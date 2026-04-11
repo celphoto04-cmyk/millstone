@@ -168,7 +168,7 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
 .dl-icon{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
 .dl-info h4{font-size:13px;font-weight:700;color:var(--text);margin-bottom:2px;}
 .dl-info p{font-size:11px;color:var(--text-muted);font-weight:500;}
-.dl-btn{display:flex;align-items:center;justify-content:center;gap:6px;padding:9px 12px;background:#f0fdf4;border-radius:9px;font-size:12px;font-weight:700;color:var(--primary);transition:all .15s;border:1.5px solid var(--border);}
+.dl-btn{display:flex;align-items:center;justify-content:center;gap:6px;padding:9px 12px;background:#f0fdf4;border-radius:9px;font-size:12px;font-weight:700;color:var(--primary);transition:all .15px;border:1.5px solid var(--border);}
 .dl-card:hover .dl-btn{background:var(--primary);color:white;border-color:var(--primary);}
 
 /* ─── RECENT ─── */
@@ -227,10 +227,9 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
   <!-- SIDEBAR -->
   <aside class="sidebar">
     <a href="#" class="logo" onclick="event.preventDefault();">
-      <!-- Custom icon: green circle + hand + money -->
       <svg class="logo-icon" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
         <circle cx="20" cy="20" r="20" fill="#16a34a"/>
-        <ellipse cx="15.5" cy="20.5" rx="6" ry="7.5" rx="6" ry="7.5" fill="#a16207" transform="rotate(-18 15.5 20.5)"/>
+        <ellipse cx="15.5" cy="20.5" rx="6" ry="7.5" fill="#a16207" transform="rotate(-18 15.5 20.5)"/>
         <ellipse cx="15.5" cy="20.5" rx="3.2" ry="4.5" fill="#854d0e" transform="rotate(-18 15.5 20.5)"/>
         <path d="M14 23.5 Q17 25 22 23.5 Q26 22 27 19 Q22 18 18 19.5 Q15 20.5 14 23.5Z" fill="#fbbf24"/>
         <path d="M22 23.5 Q26 22 27 19 L27.5 18 Q28 17 27 16.5 Q26 16 25 17.5 Q24 19 22 19.5 Q20 20 18 19.5 L14 23.5Z" fill="#fde68a"/>
@@ -238,7 +237,7 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
       </svg>
       <div class="logo-text">
         <span class="logo-name">SACCO<b>Sync</b></span>
-        <span class="logo-ver">v2.0.0</span>
+        <span class="logo-ver">v2.2.0</span>
       </div>
     </a>
     <nav id="main-nav">
@@ -602,7 +601,7 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
     <p class="setup-sub">Millennial Group S&L Management System<br>Enter your Apps Script API URL to connect.</p>
     <div class="setup-field">
       <label>Apps Script API URL</label>
-      <input type="url" id="setup-url" placeholder="https://script.google.com/macros/s/.../exec" id="setup-url-input">
+      <input type="url" id="setup-url" placeholder="https://script.google.com/macros/s/.../exec">
       <p id="setup-error">❌ Invalid or unreachable URL. Please check and try again.</p>
     </div>
     <button class="setup-cta" onclick="saveSetupUrl()" id="setup-btn">
@@ -616,34 +615,61 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
 
 <script>
 // ═══════════════════════════════════════════════════
-//  CORE STATE — Single source of truth, never reload
+//  CORE STATE
 // ═══════════════════════════════════════════════════
 var S = {
   apiUrl: localStorage.getItem('sacco_api_url') || '',
-  members: [],       // array of member objects
-  contributions: [], // raw rows (incl header)
+  members: [],
+  contributions: [],
   loans: [],
   repayments: [],
   mgr: [],
   dashboard: null,
-  currentView: 'dashboard',
-  loading: { members: false, contributions: false, loans: false, repayments: false, mgr: false, dashboard: false }
+  currentView: 'dashboard'
 };
 
-// ─── API ───
+// ═══════════════════════════════════════════════════
+//  API LAYER — ALL via GET to avoid CORS preflight
+//  Write ops: body sent as ?payload=JSON in URL
+// ═══════════════════════════════════════════════════
 var api = {
+  // GET request — for reads
   get: function(action, params) {
     var u = new URL(S.apiUrl);
     u.searchParams.set('action', action);
-    if (params) Object.keys(params).forEach(function(k){ u.searchParams.set(k, params[k]); });
-    return fetch(u.toString()).then(function(r){ return r.json(); }).then(function(r){ if (!r.success) throw new Error(r.error || 'API Error'); return r.data; });
+    if (params) {
+      Object.keys(params).forEach(function(k) {
+        u.searchParams.set(k, params[k]);
+      });
+    }
+    return fetch(u.toString(), { method: 'GET', redirect: 'follow' })
+      .then(function(r) { return r.json(); })
+      .then(function(r) {
+        if (r.success === false) throw new Error(r.error || 'API Error');
+        return r.data;
+      });
   },
+
+  // POST — body sent as ?payload=encodedJSON via GET to avoid CORS preflight
+  // Apps Script deployed as "Anyone" handles this fine
   post: function(action, body, params) {
     var u = new URL(S.apiUrl);
     u.searchParams.set('action', action);
-    if (params) Object.keys(params).forEach(function(k){ u.searchParams.set(k, params[k]); });
-    return fetch(u.toString(), { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body||{}) })
-      .then(function(r){ return r.json(); }).then(function(r){ if (!r.success) throw new Error(r.error || 'API Error'); return r.data; });
+    if (params) {
+      Object.keys(params).forEach(function(k) {
+        u.searchParams.set(k, params[k]);
+      });
+    }
+    // Encode body as payload param — avoids OPTIONS preflight entirely
+    if (body && Object.keys(body).length > 0) {
+      u.searchParams.set('payload', encodeURIComponent(JSON.stringify(body)));
+    }
+    return fetch(u.toString(), { method: 'GET', redirect: 'follow' })
+      .then(function(r) { return r.json(); })
+      .then(function(r) {
+        if (r.success === false) throw new Error(r.error || 'API Error');
+        return r.data;
+      });
   }
 };
 
@@ -659,12 +685,11 @@ function toast(msg, type) {
   setTimeout(function(){ t.classList.add('fade-out'); setTimeout(function(){ if(t.parentNode) t.parentNode.removeChild(t); },380); }, 3000);
 }
 
-// ─── MODALS — instant open/close ───
+// ─── MODALS ───
 function openModal(id) {
   var m = document.getElementById(id); if (!m) return;
   m.classList.add('open'); m.style.display = 'flex';
   document.body.style.overflow = 'hidden';
-  // Setup autocompletes on demand
   var acMap = {
     'm-contribution': function(){ setupAC('fi-cmember','ac-cmember','fi-cmid','fi-cmname','member'); },
     'm-loan':         function(){ setupAC('fi-lmember','ac-lmember','fi-lmid','fi-lmname','member'); },
@@ -678,7 +703,6 @@ function closeModal(id) {
   m.classList.remove('open'); m.style.display = 'none';
   document.body.style.overflow = '';
 }
-// Close on backdrop click
 document.addEventListener('click', function(e) {
   if (e.target && e.target.classList && e.target.classList.contains('modal') && e.target.classList.contains('open')) {
     closeModal(e.target.id);
@@ -703,7 +727,6 @@ function showView(v) {
     n.classList.toggle('active', n.dataset.view === v);
   });
   var titleEl = document.getElementById('view-title'); if (titleEl) titleEl.innerText = viewTitles[v]||'SACCOSync';
-  // Render from state — instant, no reload
   var renders = {
     dashboard: renderDashboard,
     members: renderMembersTable,
@@ -717,17 +740,16 @@ function showView(v) {
   if (renders[v]) renders[v]();
 }
 
-// ─── INITIAL DATA LOAD ───
+// ─── DATA LOAD ───
 function loadAll(force) {
   if (force) { S.members=[]; S.contributions=[]; S.loans=[]; S.repayments=[]; S.mgr=[]; S.dashboard=null; }
   var p = [];
-  // Parallel fetch all sheets
-  p.push(api.get('getDashboardStats').then(function(d){ S.dashboard=d; }).catch(function(){}));
-  p.push(api.get('getMembers',{limit:2000,offset:0}).then(function(d){ if(d&&d.length) S.members=d; }).catch(function(){}));
-  p.push(api.get('getSheet',{sheet:'Contributions'}).then(function(d){ if(d) S.contributions=d; }).catch(function(){}));
-  p.push(api.get('getSheet',{sheet:'Loans'}).then(function(d){ if(d) S.loans=d; }).catch(function(){}));
-  p.push(api.get('getSheet',{sheet:'Repayments'}).then(function(d){ if(d) S.repayments=d; }).catch(function(){}));
-  p.push(api.get('getSheet',{sheet:'MerryGoRound'}).then(function(d){ if(d) S.mgr=d; }).catch(function(){}));
+  p.push(api.get('getDashboardStats').then(function(d){ S.dashboard=d; }).catch(function(e){ console.warn('Dashboard stats error:',e.message); }));
+  p.push(api.get('getMembers',{limit:2000,offset:0}).then(function(d){ if(d&&d.length) S.members=d; }).catch(function(e){ console.warn('Members error:',e.message); }));
+  p.push(api.get('getSheet',{sheet:'Contributions'}).then(function(d){ if(d) S.contributions=d; }).catch(function(e){ console.warn('Contributions error:',e.message); }));
+  p.push(api.get('getSheet',{sheet:'Loans'}).then(function(d){ if(d) S.loans=d; }).catch(function(e){ console.warn('Loans error:',e.message); }));
+  p.push(api.get('getSheet',{sheet:'Repayments'}).then(function(d){ if(d) S.repayments=d; }).catch(function(e){ console.warn('Repayments error:',e.message); }));
+  p.push(api.get('getSheet',{sheet:'MerryGoRound'}).then(function(d){ if(d) S.mgr=d; }).catch(function(e){ console.warn('MGR error:',e.message); }));
   return Promise.all(p).then(function(){ showView(S.currentView); });
 }
 
@@ -749,18 +771,16 @@ function onFilterChange() { showView(S.currentView); }
 function getSearchVal() { return ((document.getElementById('global-search')||{}).value||'').toLowerCase().trim(); }
 function getMonthFilter() { var v=(document.getElementById('global-month')||{}).value; return v===''?null:parseInt(v); }
 function getYearFilter() { var v=(document.getElementById('global-year')||{}).value; return v===''?null:parseInt(v); }
-
 function matchesDateFilter(dateVal) {
-  var m = getMonthFilter(), y = getYearFilter();
+  var m=getMonthFilter(), y=getYearFilter();
   if (m===null && y===null) return true;
-  var d = new Date(dateVal); if (isNaN(d.getTime())) return true;
-  return (m===null || d.getMonth()===m) && (y===null || d.getFullYear()===y);
+  var d=new Date(dateVal); if (isNaN(d.getTime())) return true;
+  return (m===null||d.getMonth()===m)&&(y===null||d.getFullYear()===y);
 }
 
 // ─── DASHBOARD ───
 function renderDashboard() {
   if (S.dashboard) updateDashStats(S.dashboard);
-  // Background refresh
   api.get('getDashboardStats').then(function(d){ S.dashboard=d; updateDashStats(d); }).catch(function(){});
 }
 function updateDashStats(s) {
@@ -774,10 +794,10 @@ function updateDashStats(s) {
   se('s-totalMembersSavings', 'KES '+Number(s.totalMembersSavings||0).toLocaleString());
   se('s-totalWelfareFunds', 'KES '+Number(s.totalWelfareFunds||0).toLocaleString());
   se('s-totalMerryGoRound', 'KES '+Number(s.totalMerryGoRound||0).toLocaleString());
-  var list = document.getElementById('recent-list'); if (!list) return;
-  if (s.recentContributions && s.recentContributions.length) {
-    list.innerHTML = s.recentContributions.map(function(c){
-      var d=new Date(c[3]), amt=Number(c[4]); if(isNaN(amt)) return '';
+  var list=document.getElementById('recent-list'); if(!list) return;
+  if (s.recentContributions&&s.recentContributions.length) {
+    list.innerHTML=s.recentContributions.map(function(c){
+      var d=new Date(c[3]),amt=Number(c[4]); if(isNaN(amt)) return '';
       return '<div class="recent-item"><div class="ri-info"><strong>'+(c[2]||'')+'</strong><span>'+(isNaN(d.getTime())?'N/A':d.toLocaleDateString())+'</span></div><div class="ri-amount">+KES '+amt.toLocaleString()+'</div></div>';
     }).join('');
   } else { list.innerHTML='<p class="empty-msg">No recent activity</p>'; }
@@ -785,39 +805,32 @@ function updateDashStats(s) {
 
 // ─── MEMBERS TABLE ───
 function renderMembersTable() {
-  var search = getSearchVal();
-  var rows = S.members;
-  if (!rows || !rows.length) { skelTable('tb-members',7,6); return; }
+  var search=getSearchVal();
+  var rows=S.members;
+  if (!rows||!rows.length) { skelTable('tb-members',7,6); return; }
   if (search) {
-    rows = rows.filter(function(m){
-      return (String(m.Name||'')+String(m.ID||'')+String(m.Phone||'')).toLowerCase().indexOf(search) !== -1;
-    });
+    rows=rows.filter(function(m){ return (String(m.Name||'')+String(m.ID||'')+String(m.Phone||'')).toLowerCase().indexOf(search)!==-1; });
   }
-  var tbody = document.getElementById('tb-members'); if (!tbody) return;
+  var tbody=document.getElementById('tb-members'); if(!tbody) return;
   if (!rows.length) { tbody.innerHTML='<tr><td colspan="7" style="text-align:center;padding:28px;color:var(--text-muted);">No members found</td></tr>'; return; }
-  tbody.innerHTML = rows.map(function(m){
-    var st = String(m.Status||'').toLowerCase();
-    var bc = st==='active'?'badge-active':st==='inactive'?'badge-inactive':'badge-closed';
+  tbody.innerHTML=rows.map(function(m){
+    var st=String(m.Status||'').toLowerCase();
+    var bc=st==='active'?'badge-active':st==='inactive'?'badge-inactive':'badge-closed';
     return '<tr><td><span style="font-size:11px;color:var(--text-muted);">'+m.ID+'</span></td><td><strong>'+m.Name+'</strong></td><td>'+m.Phone+'</td><td>KES '+Number(m.TotalSavings||0).toLocaleString()+'</td><td>KES '+Number(m.CurrentLoanBalance||0).toLocaleString()+'</td><td><span class="badge '+bc+'">'+m.Status+'</span></td><td><div class="actions-cell"><button class="btn-icon btn-view" onclick="viewMember(\''+m.ID+'\')"><i class="fas fa-eye"></i></button><button class="btn-icon btn-edit" onclick="editMember(\''+m.ID+'\')"><i class="fas fa-pencil-alt"></i></button></div></td></tr>';
   }).join('');
 }
 
 // ─── GENERIC SHEET TABLE ───
 function renderSheet(key, tbId, type) {
-  var data = S[key];
-  var tbody = document.getElementById(tbId); if (!tbody) return;
-  if (!data || data.length <= 1) { skelTable(tbId, type==='repay'?7:type==='loan'?6:5, 5); return; }
-  var rows = data.slice(1).filter(function(r){ return r[0]; });
-  var search = getSearchVal(), mf = getMonthFilter(), yf = getYearFilter();
-  // Client-side filter — zero network calls
-  if (search) rows = rows.filter(function(r){ return r.some(function(c){ return String(c||'').toLowerCase().indexOf(search)!==-1; }); });
-  if (mf!==null || yf!==null) {
-    rows = rows.filter(function(r){
-      var dv = r[3]||r[7]||r[8]; return matchesDateFilter(dv);
-    });
-  }
+  var data=S[key];
+  var tbody=document.getElementById(tbId); if(!tbody) return;
+  if (!data||data.length<=1) { skelTable(tbId,type==='repay'?7:type==='loan'?6:5,5); return; }
+  var rows=data.slice(1).filter(function(r){return r[0];});
+  var search=getSearchVal(),mf=getMonthFilter(),yf=getYearFilter();
+  if (search) rows=rows.filter(function(r){return r.some(function(c){return String(c||'').toLowerCase().indexOf(search)!==-1;});});
+  if (mf!==null||yf!==null) rows=rows.filter(function(r){var dv=r[3]||r[7]||r[8];return matchesDateFilter(dv);});
   if (!rows.length) { tbody.innerHTML='<tr><td colspan="10" style="text-align:center;padding:28px;color:var(--text-muted);">No matching records</td></tr>'; return; }
-  tbody.innerHTML = rows.map(function(r){
+  tbody.innerHTML=rows.map(function(r){
     if (type==='loan') {
       var st2=String(r[9]||'Active').toLowerCase();
       var lbc=st2==='active'?'badge-active':st2==='closed'?'badge-closed':'badge-inactive';
@@ -829,29 +842,29 @@ function renderSheet(key, tbId, type) {
 }
 
 // ─── MGR ───
-var MONTHS = ['','January','February','March','April','May','June','July','August','September','October','November','December'];
+var MONTHS=['','January','February','March','April','May','June','July','August','September','October','November','December'];
 function renderMGR() { renderMGRTable(); }
 function renderMGRTable() {
-  var data = S.mgr;
-  var allRows = (data&&data.length>1) ? data.slice(1).filter(function(r){return r[0];}) : [];
-  var tot=allRows.length, done=0, totalDist=0;
-  allRows.forEach(function(r){ if(String(r[11]||'').trim()==='Distributed') done++; totalDist+=Number(r[8]||0); });
-  var latest = allRows.filter(function(r){return String(r[11]||'').trim()==='Distributed';}).sort(function(a,b){return Number(b[2])-Number(a[2])||Number(b[1])-Number(a[1]);})[0];
+  var data=S.mgr;
+  var allRows=(data&&data.length>1)?data.slice(1).filter(function(r){return r[0];}):[];
+  var tot=allRows.length,done=0,totalDist=0;
+  allRows.forEach(function(r){if(String(r[11]||'').trim()==='Distributed')done++;totalDist+=Number(r[8]||0);});
+  var latest=allRows.filter(function(r){return String(r[11]||'').trim()==='Distributed';}).sort(function(a,b){return Number(b[2])-Number(a[2])||Number(b[1])-Number(a[1]);})[0];
   function se(id,v){var el=document.getElementById(id);if(el)el.innerText=v;}
-  se('mgr-s-total',tot); se('mgr-s-done',done); se('mgr-s-pending',tot-done);
+  se('mgr-s-total',tot);se('mgr-s-done',done);se('mgr-s-pending',tot-done);
   se('mgr-s-distamt','KES '+totalDist.toLocaleString());
   se('mgr-s-latest','KES '+(latest?Number(latest[7]||0).toLocaleString():'0'));
   se('mgr-s-contrib','KES '+(S.dashboard?Number(S.dashboard.totalMerryGoRound||0).toLocaleString():'0'));
-  var tbody = document.getElementById('tb-mgr'); if (!tbody) return;
+  var tbody=document.getElementById('tb-mgr'); if(!tbody) return;
   if (!allRows.length) { tbody.innerHTML='<tr><td colspan="9" style="text-align:center;padding:36px;color:var(--text-muted);">No MGR schedules yet.</td></tr>'; return; }
   var stF=(document.getElementById('mgr-fs')||{}).value||'';
   var yrF=(document.getElementById('mgr-fy')||{}).value||'';
-  var rows = allRows.slice();
-  if (stF) rows = rows.filter(function(r){ return String(r[11]||'').trim()===stF; });
-  if (yrF) rows = rows.filter(function(r){ return String(r[2])===yrF; });
-  rows.sort(function(a,b){return (Number(b[2])-Number(a[2]))||Number(b[1])-Number(a[1]);});
+  var rows=allRows.slice();
+  if (stF) rows=rows.filter(function(r){return String(r[11]||'').trim()===stF;});
+  if (yrF) rows=rows.filter(function(r){return String(r[2])===yrF;});
+  rows.sort(function(a,b){return(Number(b[2])-Number(a[2]))||Number(b[1])-Number(a[1]);});
   if (!rows.length) { tbody.innerHTML='<tr><td colspan="9" style="text-align:center;padding:28px;color:var(--text-muted);">No records match filter.</td></tr>'; return; }
-  tbody.innerHTML = rows.map(function(r){
+  tbody.innerHTML=rows.map(function(r){
     var st=String(r[11]||'Scheduled').trim();
     var bc=st==='Distributed'?'badge-distributed':st==='Pending'?'badge-pending':'badge-scheduled';
     var dd=r[10]?new Date(r[10]).toLocaleDateString():'—';
@@ -859,8 +872,7 @@ function renderMGRTable() {
     var rid=String(r[0]||'').replace(/'/g,"\\'");
     var lble=lbl.replace(/'/g,"\\'");
     var ab=st!=='Distributed'?'<button class="btn-icon btn-view" title="Mark Distributed" onclick="openMarkDist(\''+rid+'\',\''+lble+'\')"><i class="fas fa-check"></i></button>':'<span style="color:var(--primary);font-size:16px;">✓</span>';
-    var b2cell = r[3]===r[5] ? '<span style="font-size:11px;background:#fef3c7;color:#92400e;padding:3px 7px;border-radius:6px;font-weight:700;">Single</span>' :
-      '<strong>'+(r[6]||'—')+'</strong><br><span style="font-size:10.5px;color:var(--text-muted);">'+(r[5]||'')+'</span>';
+    var b2cell=r[3]===r[5]?'<span style="font-size:11px;background:#fef3c7;color:#92400e;padding:3px 7px;border-radius:6px;font-weight:700;">Single</span>':'<strong>'+(r[6]||'—')+'</strong><br><span style="font-size:10.5px;color:var(--text-muted);">'+(r[5]||'')+'</span>';
     return '<tr><td><strong>'+lbl+'</strong></td><td><strong>'+(r[4]||'—')+'</strong><br><span style="font-size:10.5px;color:var(--text-muted);">'+(r[3]||'')+'</span></td><td>'+b2cell+'</td><td><strong>KES '+Number(r[7]||0).toLocaleString()+'</strong></td><td><strong style="color:var(--primary);">KES '+Number(r[8]||0).toLocaleString()+'</strong></td><td><span class="badge '+bc+'">'+st+'</span></td><td>'+dd+'</td><td style="max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11.5px;color:var(--text-muted);">'+(r[12]||'—')+'</td><td>'+ab+'</td></tr>';
   }).join('');
 }
@@ -876,10 +888,9 @@ function confirmMarkDistributed() {
   var dt=document.getElementById('mgrmark-date').value;
   var nt=document.getElementById('mgrmark-notes').value;
   if(!id||!dt){toast('Please select a date','error');return;}
-  // Optimistic update
-  S.mgr = S.mgr.map(function(row, idx){
-    if (idx===0) return row;
-    if (String(row[0])===String(id)) { var r=row.slice(); r[11]='Distributed'; r[10]=dt; r[12]=nt||r[12]; return r; }
+  S.mgr=S.mgr.map(function(row,idx){
+    if(idx===0) return row;
+    if(String(row[0])===String(id)){var r=row.slice();r[11]='Distributed';r[10]=dt;r[12]=nt||r[12];return r;}
     return row;
   });
   renderMGRTable();
@@ -887,7 +898,7 @@ function confirmMarkDistributed() {
   toast('Marked as Distributed!');
   api.post('markMGRDistributed',{id:id,distDate:dt,notes:nt}).then(function(){
     api.get('getSheet',{sheet:'MerryGoRound'}).then(function(d){if(d){S.mgr=d;renderMGRTable();}});
-  }).catch(function(e){ toast('Server error: '+e.message,'error'); loadAll(true); });
+  }).catch(function(e){toast('Server error: '+e.message,'error');loadAll(true);});
 }
 
 // ─── REPORTS ───
@@ -905,19 +916,18 @@ function renderReports() {
       } else { tbody.innerHTML='<tr><td colspan="5" style="text-align:center;padding:28px;color:var(--text-muted);">No overdue installments</td></tr>'; }
     }
   }
-  api.get('getDashboardStats').then(function(d){ S.dashboard=d; renderReports(); }).catch(function(){});
+  api.get('getDashboardStats').then(function(d){S.dashboard=d;renderReports();}).catch(function(){});
 }
 
 // ─── AUTOCOMPLETE ───
-function setupAC(inputId, listId, hiddenId, hiddenNameId, acType) {
-  var inp = document.getElementById(inputId); if (!inp) return;
-  var lst = document.getElementById(listId); if (!lst) return;
-  // Clone to remove old listeners
-  var ni = inp.cloneNode(true); inp.parentNode.replaceChild(ni, inp); inp=ni;
+function setupAC(inputId,listId,hiddenId,hiddenNameId,acType) {
+  var inp=document.getElementById(inputId); if(!inp) return;
+  var lst=document.getElementById(listId); if(!lst) return;
+  var ni=inp.cloneNode(true); inp.parentNode.replaceChild(ni,inp); inp=ni;
   function getItems() {
     if (acType==='member') return S.members;
     if (acType==='loan') {
-      var rows = (S.loans&&S.loans.length>1)?S.loans.slice(1):[];
+      var rows=(S.loans&&S.loans.length>1)?S.loans.slice(1):[];
       return rows.filter(function(r){return r[9]==='Active';});
     }
     return [];
@@ -927,31 +937,29 @@ function setupAC(inputId, listId, hiddenId, hiddenNameId, acType) {
     var items=getItems();
     var hits;
     if(acType==='member'){
-      hits=items.filter(function(m){return (String(m.Name||'')+String(m.ID||'')+String(m.Phone||'')).toLowerCase().indexOf(val.toLowerCase())!==-1;}).slice(0,8);
+      hits=items.filter(function(m){return(String(m.Name||'')+String(m.ID||'')+String(m.Phone||'')).toLowerCase().indexOf(val.toLowerCase())!==-1;}).slice(0,8);
       if(!hits.length){lst.innerHTML='<div style="color:var(--text-muted);padding:9px 13px;">No results</div>';return;}
       hits.forEach(function(m){
         var d=document.createElement('div');
         d.innerHTML='<strong>'+m.Name+'</strong> <span style="color:var(--text-muted);font-size:11px;">('+m.ID+')</span>';
         d.onclick=function(){
           inp.value=m.Name;
-          if(hiddenId)document.getElementById(hiddenId).value=m.ID;
-          if(hiddenNameId)document.getElementById(hiddenNameId).value=m.Name;
-          // Loan modal: set borrower type
+          if(hiddenId) document.getElementById(hiddenId).value=m.ID;
+          if(hiddenNameId) document.getElementById(hiddenNameId).value=m.Name;
           if(inputId==='fi-lmember'){var bt=document.getElementById('fi-lbtype');if(bt)bt.value=m.Type||'Member';}
           lst.innerHTML='';
         };
         lst.appendChild(d);
       });
     } else {
-      // Loan search for repayment
-      hits=items.filter(function(l){return (String(l[2]||'').toLowerCase().indexOf(val.toLowerCase())!==-1||String(l[0]||'').toLowerCase().indexOf(val.toLowerCase())!==-1);}).slice(0,8);
+      hits=items.filter(function(l){return(String(l[2]||'').toLowerCase().indexOf(val.toLowerCase())!==-1||String(l[0]||'').toLowerCase().indexOf(val.toLowerCase())!==-1);}).slice(0,8);
       if(!hits.length){lst.innerHTML='<div style="color:var(--text-muted);padding:9px 13px;">No active loans</div>';return;}
       hits.forEach(function(l){
         var d=document.createElement('div');
         d.innerHTML='<strong>'+l[2]+'</strong> <span style="color:var(--text-muted);font-size:11px;">'+l[0]+' — KES '+Number(l[4]||0).toLocaleString()+'</span>';
         d.onclick=function(){
           inp.value=l[2]+' — '+l[0];
-          if(hiddenId)document.getElementById(hiddenId).value=l[0];
+          if(hiddenId) document.getElementById(hiddenId).value=l[0];
           var rmid=document.getElementById('fi-rmid'),rmname=document.getElementById('fi-rmname'),rbtype=document.getElementById('fi-rbtype');
           if(rmid)rmid.value=l[1];if(rmname)rmname.value=l[2];if(rbtype)rbtype.value=l[3]||'Member';
           toast('Loan: '+l[2]+' loaded');
@@ -961,28 +969,28 @@ function setupAC(inputId, listId, hiddenId, hiddenNameId, acType) {
       });
     }
   }
-  inp.addEventListener('input', function(){ render(this.value.trim()); });
-  document.addEventListener('click', function(e){ if(e.target!==inp) lst.innerHTML=''; });
+  inp.addEventListener('input',function(){render(this.value.trim());});
+  document.addEventListener('click',function(e){if(e.target!==inp)lst.innerHTML='';});
 }
 
 // ─── MEMBER PROFILE / EDIT ───
 function viewMember(id) {
-  var m = S.members.find(function(x){ return x.ID===id; });
-  if (!m) { api.get('getMemberById',{id:id}).then(function(d){ if(d){fillProfile(d);openModal('m-profile');}}).catch(function(){toast('Not found','error');}); return; }
-  fillProfile(m); openModal('m-profile');
+  var m=S.members.find(function(x){return x.ID===id;});
+  if(!m){api.get('getMemberById',{id:id}).then(function(d){if(d){fillProfile(d);openModal('m-profile');}}).catch(function(){toast('Not found','error');});return;}
+  fillProfile(m);openModal('m-profile');
 }
 function fillProfile(m) {
   function se(id,v){var el=document.getElementById(id);if(el)el.innerText=v||'—';}
-  var initials = (m.Name||'?').split(' ').map(function(w){return w[0];}).join('').substring(0,2).toUpperCase();
+  var initials=(m.Name||'?').split(' ').map(function(w){return w[0];}).join('').substring(0,2).toUpperCase();
   var pi=document.getElementById('pa-initials');if(pi)pi.innerText=initials;
   se('pa-name',m.Name);se('pa-id',m.ID);se('pa-phone',m.Phone);se('pa-email',m.Email);se('pa-idno',m.ID_Number);se('pa-status',m.Status);se('pa-type',m.Type);se('pa-address',m.Address);
   var ps=document.getElementById('pa-savings'),pl=document.getElementById('pa-loan');
   if(ps)ps.innerText='KES '+Number(m.TotalSavings||0).toLocaleString();if(pl)pl.innerText='KES '+Number(m.CurrentLoanBalance||0).toLocaleString();
 }
 function editMember(id) {
-  var m = S.members.find(function(x){ return x.ID===id; });
-  if (!m) { api.get('getMemberById',{id:id}).then(function(d){ if(d){fillEditForm(d);openModal('m-edit');}}).catch(function(){toast('Not found','error');}); return; }
-  fillEditForm(m); openModal('m-edit');
+  var m=S.members.find(function(x){return x.ID===id;});
+  if(!m){api.get('getMemberById',{id:id}).then(function(d){if(d){fillEditForm(d);openModal('m-edit');}}).catch(function(){toast('Not found','error');});return;}
+  fillEditForm(m);openModal('m-edit');
 }
 function fillEditForm(m) {
   function sv(id,v){var el=document.getElementById(id);if(el)el.value=v||'';}
@@ -991,7 +999,7 @@ function fillEditForm(m) {
   if(et)et.value=m.Type||'Member';if(es)es.value=m.Status||'Active';
 }
 
-// ─── FORM SUBMISSIONS — Optimistic Updates ───
+// ─── FORM SUBMISSIONS ───
 function submitMember(e) {
   e.preventDefault();
   var phone=(document.getElementById('fi-mphone')||{}).value.trim();
@@ -999,7 +1007,6 @@ function submitMember(e) {
   var btn=document.getElementById('btn-member-submit');
   setBtnLoading(btn,true);
   var payload={name:(document.getElementById('fi-mname')||{}).value,phone:phone,email:(document.getElementById('fi-memail')||{}).value||'',idNumber:(document.getElementById('fi-midno')||{}).value,type:(document.getElementById('fi-mtype')||{}).value,address:(document.getElementById('fi-maddress')||{}).value||''};
-  // Optimistic local add
   var tempId='M'+Math.random().toString(36).substr(2,6).toUpperCase();
   var newMember={ID:tempId,Name:payload.name,Phone:payload.phone,Email:payload.email,ID_Number:payload.idNumber,Type:payload.type,Address:payload.address,Status:'Active',TotalSavings:0,CurrentLoanBalance:0};
   S.members.unshift(newMember);
@@ -1008,16 +1015,10 @@ function submitMember(e) {
   closeModal('m-member');
   document.getElementById('f-member').reset();
   setBtnLoading(btn,false);
-  // Backend confirm + get real ID
-  api.post('addMember',payload).then(function(r){
-    // Replace temp with real
+  api.post('addMember',payload).then(function(){
     api.get('getMembers',{limit:2000,offset:0}).then(function(d){if(d&&d.length){S.members=d;renderMembersTable();}});
     api.get('getDashboardStats').then(function(d){S.dashboard=d;if(S.currentView==='dashboard')updateDashStats(d);});
-  }).catch(function(err){
-    toast('Server error: '+err.message,'error');
-    S.members=S.members.filter(function(m){return m.ID!==tempId;});
-    renderMembersTable();
-  });
+  }).catch(function(err){toast('Server error: '+err.message,'error');S.members=S.members.filter(function(m){return m.ID!==tempId;});renderMembersTable();});
 }
 
 function submitContribution(e) {
@@ -1031,12 +1032,10 @@ function submitContribution(e) {
   var mname=(document.getElementById('fi-cmname')||{}).value;
   var ctype=(document.getElementById('fi-ctype')||{}).value;
   var payload={memberId:mid,memberName:mname,amount:amt,type:ctype,reference:ref};
-  // Optimistic add
   var nowIso=new Date().toISOString();
   var newRow=['C'+Date.now(),mid,mname,nowIso,amt,ctype,ref];
   if(!S.contributions||!S.contributions.length) S.contributions=[['ID','MemberID','MemberName','Date','Amount','Type','Reference']];
   S.contributions.push(newRow);
-  // Update member savings in state
   var mi=S.members.findIndex(function(m){return m.ID===mid;});
   if(mi>=0) S.members[mi].TotalSavings=(Number(S.members[mi].TotalSavings)||0)+amt;
   if(S.dashboard){
@@ -1108,7 +1107,6 @@ function submitRepayment(e) {
   var newRow=['R'+Date.now(),lid,mname,nowIso,total,principal,interest,pen,'Completed'];
   if(!S.repayments||!S.repayments.length) S.repayments=[['ID','LoanID','MemberName','Date','Amount','PrincipalPortion','InterestPortion','PenaltyPaid','Status']];
   S.repayments.push(newRow);
-  // Update member balance
   var mi=S.members.findIndex(function(m){return m.ID===mbid;});
   if(mi>=0) S.members[mi].CurrentLoanBalance=Math.max(0,(Number(S.members[mi].CurrentLoanBalance)||0)-principal);
   if(miVal==='') toast('Auto Interest: KES '+interest.toLocaleString());
@@ -1133,14 +1131,15 @@ function submitEditMember(e) {
   var btn=document.getElementById('btn-edit-submit');
   setBtnLoading(btn,true);
   var payload={name:(document.getElementById('fi-ename')||{}).value,phone:(document.getElementById('fi-ephone')||{}).value,email:(document.getElementById('fi-eemail')||{}).value,idNumber:(document.getElementById('fi-eidno')||{}).value,status:(document.getElementById('fi-estatus')||{}).value,type:(document.getElementById('fi-etype')||{}).value,address:(document.getElementById('fi-eaddress')||{}).value};
-  // Optimistic update in state
   var mi=S.members.findIndex(function(m){return m.ID===id;});
   if(mi>=0){S.members[mi].Name=payload.name;S.members[mi].Phone=payload.phone;S.members[mi].Email=payload.email;S.members[mi].Status=payload.status;S.members[mi].Type=payload.type;S.members[mi].Address=payload.address;}
   renderMembersTable();
   toast('Member updated!');
   closeModal('m-edit');
   setBtnLoading(btn,false);
-  api.post('updateMember',payload,{id:id}).then(function(){
+  // Pass id both in payload and as param for updateMember
+  var payloadWithId = Object.assign({}, payload, {id: id});
+  api.post('updateMember', payloadWithId, {id: id}).then(function(){
     api.get('getMembers',{limit:2000,offset:0}).then(function(d){if(d&&d.length){S.members=d;if(S.currentView==='members')renderMembersTable();}});
   }).catch(function(err){toast('Server error: '+err.message,'error');loadAll(true);});
 }
@@ -1174,14 +1173,14 @@ function submitMGR(e) {
 // ─── EXPORT ───
 function exportCSV(type) {
   toast('Preparing '+type+'...');
-  var getData = {
-    Members: function(){ return S.members.length ? [Object.keys(S.members[0])].concat(S.members.map(function(m){return Object.values(m);})) : []; },
-    Contributions: function(){ return S.contributions; },
-    Loans: function(){ return S.loans; },
-    Repayments: function(){ return S.repayments; },
-    MerryGoRound: function(){ return S.mgr; }
+  var getData={
+    Members:function(){return S.members.length?[Object.keys(S.members[0])].concat(S.members.map(function(m){return Object.values(m);})):[];},
+    Contributions:function(){return S.contributions;},
+    Loans:function(){return S.loans;},
+    Repayments:function(){return S.repayments;},
+    MerryGoRound:function(){return S.mgr;}
   };
-  var data = (getData[type]||function(){return[];})();
+  var data=(getData[type]||function(){return[];})();
   if(!data||data.length<=1){toast('No data to export','warning');return;}
   var csv=data.filter(function(r){return r&&r.length&&r[0]!=='';}).map(function(r){return r.map(function(c){var v=c==null?'':String(c);if(v.indexOf(',')!==-1||v.indexOf('"')!==-1||v.indexOf('\n')!==-1)v='"'+v.replace(/"/g,'""')+'"';return v;}).join(',');}).join('\n');
   var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8;'}));a.download='SACCO_'+type+'_'+new Date().toISOString().split('T')[0]+'.csv';a.style.display='none';document.body.appendChild(a);a.click();document.body.removeChild(a);
@@ -1193,10 +1192,10 @@ function downloadFullWorkbook() {
 }
 
 // ─── UTILITIES ───
-function skelTable(tbId, cols, rows) {
-  var tbody=document.getElementById(tbId); if(!tbody)return;
-  var cell=''; for(var c=0;c<cols;c++) cell+='<td><span class="skel" style="height:13px;width:80%;display:block;"></span></td>';
-  var out=''; for(var r=0;r<rows;r++) out+='<tr>'+cell+'</tr>';
+function skelTable(tbId,cols,rows) {
+  var tbody=document.getElementById(tbId);if(!tbody)return;
+  var cell='';for(var c=0;c<cols;c++)cell+='<td><span class="skel" style="height:13px;width:80%;display:block;"></span></td>';
+  var out='';for(var r=0;r<rows;r++)out+='<tr>'+cell+'</tr>';
   tbody.innerHTML=out;
 }
 function skelRows(cols,n){var cell='';for(var c=0;c<cols;c++)cell+='<td><span class="skel" style="height:13px;width:80%;display:block;"></span></td>';var out='';for(var r=0;r<n;r++)out+='<tr>'+cell+'</tr>';return out;}
@@ -1204,37 +1203,43 @@ function setBtnLoading(btn,loading){if(!btn)return;if(loading){btn.disabled=true
 
 // ─── SETUP ───
 function saveSetupUrl() {
-  var inp=document.getElementById('setup-url'); var err=document.getElementById('setup-error'); var btn=document.getElementById('setup-btn');
+  var inp=document.getElementById('setup-url');
+  var err=document.getElementById('setup-error');
+  var btn=document.getElementById('setup-btn');
   var url=(inp.value||'').trim();
-  if(!url||url.indexOf('script.google.com')===-1){err.style.display='block';return;}
+  if(!url||url.indexOf('script.google.com')===-1){err.style.display='block';err.textContent='❌ Please enter a valid Apps Script URL.';return;}
   err.style.display='none';
   btn.innerHTML='<i class="fas fa-spinner spinning"></i> Connecting...'; btn.disabled=true;
-  fetch(url+'?action=getDashboardStats').then(function(r){return r.json();}).then(function(r){
-    if(r&&r.success!==false){
-      localStorage.setItem('sacco_api_url',url); S.apiUrl=url;
-      document.getElementById('setup-overlay').style.display='none';
-      initApp();
-    } else { throw new Error('API test failed'); }
-  }).catch(function(){
-    btn.innerHTML='<i class="fas fa-plug"></i> Connect & Launch'; btn.disabled=false;
-    err.textContent='❌ Could not connect. Check the URL and try again.'; err.style.display='block';
-  });
+  // Test connection with ping action
+  fetch(url+'?action=ping')
+    .then(function(r){return r.json();})
+    .then(function(r){
+      if(r&&(r.success!==false)){
+        localStorage.setItem('sacco_api_url',url);
+        S.apiUrl=url;
+        document.getElementById('setup-overlay').style.display='none';
+        initApp();
+      } else { throw new Error('API test failed'); }
+    })
+    .catch(function(){
+      btn.innerHTML='<i class="fas fa-plug"></i> Connect & Launch'; btn.disabled=false;
+      err.textContent='❌ Could not connect. Check the URL and try again.'; err.style.display='block';
+    });
 }
 
 function initApp() {
   var de=document.getElementById('current-date');
   if(de) de.innerText=new Date().toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'});
-  // Show skeleton immediately, then fetch
   showView('dashboard');
   loadAll(false);
 }
 
-window.addEventListener('DOMContentLoaded', function(){
+window.addEventListener('DOMContentLoaded',function(){
   var urlInp=document.getElementById('setup-url');
   if(urlInp) urlInp.addEventListener('keydown',function(e){if(e.key==='Enter')saveSetupUrl();});
 });
-window.onload = function() {
-  if (!S.apiUrl) {
+window.onload=function(){
+  if(!S.apiUrl){
     document.getElementById('setup-overlay').style.display='flex';
   } else {
     initApp();
