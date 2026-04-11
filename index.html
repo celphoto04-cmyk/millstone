@@ -5,1114 +5,1241 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SACCOSync — Millennial Group S&L</title>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-/* ===================== CONFIG =====================
-   IMPORTANT: Replace API_BASE_URL in the <script> below
-   with your actual Google Apps Script Web App URL.
-   ================================================= */
-
 :root {
-    --primary: #2563eb;
-    --primary-dark: #1e40af;
-    --primary-light: #dbeafe;
-    --accent: #10b981;
-    --warning: #f59e0b;
-    --danger: #ef4444;
-    --background: #f1f5f9;
-    --surface-solid: #ffffff;
-    --text: #0f172a;
-    --text-muted: #64748b;
-    --border: #e2e8f0;
-    --sidebar-width: 280px;
-    --glass: rgba(255,255,255,0.75);
-    --shadow: 0 4px 6px -1px rgb(0 0 0/0.1),0 2px 4px -2px rgb(0 0 0/0.1);
-    --shadow-lg: 0 10px 15px -3px rgb(0 0 0/0.1),0 4px 6px -4px rgb(0 0 0/0.1);
+  --primary: #16a34a;
+  --primary-dark: #15803d;
+  --primary-light: #dcfce7;
+  --primary-xlight: #f0fdf4;
+  --accent: #22c55e;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --background: #f0fdf4;
+  --surface: #ffffff;
+  --text: #052e16;
+  --text-muted: #6b7280;
+  --border: #d1fae5;
+  --sidebar-width: 260px;
+  --glass: rgba(255,255,255,0.82);
+  --shadow: 0 2px 8px rgba(22,163,74,0.08), 0 1px 3px rgba(0,0,0,0.06);
+  --shadow-lg: 0 8px 30px rgba(22,163,74,0.12), 0 4px 8px rgba(0,0,0,0.06);
+  --radius: 14px;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased;}
-body{font-family:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--background);color:var(--text);overflow-x:hidden;}
+body{font-family:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--background);color:var(--text);overflow-x:hidden;}
 .app-container{display:flex;min-height:100vh;}
 
-/* SIDEBAR */
-.sidebar{width:var(--sidebar-width);background:var(--surface-solid);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:28px 18px;position:fixed;height:100vh;z-index:100;box-shadow:4px 0 24px rgba(0,0,0,.03);overflow-y:auto;}
-.logo{display:flex;align-items:center;gap:12px;font-size:21px;font-weight:800;color:var(--text);margin-bottom:36px;padding-left:8px;flex-shrink:0;}
-.logo i{color:var(--primary);font-size:24px;}
-.logo b{color:var(--primary);}
-nav{display:flex;flex-direction:column;gap:3px;}
-.nav-item{display:flex;align-items:center;gap:12px;padding:11px 14px;color:var(--text-muted);text-decoration:none;border-radius:11px;font-weight:500;font-size:14px;transition:all .2s;cursor:pointer;}
-.nav-item i{font-size:15px;width:18px;text-align:center;flex-shrink:0;}
-.nav-item:hover{background:#f8fafc;color:var(--primary);transform:translateX(3px);}
-.nav-item.active{background:var(--primary-light);color:var(--primary);box-shadow:0 4px 12px rgba(37,99,235,.1);}
-.sidebar-footer{margin-top:auto;padding:14px 6px 0;flex-shrink:0;}
-.btn-init{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;padding:11px;background:#f8fafc;border:1px solid var(--border);border-radius:11px;color:var(--text-muted);font-weight:600;font-size:13px;cursor:pointer;transition:all .2s;}
-.btn-init:hover{background:white;color:var(--text);box-shadow:var(--shadow);}
+/* ─── SIDEBAR ─── */
+.sidebar{width:var(--sidebar-width);background:var(--surface);border-right:1.5px solid var(--border);display:flex;flex-direction:column;padding:22px 14px;position:fixed;height:100vh;z-index:100;box-shadow:4px 0 24px rgba(22,163,74,0.06);overflow-y:auto;}
+.logo{display:flex;align-items:center;gap:10px;margin-bottom:28px;padding-left:6px;flex-shrink:0;text-decoration:none;}
+.logo-icon{width:40px;height:40px;flex-shrink:0;}
+.logo-text{display:flex;flex-direction:column;}
+.logo-name{font-size:19px;font-weight:900;color:var(--text);line-height:1.1;}
+.logo-name b{color:var(--primary);}
+.logo-ver{font-size:10px;font-weight:600;color:var(--text-muted);opacity:.7;}
+nav{display:flex;flex-direction:column;gap:2px;}
+.nav-item{display:flex;align-items:center;gap:11px;padding:10px 13px;color:var(--text-muted);text-decoration:none;border-radius:11px;font-weight:600;font-size:13.5px;transition:all .15s;cursor:pointer;border:none;background:none;width:100%;text-align:left;}
+.nav-item i{font-size:14px;width:18px;text-align:center;flex-shrink:0;}
+.nav-item:hover{background:var(--primary-xlight);color:var(--primary);}
+.nav-item.active{background:var(--primary-light);color:var(--primary);box-shadow:0 2px 8px rgba(22,163,74,0.15);}
+.sidebar-footer{margin-top:auto;padding:12px 4px 0;flex-shrink:0;}
+.btn-sync{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px;background:var(--primary-xlight);border:1.5px solid var(--border);border-radius:11px;color:var(--primary);font-weight:700;font-size:12.5px;cursor:pointer;transition:all .2s;font-family:inherit;}
+.btn-sync:hover{background:var(--primary-light);box-shadow:var(--shadow);}
+.sidebar-brand{display:block;text-align:center;font-size:12px;font-weight:700;margin-top:6px;color:var(--primary);opacity:.7;}
 
-/* CONTENT */
-.content{flex:1;margin-left:var(--sidebar-width);padding:28px;background:linear-gradient(135deg,#f1f5f9 0%,#e2e8f0 100%);min-height:100vh;}
-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;gap:16px;padding:14px 20px;flex-wrap:wrap;}
-.glass{background:var(--glass);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.55);box-shadow:var(--shadow-lg);border-radius:18px;}
-.header-left{display:flex;align-items:center;gap:16px;}
-.user-profile img{width:44px;height:44px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,.1);}
-.view-info h1{font-size:20px;font-weight:800;color:var(--text);margin-bottom:2px;}
-.view-info p{color:var(--text-muted);font-size:12px;font-weight:500;}
-.header-filters{display:flex;gap:10px;flex-grow:1;max-width:680px;flex-wrap:wrap;}
-.search-box{flex:1;display:flex;align-items:center;padding:9px 14px;gap:9px;min-width:160px;}
-.search-box input{border:none;background:transparent;width:100%;font-size:13px;outline:none;color:var(--text);}
-.search-box i{color:var(--text-muted);font-size:13px;}
-.filter-group{display:flex;gap:5px;padding:5px;align-items:center;}
-.filter-group select{border:none;background:transparent;padding:5px 8px;font-size:13px;font-weight:500;color:var(--text);outline:none;cursor:pointer;}
+/* ─── CONTENT ─── */
+.content{flex:1;margin-left:var(--sidebar-width);padding:24px;background:var(--background);min-height:100vh;}
+header{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;gap:14px;padding:12px 18px;flex-wrap:wrap;background:var(--glass);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1.5px solid rgba(255,255,255,.7);box-shadow:var(--shadow-lg);border-radius:var(--radius);}
+.header-left{display:flex;align-items:center;gap:14px;}
+.user-avatar{width:40px;height:40px;border-radius:11px;background:var(--primary-light);display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--primary);font-weight:800;}
+.view-info h1{font-size:18px;font-weight:800;color:var(--text);line-height:1.1;}
+.view-info p{color:var(--text-muted);font-size:11.5px;font-weight:500;margin-top:1px;}
+.header-filters{display:flex;gap:8px;flex-grow:1;max-width:640px;flex-wrap:wrap;}
+.search-wrap{flex:1;display:flex;align-items:center;padding:9px 13px;gap:8px;background:var(--glass);backdrop-filter:blur(16px);border:1.5px solid rgba(255,255,255,.7);border-radius:11px;min-width:140px;}
+.search-wrap input{border:none;background:transparent;width:100%;font-size:13px;outline:none;color:var(--text);font-family:inherit;}
+.search-wrap input::placeholder{color:var(--text-muted);}
+.search-wrap i{color:var(--text-muted);font-size:13px;}
+.filter-wrap{display:flex;gap:4px;padding:4px;align-items:center;background:var(--glass);backdrop-filter:blur(16px);border:1.5px solid rgba(255,255,255,.7);border-radius:11px;}
+.filter-wrap select{border:none;background:transparent;padding:5px 7px;font-size:12.5px;font-weight:600;color:var(--text);outline:none;cursor:pointer;font-family:inherit;}
 
-/* STATS */
-.stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(195px,1fr));gap:18px;margin-bottom:28px;}
-.stat-card{padding:22px;transition:transform .2s,box-shadow .2s;position:relative;overflow:hidden;}
-.stat-card:hover{transform:translateY(-4px);box-shadow:0 20px 25px -5px rgb(0 0 0/.1);}
-.stat-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:14px;}
-.stat-info p{font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px;}
-.stat-info h2{font-size:21px;font-weight:800;color:var(--text);}
-.stat-icon.purple{background:#f3e8ff;color:#9333ea;}
-.stat-icon.green{background:#dcfce7;color:#16a34a;}
-.stat-icon.blue{background:#dbeafe;color:#2563eb;}
-.stat-icon.orange{background:#ffedd5;color:#ea580c;}
-.stat-icon.blue-light{background:#e0f2fe;color:#0369a1;}
-.stat-icon.red-light{background:#fee2e2;color:#dc2626;}
-.stat-icon.teal{background:#ccfbf1;color:#0d9488;}
-.stat-icon.pink{background:#fce7f3;color:#db2777;}
+/* ─── STATS ─── */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:14px;margin-bottom:22px;}
+.stat-card{padding:18px;background:var(--glass);backdrop-filter:blur(12px);border:1.5px solid rgba(255,255,255,.7);border-radius:var(--radius);box-shadow:var(--shadow);transition:transform .15s,box-shadow .15s;}
+.stat-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg);}
+.stat-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:12px;}
+.stat-info p{font-size:10.5px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px;}
+.stat-info h2{font-size:20px;font-weight:800;color:var(--text);}
+.si-green{background:#dcfce7;color:#16a34a;}
+.si-blue{background:#dbeafe;color:#2563eb;}
+.si-orange{background:#ffedd5;color:#ea580c;}
+.si-purple{background:#f3e8ff;color:#9333ea;}
+.si-teal{background:#ccfbf1;color:#0d9488;}
+.si-pink{background:#fce7f3;color:#db2777;}
+.si-cyan{background:#e0f2fe;color:#0369a1;}
+.si-red{background:#fee2e2;color:#dc2626;}
 
-/* TABLES */
-.table-container{padding:0;overflow:hidden;}
+/* ─── TABLES ─── */
+.table-wrap{background:var(--glass);backdrop-filter:blur(12px);border:1.5px solid rgba(255,255,255,.7);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;}
 table{width:100%;border-spacing:0;}
-th{background:#f8fafc;padding:13px 18px;text-align:left;font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--border);}
-td{padding:14px 18px;border-bottom:1px solid var(--border);font-size:13px;font-weight:500;color:var(--text);}
+th{background:#f0fdf4;padding:11px 16px;text-align:left;font-size:10.5px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.4px;border-bottom:1.5px solid var(--border);}
+td{padding:12px 16px;border-bottom:1px solid #f0fdf4;font-size:12.5px;font-weight:500;color:var(--text);}
 tr:last-child td{border-bottom:none;}
-tr:hover td{background:rgba(248,250,252,.6);}
+tbody tr{transition:background .1s;}
+tbody tr:hover td{background:rgba(22,163,74,0.035);}
 
-/* BUTTONS */
-.btn-primary{background:var(--primary);color:white;border:none;padding:10px 20px;border-radius:11px;font-weight:700;font-size:13px;cursor:pointer;transition:all .2s;box-shadow:0 4px 6px rgba(37,99,235,.2);display:inline-flex;align-items:center;gap:7px;}
-.btn-primary:hover{background:var(--primary-dark);transform:translateY(-1px);box-shadow:0 8px 12px rgba(37,99,235,.3);}
-.btn-secondary{background:white;color:var(--text);border:1px solid var(--border);padding:10px 20px;border-radius:11px;font-weight:600;font-size:13px;cursor:pointer;transition:all .2s;}
-.btn-secondary:hover{background:#f8fafc;box-shadow:var(--shadow);}
-.btn-submit{background:var(--primary);color:white;border:none;padding:14px;width:100%;border-radius:12px;font-weight:700;font-size:15px;cursor:pointer;box-shadow:0 4px 12px rgba(37,99,235,.2);transition:all .2s;margin-top:4px;}
+/* ─── BUTTONS ─── */
+.btn-primary{background:var(--primary);color:white;border:none;padding:9px 18px;border-radius:10px;font-weight:700;font-size:12.5px;cursor:pointer;transition:all .15s;box-shadow:0 2px 8px rgba(22,163,74,0.25);display:inline-flex;align-items:center;gap:6px;font-family:inherit;}
+.btn-primary:hover{background:var(--primary-dark);transform:translateY(-1px);box-shadow:0 6px 16px rgba(22,163,74,0.35);}
+.btn-primary:active{transform:translateY(0);}
+.btn-secondary{background:white;color:var(--text);border:1.5px solid var(--border);padding:9px 18px;border-radius:10px;font-weight:600;font-size:12.5px;cursor:pointer;transition:all .15s;font-family:inherit;}
+.btn-secondary:hover{background:var(--primary-xlight);border-color:var(--primary);color:var(--primary);}
+.btn-submit{background:var(--primary);color:white;border:none;padding:13px;width:100%;border-radius:11px;font-weight:700;font-size:14px;cursor:pointer;box-shadow:0 4px 14px rgba(22,163,74,0.25);transition:all .15s;margin-top:4px;font-family:inherit;}
 .btn-submit:hover{background:var(--primary-dark);transform:scale(1.01);}
-.btn-submit:disabled{opacity:.6;cursor:not-allowed;transform:none;}
-.btn-icon-action{width:34px;height:34px;border-radius:9px;display:inline-flex;align-items:center;justify-content:center;border:none;background:#f1f5f9;color:var(--text-muted);cursor:pointer;transition:all .2s;font-size:13px;}
-.btn-view:hover{background:var(--primary-light);color:var(--primary);}
-.btn-edit:hover{background:#fef3c7;color:var(--warning);}
-.actions-cell{display:flex;gap:6px;}
+.btn-submit:disabled{opacity:.55;cursor:not-allowed;transform:none;}
+.btn-icon{width:32px;height:32px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;border:none;cursor:pointer;transition:all .15s;font-size:12px;font-family:inherit;}
+.btn-view{background:#f0fdf4;color:#16a34a;}
+.btn-view:hover{background:var(--primary-light);color:var(--primary-dark);}
+.btn-edit{background:#fff7ed;color:#ea580c;}
+.btn-edit:hover{background:#ffedd5;color:#c2410c;}
+.actions-cell{display:flex;gap:5px;}
 
-/* MODALS */
-.modal{display:none;position:fixed!important;z-index:10000;left:0;top:0;width:100vw;height:100vh;background:rgba(15,23,42,.4);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);align-items:center;justify-content:center;}
-.modal-content{margin:auto!important;width:95%;max-width:580px;max-height:90vh;overflow-y:auto;position:relative;animation:modalPop .3s cubic-bezier(.34,1.56,.64,1);padding:36px!important;background:white;border-radius:22px!important;box-shadow:0 25px 50px -12px rgba(0,0,0,.25);}
-@keyframes modalPop{from{transform:scale(.92) translateY(16px);opacity:0;}to{transform:scale(1) translateY(0);opacity:1;}}
-.close{position:absolute;right:20px;top:20px;font-size:26px;font-weight:300;color:var(--text-muted);cursor:pointer;transition:all .2s;line-height:1;width:30px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:50%;}
-.close:hover{background:#f1f5f9;color:var(--danger);}
-.modal-content h2{font-size:21px;font-weight:800;color:var(--text);margin-bottom:22px;display:flex;align-items:center;gap:10px;}
+/* ─── MODALS ─── */
+.modal{display:none;position:fixed!important;z-index:10000;left:0;top:0;width:100vw;height:100vh;background:rgba(5,46,22,.35);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);align-items:center;justify-content:center;}
+.modal.open{display:flex!important;}
+.modal-content{width:95%;max-width:570px;max-height:90vh;overflow-y:auto;position:relative;animation:mpop .2s cubic-bezier(.34,1.56,.64,1);padding:32px!important;background:white;border-radius:20px!important;box-shadow:0 24px 60px rgba(5,46,22,0.18);}
+@keyframes mpop{from{transform:scale(.93) translateY(12px);opacity:0;}to{transform:scale(1) translateY(0);opacity:1;}}
+.modal-close{position:absolute;right:18px;top:18px;font-size:24px;font-weight:300;color:var(--text-muted);cursor:pointer;transition:all .15s;line-height:1;width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:50%;border:none;background:none;font-family:inherit;}
+.modal-close:hover{background:#f0fdf4;color:var(--danger);}
+.modal-content h2{font-size:19px;font-weight:800;color:var(--text);margin-bottom:20px;display:flex;align-items:center;gap:9px;}
 
-/* FORMS */
-.form-group{position:relative;margin-bottom:18px;}
-.form-group label{display:block;margin-bottom:8px;font-size:13px;font-weight:600;color:var(--text-muted);}
-.form-group input,.form-group select,.form-group textarea{width:100%;padding:12px 14px;background:#f8fafc;border:1px solid var(--border);border-radius:11px;font-size:14px;color:var(--text);outline:none;transition:all .2s;font-family:inherit;}
-.form-group input:focus,.form-group select:focus,.form-group textarea:focus{background:white;border-color:var(--primary);box-shadow:0 0 0 3px rgba(37,99,235,.1);}
-.form-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:18px;}
+/* ─── FORMS ─── */
+.form-group{position:relative;margin-bottom:15px;}
+.form-group label{display:block;margin-bottom:6px;font-size:12px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.3px;}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:11px 13px;background:#f9fafb;border:1.5px solid #e5e7eb;border-radius:10px;font-size:13.5px;color:var(--text);outline:none;transition:all .15s;font-family:inherit;}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{background:white;border-color:var(--primary);box-shadow:0 0 0 3px rgba(22,163,74,0.1);}
+.form-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;}
 
-/* AUTOCOMPLETE */
-.autocomplete-items{position:absolute;border:1px solid var(--border);border-top:none;z-index:9999;top:100%;left:0;right:0;background:white;border-radius:0 0 11px 11px;box-shadow:var(--shadow-lg);max-height:220px;overflow-y:auto;}
-.autocomplete-items div{padding:10px 14px;cursor:pointer;transition:background .15s;border-bottom:1px solid #f1f5f9;font-size:13px;color:var(--text);}
-.autocomplete-items div:last-child{border-bottom:none;}
-.autocomplete-items div:hover{background:var(--primary-light);color:var(--primary);font-weight:600;}
+/* ─── AUTOCOMPLETE ─── */
+.ac-list{position:absolute;border:1.5px solid var(--border);border-top:none;z-index:9999;top:100%;left:0;right:0;background:white;border-radius:0 0 10px 10px;box-shadow:var(--shadow-lg);max-height:200px;overflow-y:auto;}
+.ac-list div{padding:9px 13px;cursor:pointer;border-bottom:1px solid #f0fdf4;font-size:12.5px;color:var(--text);transition:background .1s;}
+.ac-list div:last-child{border-bottom:none;}
+.ac-list div:hover{background:var(--primary-xlight);color:var(--primary);font-weight:600;}
 
-/* BADGES */
-.badge{padding:5px 12px;border-radius:9px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;display:inline-block;}
-.badge.active{background:#dcfce7;color:#16a34a;}
-.badge.inactive{background:#fee2e2;color:#dc2626;}
-.badge.closed{background:#f1f5f9;color:var(--text-muted);}
+/* ─── BADGES ─── */
+.badge{padding:4px 10px;border-radius:8px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;display:inline-block;}
+.badge-active{background:#dcfce7;color:#16a34a;}
+.badge-inactive{background:#fee2e2;color:#dc2626;}
+.badge-closed{background:#f1f5f9;color:#94a3b8;}
+.badge-scheduled{background:#dbeafe;color:#2563eb;}
+.badge-distributed{background:#dcfce7;color:#16a34a;}
+.badge-pending{background:#ffedd5;color:#ea580c;}
 
-/* TOAST */
-.toast-container{position:fixed;bottom:24px;right:24px;z-index:99999;display:flex;flex-direction:column;gap:10px;}
-.toast{background:white;padding:14px 22px;border-radius:14px;box-shadow:var(--shadow-lg);display:flex;align-items:center;gap:12px;font-size:14px;font-weight:500;border:1px solid var(--border);animation:slideInRight .35s ease;max-width:340px;}
-.toast.error i{color:var(--danger);}
-.toast.success i{color:var(--accent);}
-.toast.warning i{color:var(--warning);}
-.toast.fade-out{animation:fadeOut .4s ease forwards;}
-@keyframes slideInRight{from{transform:translateX(110%);opacity:0;}to{transform:translateX(0);opacity:1;}}
-@keyframes fadeOut{to{opacity:0;transform:translateX(110%);}}
+/* ─── TOAST ─── */
+.toast-cont{position:fixed;bottom:22px;right:22px;z-index:99999;display:flex;flex-direction:column;gap:8px;}
+.toast{background:white;padding:12px 20px;border-radius:12px;box-shadow:var(--shadow-lg);display:flex;align-items:center;gap:10px;font-size:13px;font-weight:600;border:1.5px solid var(--border);animation:tslide .3s ease;max-width:320px;}
+.toast.t-error i{color:var(--danger);}
+.toast.t-success i{color:var(--primary);}
+.toast.t-warning i{color:var(--warning);}
+.toast.fade-out{animation:tfade .35s ease forwards;}
+@keyframes tslide{from{transform:translateX(110%);opacity:0;}to{transform:translateX(0);opacity:1;}}
+@keyframes tfade{to{opacity:0;transform:translateX(110%);}}
 
-/* SKELETON */
+/* ─── SKELETON ─── */
 @keyframes shimmer{0%{background-position:-400px 0;}100%{background-position:400px 0;}}
-.skel-cell,.skel-row{background:linear-gradient(90deg,#f0f4f8 25%,#e2e8f0 50%,#f0f4f8 75%);background-size:800px 100%;animation:shimmer 1.4s infinite linear;border-radius:8px;}
-.skel-cell{height:14px;width:85%;display:block;}
-.skel-row{height:44px;width:100%;margin-bottom:10px;border-radius:10px;}
+.skel{background:linear-gradient(90deg,#f0fdf4 25%,#dcfce7 50%,#f0fdf4 75%);background-size:800px 100%;animation:shimmer 1.3s infinite linear;border-radius:7px;display:block;}
 
-/* MGR */
-.mgr-filter-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px;}
-.mgr-filter-selects{display:flex;gap:8px;flex-wrap:wrap;}
-.mgr-filter-selects select{padding:9px 14px;border-radius:10px;border:1px solid var(--border);background:white;font-size:13px;color:var(--text);outline:none;cursor:pointer;font-family:inherit;}
-.beneficiary-box{border-radius:12px;padding:18px;margin-bottom:14px;}
-.beneficiary-box.green-box{background:#f0fdf4;border:1px solid #bbf7d0;}
-.beneficiary-box.blue-box{background:#eff6ff;border:1px solid #bfdbfe;}
-.beneficiary-box p{font-weight:700;font-size:13px;margin-bottom:12px;}
-.beneficiary-box.green-box p{color:#16a34a;}
-.beneficiary-box.blue-box p{color:#2563eb;}
+/* ─── MGR ─── */
+.mgr-filter-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:8px;}
+.mgr-filters{display:flex;gap:7px;flex-wrap:wrap;}
+.mgr-filters select{padding:8px 12px;border-radius:9px;border:1.5px solid var(--border);background:white;font-size:12.5px;color:var(--text);outline:none;cursor:pointer;font-family:inherit;font-weight:600;}
+.bene-box{border-radius:11px;padding:15px;margin-bottom:12px;}
+.bene-green{background:#f0fdf4;border:1.5px solid #bbf7d0;}
+.bene-blue{background:#eff6ff;border:1.5px solid #bfdbfe;}
+.bene-box p{font-weight:700;font-size:12px;margin-bottom:10px;text-transform:uppercase;letter-spacing:.3px;}
+.bene-green p{color:#16a34a;}
+.bene-blue p{color:#2563eb;}
 
-/* DOWNLOADS */
-.download-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:18px;}
-.download-card{background:var(--glass);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.55);border-radius:18px;padding:24px;cursor:pointer;transition:all .3s;display:flex;flex-direction:column;gap:18px;box-shadow:var(--shadow);}
-.download-card:hover{transform:translateY(-5px);box-shadow:0 20px 40px rgba(0,0,0,.1);background:rgba(255,255,255,.9);}
-.card-header-flex{display:flex;align-items:center;gap:14px;}
-.download-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
-.download-icon.banking-blue{background:#dbeafe;color:#2563eb;}
-.download-icon.accounting-green{background:#dcfce7;color:#16a34a;}
-.download-icon.credit-orange{background:#ffedd5;color:#ea580c;}
-.download-icon.liquidity-cyan{background:#e0f2fe;color:#0369a1;}
-.download-info h4{font-size:14px;font-weight:700;color:var(--text);margin-bottom:2px;}
-.download-info p{font-size:11px;color:var(--text-muted);font-weight:500;}
-.export-action-btn{display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 14px;background:#f1f5f9;border-radius:11px;font-size:12px;font-weight:700;color:var(--text-muted);transition:all .2s;border:1px solid var(--border);}
-.download-card:hover .export-action-btn{background:var(--primary);color:white;border-color:var(--primary);}
+/* ─── DOWNLOADS ─── */
+.dl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:15px;}
+.dl-card{background:var(--glass);backdrop-filter:blur(12px);border:1.5px solid rgba(255,255,255,.7);border-radius:var(--radius);padding:20px;cursor:pointer;transition:all .2s;display:flex;flex-direction:column;gap:14px;box-shadow:var(--shadow);}
+.dl-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);background:rgba(255,255,255,.95);}
+.dl-card-head{display:flex;align-items:center;gap:12px;}
+.dl-icon{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+.dl-info h4{font-size:13px;font-weight:700;color:var(--text);margin-bottom:2px;}
+.dl-info p{font-size:11px;color:var(--text-muted);font-weight:500;}
+.dl-btn{display:flex;align-items:center;justify-content:center;gap:6px;padding:9px 12px;background:#f0fdf4;border-radius:9px;font-size:12px;font-weight:700;color:var(--primary);transition:all .15s;border:1.5px solid var(--border);}
+.dl-card:hover .dl-btn{background:var(--primary);color:white;border-color:var(--primary);}
 
-/* RECENT LIST */
-.recent-list{display:flex;flex-direction:column;gap:10px;}
-.list-item{display:flex;justify-content:space-between;align-items:center;padding:13px 16px;background:rgba(255,255,255,.4);border-radius:12px;transition:all .2s;}
-.list-item:hover{background:rgba(255,255,255,.8);}
-.item-info strong{display:block;font-size:14px;}
-.item-info span{font-size:12px;color:var(--text-muted);}
-.item-amount{font-weight:700;color:var(--accent);font-size:14px;}
-.chart-container{padding:24px;}
-.chart-container h3{font-size:16px;font-weight:700;margin-bottom:16px;}
-.empty-msg{text-align:center;color:var(--text-muted);padding:20px;font-size:13px;}
+/* ─── RECENT ─── */
+.recent-list{display:flex;flex-direction:column;gap:8px;}
+.recent-item{display:flex;justify-content:space-between;align-items:center;padding:11px 14px;background:rgba(240,253,244,0.6);border-radius:10px;transition:background .1s;border:1px solid transparent;}
+.recent-item:hover{background:rgba(255,255,255,.9);border-color:var(--border);}
+.ri-info strong{display:block;font-size:13.5px;font-weight:700;}
+.ri-info span{font-size:11.5px;color:var(--text-muted);}
+.ri-amount{font-weight:800;color:var(--primary);font-size:14px;}
+.chart-wrap{padding:20px;}
+.chart-wrap h3{font-size:15px;font-weight:700;margin-bottom:14px;color:var(--text);}
+.empty-msg{text-align:center;color:var(--text-muted);padding:30px;font-size:13px;}
+
+/* ─── SETUP OVERLAY ─── */
+#setup-overlay{display:none;position:fixed;inset:0;z-index:99999;background:linear-gradient(135deg,#052e16 0%,#14532d 100%);align-items:center;justify-content:center;}
+.setup-box{background:white;border-radius:22px;padding:44px 40px;max-width:460px;width:95%;box-shadow:0 40px 80px rgba(0,0,0,0.4);text-align:center;}
+.setup-logo{width:72px;height:72px;margin:0 auto 22px;display:block;}
+.setup-title{font-size:26px;font-weight:900;color:var(--text);margin-bottom:6px;}
+.setup-title b{color:var(--primary);}
+.setup-sub{color:var(--text-muted);font-size:13.5px;margin-bottom:28px;line-height:1.6;}
+.setup-field{background:#f9fafb;border:1.5px solid #e5e7eb;border-radius:13px;padding:18px;margin-bottom:20px;text-align:left;}
+.setup-field label{display:block;font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;}
+.setup-field input{width:100%;padding:11px 13px;border:1.5px solid #e5e7eb;border-radius:9px;font-size:13px;outline:none;color:var(--text);font-family:inherit;transition:border-color .15s;}
+.setup-field input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(22,163,74,0.1);}
+#setup-error{color:var(--danger);font-size:12px;margin-top:8px;display:none;}
+.setup-cta{width:100%;padding:14px;background:var(--primary);color:white;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px;font-family:inherit;}
+.setup-cta:hover{background:var(--primary-dark);}
+.setup-note{margin-top:14px;font-size:11px;color:#9ca3af;}
+
+/* ─── SPINNING ─── */
 .spinning{animation:spin 1s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg);}}
+.view-action-bar{display:flex;justify-content:flex-end;margin-bottom:16px;}
 
+/* ─── PROFILE MODAL ─── */
+.profile-header{display:flex;gap:16px;align-items:center;margin-bottom:18px;padding:18px;background:var(--primary-xlight);border-radius:12px;border:1.5px solid var(--primary-light);}
+.profile-avatar{width:64px;height:64px;border-radius:16px;background:var(--primary-light);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;color:var(--primary);flex-shrink:0;}
+.profile-meta h3{font-size:18px;font-weight:800;margin-bottom:2px;}
+.profile-meta p{color:var(--text-muted);font-size:12.5px;}
+.profile-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+.profile-stat{background:white;border:1.5px solid var(--border);border-radius:11px;padding:12px;}
+.profile-stat p{font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;margin-bottom:3px;}
+.profile-stat h4{font-size:16px;font-weight:800;}
+.profile-details{display:flex;flex-direction:column;gap:9px;font-size:13.5px;}
+.profile-details span{font-weight:600;color:var(--text-muted);}
 
-
-/* RESPONSIVE */
-@media(max-width:1024px){.sidebar{width:72px;padding:20px 8px;}.logo span,.nav-item span,.sidebar-footer{display:none;}.content{margin-left:72px;padding:20px;}.nav-item{justify-content:center;padding:12px;}}
-@media(max-width:768px){.stats-grid{grid-template-columns:1fr 1fr;}.download-grid{grid-template-columns:1fr 1fr;}.header-filters{max-width:100%;}}
-@media(max-width:480px){.stats-grid{grid-template-columns:1fr;}.download-grid{grid-template-columns:1fr;}.content{padding:12px;}}
+/* ─── RESPONSIVE ─── */
+@media(max-width:1024px){.sidebar{width:64px;padding:16px 6px;}.logo-text,.nav-item span,.sidebar-brand,.btn-sync span{display:none;}.content{margin-left:64px;padding:16px;}.nav-item{justify-content:center;padding:11px;}}
+@media(max-width:768px){.stats-grid{grid-template-columns:1fr 1fr;}.dl-grid{grid-template-columns:1fr 1fr;}.header-filters{max-width:100%;}}
+@media(max-width:480px){.stats-grid{grid-template-columns:1fr;}.dl-grid{grid-template-columns:1fr;}.content{padding:10px;}}
 </style>
 </head>
 <body>
 <div class="app-container">
 
-    <!-- SIDEBAR -->
-    <aside class="sidebar">
-        <div class="logo">
-            <i class="fas fa-university"></i>
-            <div style="display:flex;flex-direction:column;align-items:flex-start;">
-                <span style="line-height:1;">SACCO<b>Sync</b></span>
-                <span style="font-size:10px;font-weight:500;opacity:.65;margin-top:3px;">Version 2.0.0</span>
-            </div>
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <a href="#" class="logo" onclick="event.preventDefault();">
+      <!-- Custom icon: green circle + hand + money -->
+      <svg class="logo-icon" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="20" cy="20" r="20" fill="#16a34a"/>
+        <ellipse cx="15.5" cy="20.5" rx="6" ry="7.5" rx="6" ry="7.5" fill="#a16207" transform="rotate(-18 15.5 20.5)"/>
+        <ellipse cx="15.5" cy="20.5" rx="3.2" ry="4.5" fill="#854d0e" transform="rotate(-18 15.5 20.5)"/>
+        <path d="M14 23.5 Q17 25 22 23.5 Q26 22 27 19 Q22 18 18 19.5 Q15 20.5 14 23.5Z" fill="#fbbf24"/>
+        <path d="M22 23.5 Q26 22 27 19 L27.5 18 Q28 17 27 16.5 Q26 16 25 17.5 Q24 19 22 19.5 Q20 20 18 19.5 L14 23.5Z" fill="#fde68a"/>
+        <rect x="25" y="14" width="5.5" height="9" rx="2" fill="#f97316" transform="rotate(10 27.75 18.5)"/>
+      </svg>
+      <div class="logo-text">
+        <span class="logo-name">SACCO<b>Sync</b></span>
+        <span class="logo-ver">v2.0.0</span>
+      </div>
+    </a>
+    <nav id="main-nav">
+      <button class="nav-item active" data-view="dashboard"><i class="fas fa-home"></i><span>Dashboard</span></button>
+      <button class="nav-item" data-view="members"><i class="fas fa-users"></i><span>Members</span></button>
+      <button class="nav-item" data-view="contributions"><i class="fas fa-hand-holding-usd"></i><span>Contributions</span></button>
+      <button class="nav-item" data-view="loans"><i class="fas fa-file-invoice-dollar"></i><span>Loans</span></button>
+      <button class="nav-item" data-view="repayments"><i class="fas fa-coins"></i><span>Repayments</span></button>
+      <button class="nav-item" data-view="mgr"><i class="fas fa-sync-alt"></i><span>Merry Go Round</span></button>
+      <button class="nav-item" data-view="reports"><i class="fas fa-chart-line"></i><span>Reports</span></button>
+      <button class="nav-item" data-view="downloads"><i class="fas fa-file-download"></i><span>Downloads</span></button>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="btn-sync" onclick="forceSync()">
+        <i class="fas fa-sync" id="sync-icon"></i><span>Sync System</span>
+      </button>
+      <span class="sidebar-brand">Millennial Group S&L</span>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="content">
+    <header>
+      <div class="header-left">
+        <div class="user-avatar"><i class="fas fa-user-shield"></i></div>
+        <div class="view-info">
+          <h1 id="view-title">Dashboard Overview</h1>
+          <p id="current-date"></p>
         </div>
-        <nav>
-            <a href="#" class="nav-item active" onclick="event.preventDefault();showView('dashboard')"><i class="fas fa-home"></i><span>Dashboard</span></a>
-            <a href="#" class="nav-item" onclick="event.preventDefault();showView('members')"><i class="fas fa-users"></i><span>Members</span></a>
-            <a href="#" class="nav-item" onclick="event.preventDefault();showView('contributions')"><i class="fas fa-hand-holding-usd"></i><span>Contributions</span></a>
-            <a href="#" class="nav-item" onclick="event.preventDefault();showView('loans')"><i class="fas fa-file-invoice-dollar"></i><span>Loans</span></a>
-            <a href="#" class="nav-item" onclick="event.preventDefault();showView('repayments')"><i class="fas fa-coins"></i><span>Repayments</span></a>
-            <a href="#" class="nav-item" onclick="event.preventDefault();showView('mgr')"><i class="fas fa-sync-alt"></i><span>Merry Go Round</span></a>
-            <a href="#" class="nav-item" onclick="event.preventDefault();showView('reports')"><i class="fas fa-chart-line"></i><span>Reports</span></a>
-            <a href="#" class="nav-item" onclick="event.preventDefault();showView('downloads')"><i class="fas fa-file-download"></i><span>Download Reports</span></a>
-        </nav>
-        <div class="sidebar-footer">
-            <button onclick="forceSync()" class="btn-init">
-                <i class="fas fa-sync" id="sync-icon"></i><span>Sync System</span>
-            </button>
-            <span style="display:block;text-align:center;font-size:13px;font-weight:700;margin-top:5px;background:linear-gradient(90deg,#666,#999);-webkit-background-clip:text;-webkit-text-fill-color:transparent;opacity:.8;">Millennial Group S&L</span>
+      </div>
+      <div class="header-filters">
+        <div class="search-wrap">
+          <i class="fas fa-search"></i>
+          <input type="text" id="global-search" placeholder="Search anything..." oninput="onSearchInput()">
         </div>
-    </aside>
-
-    <!-- MAIN -->
-    <main class="content">
-        <header class="glass">
-            <div class="header-left">
-                <div class="user-profile">
-                    <img src="https://ui-avatars.com/api/?name=Admin&background=2563eb&color=fff" alt="Admin">
-                </div>
-                <div class="view-info">
-                    <h1 id="view-title">Dashboard Overview</h1>
-                    <p id="current-date"></p>
-                </div>
-            </div>
-            <div class="header-filters">
-                <div class="search-box glass">
-                    <i class="fas fa-search"></i>
-                    <input type="text" id="global-search" placeholder="Search..." oninput="handleGlobalSearch()">
-                </div>
-                <div class="filter-group glass">
-                    <select id="global-month" onchange="handleGlobalFilter()">
-                        <option value="">All Months</option>
-                        <option value="0">Jan</option><option value="1">Feb</option><option value="2">Mar</option><option value="3">Apr</option>
-                        <option value="4">May</option><option value="5">Jun</option><option value="6">Jul</option><option value="7">Aug</option>
-                        <option value="8">Sep</option><option value="9">Oct</option><option value="10">Nov</option><option value="11">Dec</option>
-                    </select>
-                    <select id="global-year" onchange="handleGlobalFilter()">
-                        <option value="">Year</option>
-                        <option value="2025">2025</option><option value="2026">2026</option><option value="2027">2027</option>
-                    </select>
-                    <button class="btn-primary" onclick="handleGlobalFilter()" style="padding:7px 14px;font-size:12px;">
-                        <i class="fas fa-filter"></i> Apply
-                    </button>
-                </div>
-            </div>
-        </header>
-
-
-
-        <!-- DASHBOARD -->
-        <div id="dashboard-view" class="view">
-            <div class="stats-grid">
-                <div class="stat-card glass"><div class="stat-icon purple"><i class="fas fa-users"></i></div><div class="stat-info"><p>Total Members</p><h2 id="total-members">0</h2></div></div>
-                <div class="stat-card glass"><div class="stat-icon blue-light"><i class="fas fa-user-check"></i></div><div class="stat-info"><p>Active Members</p><h2 id="active-members-stat">0</h2></div></div>
-                <div class="stat-card glass"><div class="stat-icon red-light"><i class="fas fa-user-slash"></i></div><div class="stat-info"><p>Inactive Members</p><h2 id="inactive-members-stat">0</h2></div></div>
-                <div class="stat-card glass"><div class="stat-icon blue"><i class="fas fa-hand-holding-heart"></i></div><div class="stat-info"><p>Active Loans</p><h2 id="total-loans">0</h2></div></div>
-                <div class="stat-card glass"><div class="stat-icon green"><i class="fas fa-piggy-bank"></i></div><div class="stat-info"><p>Total Merry Go Round</p><h2 id="total-merry-go-round">KES 0</h2></div></div>
-                <div class="stat-card glass"><div class="stat-icon orange"><i class="fas fa-clock"></i></div><div class="stat-info"><p>Loans Disbursed</p><h2 id="total-outstanding">KES 0</h2></div></div>
-                <div class="stat-card glass"><div class="stat-icon teal"><i class="fas fa-wallet"></i></div><div class="stat-info"><p>Members Savings</p><h2 id="total-members-savings">KES 0</h2></div></div>
-                <div class="stat-card glass"><div class="stat-icon pink"><i class="fas fa-hand-holding-medical"></i></div><div class="stat-info"><p>Welfare Funds</p><h2 id="total-welfare-funds">KES 0</h2></div></div>
-            </div>
-            <div class="glass chart-container">
-                <h3>Recent Contributions</h3>
-                <div id="recent-contributions-list" class="recent-list"><p class="empty-msg">Loading...</p></div>
-            </div>
+        <div class="filter-wrap">
+          <select id="global-month" onchange="onFilterChange()">
+            <option value="">All Months</option>
+            <option value="0">Jan</option><option value="1">Feb</option><option value="2">Mar</option><option value="3">Apr</option>
+            <option value="4">May</option><option value="5">Jun</option><option value="6">Jul</option><option value="7">Aug</option>
+            <option value="8">Sep</option><option value="9">Oct</option><option value="10">Nov</option><option value="11">Dec</option>
+          </select>
+          <select id="global-year" onchange="onFilterChange()">
+            <option value="">Year</option>
+            <option value="2025">2025</option><option value="2026">2026</option><option value="2027">2027</option>
+          </select>
+          <button class="btn-primary" onclick="onFilterChange()" style="padding:6px 12px;font-size:11.5px;">
+            <i class="fas fa-filter"></i>
+          </button>
         </div>
+      </div>
+    </header>
 
-        <!-- MEMBERS -->
-        <div id="members-view" class="view" style="display:none">
-            <div style="display:flex;justify-content:flex-end;margin-bottom:20px;">
-                <button class="btn-primary" onclick="openModal('member-modal')"><i class="fas fa-user-plus"></i> Add Member</button>
-            </div>
-            <div class="table-container glass">
-                <table id="members-table">
-                    <thead><tr><th>ID</th><th>Name</th><th>Phone</th><th>Savings</th><th>Loan Bal</th><th>Status</th><th>Actions</th></tr></thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-        </div>
+    <!-- DASHBOARD VIEW -->
+    <div id="v-dashboard" class="view">
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-icon si-purple"><i class="fas fa-users"></i></div><div class="stat-info"><p>Total Members</p><h2 id="s-totalMembers">—</h2></div></div>
+        <div class="stat-card"><div class="stat-icon si-green"><i class="fas fa-user-check"></i></div><div class="stat-info"><p>Active Members</p><h2 id="s-activeMembers">—</h2></div></div>
+        <div class="stat-card"><div class="stat-icon si-red"><i class="fas fa-user-slash"></i></div><div class="stat-info"><p>Inactive Members</p><h2 id="s-inactiveMembers">—</h2></div></div>
+        <div class="stat-card"><div class="stat-icon si-blue"><i class="fas fa-hand-holding-heart"></i></div><div class="stat-info"><p>Active Loans</p><h2 id="s-totalLoans">—</h2></div></div>
+        <div class="stat-card"><div class="stat-icon si-green"><i class="fas fa-piggy-bank"></i></div><div class="stat-info"><p>Merry Go Round</p><h2 id="s-totalMerryGoRound">KES —</h2></div></div>
+        <div class="stat-card"><div class="stat-icon si-orange"><i class="fas fa-clock"></i></div><div class="stat-info"><p>Loans Disbursed</p><h2 id="s-outstandingBalance">KES —</h2></div></div>
+        <div class="stat-card"><div class="stat-icon si-teal"><i class="fas fa-wallet"></i></div><div class="stat-info"><p>Members Savings</p><h2 id="s-totalMembersSavings">KES —</h2></div></div>
+        <div class="stat-card"><div class="stat-icon si-pink"><i class="fas fa-hand-holding-medical"></i></div><div class="stat-info"><p>Welfare Funds</p><h2 id="s-totalWelfareFunds">KES —</h2></div></div>
+      </div>
+      <div class="table-wrap chart-wrap">
+        <h3>Recent Contributions</h3>
+        <div id="recent-list" class="recent-list"><p class="empty-msg">Loading...</p></div>
+      </div>
+    </div>
 
-        <!-- CONTRIBUTIONS -->
-        <div id="contributions-view" class="view" style="display:none">
-            <div style="display:flex;justify-content:flex-end;margin-bottom:20px;">
-                <button class="btn-primary" onclick="openModal('contribution-modal')"><i class="fas fa-plus"></i> Log Contribution</button>
-            </div>
-            <div class="table-container glass">
-                <table id="contributions-table">
-                    <thead><tr><th>Date</th><th>Member</th><th>Amount</th><th>Type</th><th>Reference</th></tr></thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-        </div>
+    <!-- MEMBERS VIEW -->
+    <div id="v-members" class="view" style="display:none">
+      <div class="view-action-bar"><button class="btn-primary" onclick="openModal('m-member')"><i class="fas fa-user-plus"></i> Add Member</button></div>
+      <div class="table-wrap">
+        <table><thead><tr><th>ID</th><th>Name</th><th>Phone</th><th>Savings</th><th>Loan Bal</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody id="tb-members"></tbody></table>
+      </div>
+    </div>
 
-        <!-- LOANS -->
-        <div id="loans-view" class="view" style="display:none">
-            <div style="display:flex;justify-content:flex-end;margin-bottom:20px;">
-                <button class="btn-primary" onclick="openModal('loan-modal')"><i class="fas fa-plus"></i> Issue New Loan</button>
-            </div>
-            <div class="table-container glass">
-                <table id="loans-table">
-                    <thead><tr><th>ID</th><th>Borrower</th><th>Amount</th><th>Term</th><th>Due Date</th><th>Status</th></tr></thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-        </div>
+    <!-- CONTRIBUTIONS VIEW -->
+    <div id="v-contributions" class="view" style="display:none">
+      <div class="view-action-bar"><button class="btn-primary" onclick="openModal('m-contribution')"><i class="fas fa-plus"></i> Log Contribution</button></div>
+      <div class="table-wrap">
+        <table><thead><tr><th>Date</th><th>Member</th><th>Amount</th><th>Type</th><th>Reference</th></tr></thead>
+        <tbody id="tb-contributions"></tbody></table>
+      </div>
+    </div>
 
-        <!-- REPAYMENTS -->
-        <div id="repayments-view" class="view" style="display:none">
-            <div style="display:flex;justify-content:flex-end;margin-bottom:20px;">
-                <button class="btn-primary" onclick="openModal('repayment-modal')"><i class="fas fa-plus"></i> Register Repayment</button>
-            </div>
-            <div class="table-container glass">
-                <table id="repayments-table">
-                    <thead><tr><th>Date</th><th>Member</th><th>Loan ID</th><th>Total Paid</th><th>Principal</th><th>Interest</th><th>Penalty</th></tr></thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-        </div>
+    <!-- LOANS VIEW -->
+    <div id="v-loans" class="view" style="display:none">
+      <div class="view-action-bar"><button class="btn-primary" onclick="openModal('m-loan')"><i class="fas fa-plus"></i> Issue Loan</button></div>
+      <div class="table-wrap">
+        <table><thead><tr><th>ID</th><th>Borrower</th><th>Amount</th><th>Term</th><th>Due Date</th><th>Status</th></tr></thead>
+        <tbody id="tb-loans"></tbody></table>
+      </div>
+    </div>
 
-        <!-- MGR -->
-        <div id="mgr-view" class="view" style="display:none">
-            <div class="stats-grid" style="margin-bottom:24px;">
-                <div class="stat-card glass"><div class="stat-icon green"><i class="fas fa-calendar-check"></i></div><div class="stat-info"><p>Total Schedules</p><h2 id="mgr-total-schedules">0</h2></div></div>
-                <div class="stat-card glass"><div class="stat-icon teal"><i class="fas fa-check-double"></i></div><div class="stat-info"><p>Distributed</p><h2 id="mgr-distributed-count">0</h2></div></div>
-                <div class="stat-card glass"><div class="stat-icon orange"><i class="fas fa-hourglass-half"></i></div><div class="stat-info"><p>Pending / Scheduled</p><h2 id="mgr-pending-count">0</h2></div></div>
-                <div class="stat-card glass"><div class="stat-icon purple"><i class="fas fa-coins"></i></div><div class="stat-info"><p>Total Distributed (KES)</p><h2 id="mgr-total-distributed">KES 0</h2></div></div>
-                <div class="stat-card glass"><div class="stat-icon blue"><i class="fas fa-hand-holding-usd"></i></div><div class="stat-info"><p>Latest Amount Each</p><h2 id="mgr-latest-each">KES 0</h2></div></div>
-                <div class="stat-card glass" style="border:2px solid #bbf7d0;"><div class="stat-icon green"><i class="fas fa-piggy-bank"></i></div><div class="stat-info"><p>Total MGR Contributions</p><h2 id="mgr-total-contributions">KES 0</h2><span style="font-size:11px;color:var(--text-muted);font-weight:500;">From Contributions Sheet</span></div></div>
-            </div>
-            <div class="mgr-filter-bar">
-                <div class="mgr-filter-selects">
-                    <select id="mgr-filter-status" onchange="loadMGR()"><option value="">All Status</option><option value="Scheduled">Scheduled</option><option value="Distributed">Distributed</option><option value="Pending">Pending</option></select>
-                    <select id="mgr-filter-year" onchange="loadMGR()"><option value="">All Years</option><option value="2025">2025</option><option value="2026">2026</option><option value="2027">2027</option></select>
-                </div>
-                <button class="btn-primary" onclick="openModal('mgr-modal')"><i class="fas fa-plus"></i> Schedule Distribution</button>
-            </div>
-            <div class="table-container glass">
-                <table id="mgr-table">
-                    <thead><tr><th>Month / Year</th><th>Beneficiary 1</th><th>Beneficiary 2</th><th>Amount Each</th><th>Total Distributed</th><th>Status</th><th>Dist. Date</th><th>Notes</th><th>Action</th></tr></thead>
-                    <tbody><tr><td colspan="9" style="text-align:center;padding:40px;color:var(--text-muted);">Loading...</td></tr></tbody>
-                </table>
-            </div>
-        </div>
+    <!-- REPAYMENTS VIEW -->
+    <div id="v-repayments" class="view" style="display:none">
+      <div class="view-action-bar"><button class="btn-primary" onclick="openModal('m-repayment')"><i class="fas fa-plus"></i> Register Repayment</button></div>
+      <div class="table-wrap">
+        <table><thead><tr><th>Date</th><th>Member</th><th>Loan ID</th><th>Total Paid</th><th>Principal</th><th>Interest</th><th>Penalty</th></tr></thead>
+        <tbody id="tb-repayments"></tbody></table>
+      </div>
+    </div>
 
-        <!-- REPORTS -->
-        <div id="reports-view" class="view" style="display:none">
-            <div class="stats-grid">
-                <div class="stat-card glass"><div class="stat-info"><p>Total Penalties Collected</p><h2 id="total-penalties">KES 0</h2></div></div>
-                <div class="stat-card glass"><div class="stat-info"><p>Active Borrowers</p><h2 id="active-borrowers">0</h2></div></div>
-                <div class="stat-card glass"><div class="stat-info"><p>Total Interests Collected</p><h2 id="total-interests">KES 0</h2></div></div>
-            </div>
-            <div class="table-container glass">
-                <div style="padding:20px 24px 12px;"><h3 style="font-size:16px;font-weight:700;">Overdue Installments</h3></div>
-                <table id="overdue-table">
-                    <thead><tr><th>Loan ID</th><th>Member</th><th>Due Date</th><th>Late Days</th><th>Penalty</th></tr></thead>
-                    <tbody></tbody>
-                </table>
-            </div>
+    <!-- MGR VIEW -->
+    <div id="v-mgr" class="view" style="display:none">
+      <div class="stats-grid" style="margin-bottom:20px;">
+        <div class="stat-card"><div class="stat-icon si-green"><i class="fas fa-calendar-check"></i></div><div class="stat-info"><p>Total Schedules</p><h2 id="mgr-s-total">—</h2></div></div>
+        <div class="stat-card"><div class="stat-icon si-teal"><i class="fas fa-check-double"></i></div><div class="stat-info"><p>Distributed</p><h2 id="mgr-s-done">—</h2></div></div>
+        <div class="stat-card"><div class="stat-icon si-orange"><i class="fas fa-hourglass-half"></i></div><div class="stat-info"><p>Pending</p><h2 id="mgr-s-pending">—</h2></div></div>
+        <div class="stat-card"><div class="stat-icon si-purple"><i class="fas fa-coins"></i></div><div class="stat-info"><p>Total Distributed</p><h2 id="mgr-s-distamt">KES —</h2></div></div>
+        <div class="stat-card"><div class="stat-icon si-blue"><i class="fas fa-hand-holding-usd"></i></div><div class="stat-info"><p>Latest Amount Each</p><h2 id="mgr-s-latest">KES —</h2></div></div>
+        <div class="stat-card" style="border:2px solid #bbf7d0;"><div class="stat-icon si-green"><i class="fas fa-piggy-bank"></i></div><div class="stat-info"><p>Total MGR Contributions</p><h2 id="mgr-s-contrib">KES —</h2></div></div>
+      </div>
+      <div class="mgr-filter-bar">
+        <div class="mgr-filters">
+          <select id="mgr-fs" onchange="renderMGRTable()"><option value="">All Status</option><option value="Scheduled">Scheduled</option><option value="Distributed">Distributed</option><option value="Pending">Pending</option></select>
+          <select id="mgr-fy" onchange="renderMGRTable()"><option value="">All Years</option><option value="2025">2025</option><option value="2026">2026</option><option value="2027">2027</option></select>
         </div>
+        <button class="btn-primary" onclick="openModal('m-mgr')"><i class="fas fa-plus"></i> Schedule Distribution</button>
+      </div>
+      <div class="table-wrap">
+        <table><thead><tr><th>Month/Year</th><th>Beneficiary 1</th><th>Beneficiary 2</th><th>Each</th><th>Total</th><th>Status</th><th>Dist. Date</th><th>Notes</th><th>Action</th></tr></thead>
+        <tbody id="tb-mgr"></tbody></table>
+      </div>
+    </div>
 
-        <!-- DOWNLOADS -->
-        <div id="downloads-view" class="view" style="display:none">
-            <div style="margin-bottom:28px;">
-                <h2 style="font-size:26px;font-weight:900;color:var(--text);letter-spacing:-1px;">System Repository</h2>
-                <p style="color:var(--text-muted);font-size:13px;margin-top:4px;">Enterprise-grade data management and archival center.</p>
-            </div>
-            <div onclick="downloadFullWorkbook()" style="background:linear-gradient(135deg,#2563eb 0%,#1e40af 100%);border-radius:20px;padding:36px;display:flex;align-items:center;gap:24px;cursor:pointer;transition:all .3s;margin-bottom:40px;box-shadow:0 16px 40px rgba(37,99,235,.35);" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform=''">
-                <div style="width:68px;height:68px;background:rgba(255,255,255,.18);border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:28px;color:white;flex-shrink:0;"><i class="fas fa-server"></i></div>
-                <div style="flex:1;"><h4 style="font-size:20px;font-weight:800;color:white;margin-bottom:6px;">Unified System Workbook (.xlsx)</h4><p style="color:rgba(255,255,255,.75);font-size:13px;">Master archive — Members, Loans, Contributions, Repayments, MGR all in one file.</p></div>
-                <div style="background:white;color:#1e40af;padding:12px 22px;border-radius:12px;font-weight:700;font-size:13px;white-space:nowrap;display:flex;align-items:center;gap:8px;flex-shrink:0;"><i class="fas fa-download"></i> Generate Master File</div>
-            </div>
-            <p style="font-size:11px;text-transform:uppercase;letter-spacing:2px;font-weight:700;color:var(--text-muted);margin-bottom:16px;">Modular Exports</p>
-            <div class="download-grid">
-                <div class="download-card" onclick="exportToCSV('Members')"><div class="card-header-flex"><div class="download-icon banking-blue"><i class="fas fa-id-card"></i></div><div class="download-info"><h4>Members Registry</h4><p>Personal & KYC Data</p></div></div><div class="export-action-btn"><i class="fas fa-file-csv"></i> Export CSV</div></div>
-                <div class="download-card" onclick="exportToCSV('Contributions')"><div class="card-header-flex"><div class="download-icon accounting-green"><i class="fas fa-file-invoice-dollar"></i></div><div class="download-info"><h4>Financial Ledger</h4><p>Savings & Collections</p></div></div><div class="export-action-btn"><i class="fas fa-file-csv"></i> Export CSV</div></div>
-                <div class="download-card" onclick="exportToCSV('Loans')"><div class="card-header-flex"><div class="download-icon credit-orange"><i class="fas fa-hand-holding-usd"></i></div><div class="download-info"><h4>Loan Portfolio</h4><p>Active Agreements</p></div></div><div class="export-action-btn"><i class="fas fa-file-csv"></i> Export CSV</div></div>
-                <div class="download-card" onclick="exportToCSV('Repayments')"><div class="card-header-flex"><div class="download-icon liquidity-cyan"><i class="fas fa-coins"></i></div><div class="download-info"><h4>Receipt Summary</h4><p>Installment History</p></div></div><div class="export-action-btn"><i class="fas fa-file-csv"></i> Export CSV</div></div>
-                <div class="download-card" onclick="exportToCSV('MerryGoRound')"><div class="card-header-flex"><div class="download-icon" style="background:#f0fdf4;color:#16a34a;"><i class="fas fa-sync-alt"></i></div><div class="download-info"><h4>MGR Schedule</h4><p>Distribution History</p></div></div><div class="export-action-btn"><i class="fas fa-file-csv"></i> Export CSV</div></div>
-            </div>
-        </div>
-    </main>
+    <!-- REPORTS VIEW -->
+    <div id="v-reports" class="view" style="display:none">
+      <div class="stats-grid" style="margin-bottom:20px;">
+        <div class="stat-card"><div class="stat-info"><p>Total Penalties</p><h2 id="r-penalties">KES —</h2></div></div>
+        <div class="stat-card"><div class="stat-info"><p>Active Borrowers</p><h2 id="r-borrowers">—</h2></div></div>
+        <div class="stat-card"><div class="stat-info"><p>Total Interests</p><h2 id="r-interests">KES —</h2></div></div>
+      </div>
+      <div class="table-wrap">
+        <div style="padding:18px 20px 10px;"><h3 style="font-size:15px;font-weight:700;">Overdue Installments</h3></div>
+        <table><thead><tr><th>Loan ID</th><th>Member</th><th>Due Date</th><th>Days Late</th><th>Penalty</th></tr></thead>
+        <tbody id="tb-overdue"></tbody></table>
+      </div>
+    </div>
+
+    <!-- DOWNLOADS VIEW -->
+    <div id="v-downloads" class="view" style="display:none">
+      <div style="margin-bottom:24px;">
+        <h2 style="font-size:24px;font-weight:900;letter-spacing:-0.5px;">System Repository</h2>
+        <p style="color:var(--text-muted);font-size:13px;margin-top:3px;">Enterprise data management and archival center.</p>
+      </div>
+      <div onclick="downloadFullWorkbook()" style="background:linear-gradient(135deg,#16a34a 0%,#15803d 100%);border-radius:18px;padding:30px;display:flex;align-items:center;gap:20px;cursor:pointer;transition:all .25s;margin-bottom:32px;box-shadow:0 12px 36px rgba(22,163,74,.35);" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform=''">
+        <div style="width:60px;height:60px;background:rgba(255,255,255,.18);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;color:white;flex-shrink:0;"><i class="fas fa-server"></i></div>
+        <div style="flex:1;"><h4 style="font-size:18px;font-weight:800;color:white;margin-bottom:5px;">Unified System Workbook (.xlsx)</h4><p style="color:rgba(255,255,255,.75);font-size:12.5px;">Master archive — Members, Loans, Contributions, Repayments, MGR all in one.</p></div>
+        <div style="background:white;color:#15803d;padding:10px 20px;border-radius:10px;font-weight:700;font-size:13px;white-space:nowrap;display:flex;align-items:center;gap:7px;flex-shrink:0;"><i class="fas fa-download"></i> Generate</div>
+      </div>
+      <p style="font-size:10.5px;text-transform:uppercase;letter-spacing:2px;font-weight:700;color:var(--text-muted);margin-bottom:14px;">Modular Exports</p>
+      <div class="dl-grid">
+        <div class="dl-card" onclick="exportCSV('Members')"><div class="dl-card-head"><div class="dl-icon si-blue"><i class="fas fa-id-card"></i></div><div class="dl-info"><h4>Members Registry</h4><p>Personal & KYC Data</p></div></div><div class="dl-btn"><i class="fas fa-file-csv"></i> Export CSV</div></div>
+        <div class="dl-card" onclick="exportCSV('Contributions')"><div class="dl-card-head"><div class="dl-icon si-green"><i class="fas fa-file-invoice-dollar"></i></div><div class="dl-info"><h4>Financial Ledger</h4><p>Savings & Collections</p></div></div><div class="dl-btn"><i class="fas fa-file-csv"></i> Export CSV</div></div>
+        <div class="dl-card" onclick="exportCSV('Loans')"><div class="dl-card-head"><div class="dl-icon si-orange"><i class="fas fa-hand-holding-usd"></i></div><div class="dl-info"><h4>Loan Portfolio</h4><p>Active Agreements</p></div></div><div class="dl-btn"><i class="fas fa-file-csv"></i> Export CSV</div></div>
+        <div class="dl-card" onclick="exportCSV('Repayments')"><div class="dl-card-head"><div class="dl-icon si-cyan"><i class="fas fa-coins"></i></div><div class="dl-info"><h4>Receipt Summary</h4><p>Installment History</p></div></div><div class="dl-btn"><i class="fas fa-file-csv"></i> Export CSV</div></div>
+        <div class="dl-card" onclick="exportCSV('MerryGoRound')"><div class="dl-card-head"><div class="dl-icon si-green"><i class="fas fa-sync-alt"></i></div><div class="dl-info"><h4>MGR Schedule</h4><p>Distribution History</p></div></div><div class="dl-btn"><i class="fas fa-file-csv"></i> Export CSV</div></div>
+      </div>
+    </div>
+  </main>
 </div>
 
-<!-- ======================== MODALS ======================== -->
+<!-- ═══════════════════ MODALS ═══════════════════ -->
 
 <!-- ADD MEMBER -->
-<div id="member-modal" class="modal" style="display:none">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal('member-modal')">&times;</span>
-        <h2>Register New Member</h2>
-        <form id="member-form">
-            <div class="form-group"><label>Full Name</label><input type="text" id="member-name" required></div>
-            <div class="form-row">
-                <div class="form-group"><label>Phone Number</label><input type="tel" id="member-phone" required></div>
-                <div class="form-group"><label>ID Number</label><input type="text" id="member-id-number" required></div>
-            </div>
-            <div class="form-row">
-                <div class="form-group"><label>Email Address</label><input type="email" id="member-email"></div>
-                <div class="form-group"><label>Member Type</label><select id="member-type" required><option value="">Select Type</option><option value="Member">Member</option><option value="External">External</option></select></div>
-            </div>
-            <div class="form-group"><label>Address</label><textarea id="member-address" style="min-height:60px;"></textarea></div>
-            <button type="submit" class="btn-submit">Register Member</button>
-        </form>
-    </div>
-</div>
-
-<!-- CONTRIBUTION -->
-<div id="contribution-modal" class="modal" style="display:none">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal('contribution-modal')">&times;</span>
-        <h2>Log Contribution</h2>
-        <form id="contribution-form">
-            <div class="form-group">
-                <label>Member (type name or ID)</label>
-                <input type="text" id="contrib-member-input" placeholder="Search member..." required autocomplete="off">
-                <input type="hidden" id="contrib-member-id"><input type="hidden" id="contrib-member-name"><input type="hidden" id="contrib-ref">
-                <div id="contrib-member-list" class="autocomplete-items"></div>
-            </div>
-            <div class="form-row">
-                <div class="form-group"><label>Amount (KES)</label><input type="number" id="contrib-amount" required min="1"></div>
-                <div class="form-group"><label>Type</label><select id="contrib-type"><option>Members Savings</option><option>Welfare Funds</option><option>Merry Go Round</option></select></div>
-            </div>
-            <button type="submit" class="btn-submit">Submit Contribution</button>
-        </form>
-    </div>
-</div>
-
-<!-- LOAN -->
-<div id="loan-modal" class="modal" style="display:none">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal('loan-modal')">&times;</span>
-        <h2>Issue New Loan</h2>
-        <form id="loan-form">
-            <div class="form-row">
-                <div class="form-group"><label>Member Search</label><input type="text" id="loan-member-input" placeholder="Search borrower..." required autocomplete="off"><input type="hidden" id="loan-member-id"><input type="hidden" id="loan-member-name"><div id="loan-member-list" class="autocomplete-items"></div></div>
-                <div class="form-group"><label>Borrower Type</label><select id="borrower-type" disabled style="background:#f1f5f9;cursor:not-allowed;opacity:.8;"><option value="Member">Member</option><option value="External">External</option></select></div>
-            </div>
-            <div class="form-row">
-                <div class="form-group"><label>Amount (KES)</label><input type="number" id="loan-amount" required min="1"></div>
-                <div class="form-group"><label>Term (Months)</label><input type="number" id="loan-term" min="1" max="36" value="1" required></div>
-            </div>
-            <button type="submit" class="btn-submit">Issue Loan</button>
-        </form>
-    </div>
-</div>
-
-<!-- REPAYMENT -->
-<div id="repayment-modal" class="modal" style="display:none">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal('repayment-modal')">&times;</span>
-        <h2>Log Repayment</h2>
-        <form id="repayment-form">
-            <div class="form-group"><label>Loan Search (Name or Loan ID)</label><input type="text" id="repay-loan-input" placeholder="Search active loan..." required autocomplete="off"><input type="hidden" id="repay-loan-id"><input type="hidden" id="repay-member-id"><input type="hidden" id="repay-member-name"><input type="hidden" id="repay-borrower-type"><div id="repay-loan-list" class="autocomplete-items"></div></div>
-            <div class="form-row">
-                <div class="form-group"><label>Repayment Amount (KES)</label><input type="number" id="repay-amount" required placeholder="0.00" min="1"></div>
-                <div class="form-group"><label>Interest Amount (leave blank = auto)</label><input type="number" id="repay-interest" placeholder="Auto-calculated"></div>
-            </div>
-            <div class="form-group"><label>Penalty Paid (KES)</label><input type="number" id="repay-penalty" value="0" min="0"></div>
-            <button type="submit" class="btn-submit">Register Payment</button>
-        </form>
-    </div>
-</div>
-
-<!-- MGR SCHEDULE -->
-<div id="mgr-modal" class="modal" style="display:none">
-    <div class="modal-content" style="max-width:620px;">
-        <span class="close" onclick="closeModal('mgr-modal')">&times;</span>
-        <h2><i class="fas fa-sync-alt" style="color:var(--accent);font-size:18px;"></i> Schedule MGR Distribution</h2>
-        <form id="mgr-form">
-            <div class="form-row">
-                <div class="form-group"><label>Month</label><select id="mgr-month" required><option value="">Select Month</option><option value="1">January</option><option value="2">February</option><option value="3">March</option><option value="4">April</option><option value="5">May</option><option value="6">June</option><option value="7">July</option><option value="8">August</option><option value="9">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option></select></div>
-                <div class="form-group"><label>Year</label><select id="mgr-year" required><option value="2025">2025</option><option value="2026" selected>2026</option><option value="2027">2027</option></select></div>
-            </div>
-            <div class="beneficiary-box green-box"><p><i class="fas fa-user"></i> Beneficiary 1</p><div class="form-group" style="margin-bottom:0;position:relative;"><input type="text" id="mgr-b1-input" placeholder="Search member..." autocomplete="off"><input type="hidden" id="mgr-b1-id"><input type="hidden" id="mgr-b1-name"><div id="mgr-b1-list" class="autocomplete-items"></div></div></div>
-            <div class="beneficiary-box blue-box"><p><i class="fas fa-user"></i> Beneficiary 2</p><div class="form-group" style="margin-bottom:0;position:relative;"><input type="text" id="mgr-b2-input" placeholder="Search member..." autocomplete="off"><input type="hidden" id="mgr-b2-id"><input type="hidden" id="mgr-b2-name"><div id="mgr-b2-list" class="autocomplete-items"></div></div></div>
-            <div class="form-row">
-                <div class="form-group"><label>Amount Each (KES)</label><input type="number" id="mgr-amount-each" required placeholder="e.g. 13500" min="1" oninput="updateMGRTotal()"></div>
-                <div class="form-group"><label>Total Distributed (auto)</label><input type="number" id="mgr-total-amount" readonly placeholder="Auto" style="background:#f1f5f9;cursor:not-allowed;"></div>
-            </div>
-            <div class="form-row">
-                <div class="form-group"><label>Status</label><select id="mgr-status" required><option value="Scheduled">Scheduled</option><option value="Distributed">Distributed</option><option value="Pending">Pending</option></select></div>
-                <div class="form-group"><label>Distribution Date (if done)</label><input type="date" id="mgr-dist-date"></div>
-            </div>
-            <div class="form-group"><label>Notes (Optional)</label><textarea id="mgr-notes" style="min-height:55px;" placeholder="Any notes..."></textarea></div>
-            <button type="submit" class="btn-submit">Save Schedule</button>
-        </form>
-    </div>
-</div>
-
-<!-- MGR MARK DISTRIBUTED -->
-<div id="mgr-mark-modal" class="modal" style="display:none">
-    <div class="modal-content" style="max-width:420px;">
-        <span class="close" onclick="closeModal('mgr-mark-modal')">&times;</span>
-        <h2><i class="fas fa-check-circle" style="color:var(--accent);"></i> Mark as Distributed</h2>
-        <p style="color:var(--text-muted);margin-bottom:20px;font-size:13px;">Confirming: <strong id="mgr-mark-label"></strong></p>
-        <input type="hidden" id="mgr-mark-id">
-        <div class="form-group"><label>Distribution Date</label><input type="date" id="mgr-mark-date" required></div>
-        <div class="form-group"><label>Notes (Optional)</label><textarea id="mgr-mark-notes" style="min-height:55px;"></textarea></div>
-        <button class="btn-submit" onclick="confirmMarkDistributed()">Confirm Distribution</button>
-    </div>
-</div>
-
-<!-- MEMBER PROFILE -->
-<div id="member-profile-modal" class="modal" style="display:none">
-    <div class="modal-content" style="max-width:560px;">
-        <span class="close" onclick="closeModal('member-profile-modal')">&times;</span>
-        <h2>Member Profile</h2>
-        <div style="display:flex;gap:18px;align-items:center;margin-bottom:20px;">
-            <img src="" id="profile-avatar" style="width:72px;height:72px;border-radius:18px;">
-            <div><h3 id="profile-name" style="font-size:18px;font-weight:800;">---</h3><p id="profile-id" style="color:var(--text-muted);font-size:13px;">---</p></div>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px;">
-            <div class="stat-card glass" style="padding:14px;"><p style="font-size:11px;color:var(--text-muted);font-weight:600;text-transform:uppercase;margin-bottom:4px;">Total Savings</p><h4 id="profile-savings" style="font-size:16px;font-weight:800;">KES 0</h4></div>
-            <div class="stat-card glass" style="padding:14px;"><p style="font-size:11px;color:var(--text-muted);font-weight:600;text-transform:uppercase;margin-bottom:4px;">Loan Balance</p><h4 id="profile-loan" style="font-size:16px;font-weight:800;">KES 0</h4></div>
-        </div>
-        <div style="display:flex;flex-direction:column;gap:10px;font-size:14px;">
-            <p><strong>Phone:</strong> <span id="profile-phone">---</span></p>
-            <p><strong>Email:</strong> <span id="profile-email">---</span></p>
-            <p><strong>ID Number:</strong> <span id="profile-id-no">---</span></p>
-            <p><strong>Status:</strong> <span id="profile-status">---</span></p>
-            <p><strong>Type:</strong> <span id="profile-type">---</span></p>
-            <p><strong>Address:</strong> <span id="profile-address">---</span></p>
-        </div>
-    </div>
-</div>
-
-<!-- MEMBER EDIT -->
-<div id="member-edit-modal" class="modal" style="display:none">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal('member-edit-modal')">&times;</span>
-        <h2>Edit Member</h2>
-        <form id="member-edit-form">
-            <input type="hidden" id="edit-member-id">
-            <div class="form-group"><label>Full Name</label><input type="text" id="edit-member-name" required></div>
-            <div class="form-row">
-                <div class="form-group"><label>Phone Number</label><input type="tel" id="edit-member-phone" required></div>
-                <div class="form-group"><label>Email Address</label><input type="email" id="edit-member-email"></div>
-            </div>
-            <div class="form-row">
-                <div class="form-group"><label>ID Number (read-only)</label><input type="text" id="edit-member-id-no" readonly style="background:#f1f5f9;cursor:not-allowed;"></div>
-                <div class="form-group"><label>Member Type</label><select id="edit-member-type"><option value="Member">Member</option><option value="External">External</option></select></div>
-            </div>
-            <div class="form-row">
-                <div class="form-group"><label>Status</label><select id="edit-member-status"><option value="Active">Active</option><option value="Inactive">Inactive</option></select></div>
-                <div class="form-group"><label>Address</label><input type="text" id="edit-member-address"></div>
-            </div>
-            <button type="submit" class="btn-submit">Save Changes</button>
-        </form>
-    </div>
-</div>
-
-<div id="toast-container" class="toast-container"></div>
-
-<!-- FIRST TIME SETUP OVERLAY -->
-<div id="setup-overlay" style="display:none;position:fixed;inset:0;z-index:99999;background:linear-gradient(135deg,#0f172a 0%,#1e3a5f 100%);align-items:center;justify-content:center;">
-  <div style="background:white;border-radius:24px;padding:48px 44px;max-width:480px;width:95%;box-shadow:0 40px 80px rgba(0,0,0,0.5);text-align:center;">
-    <div style="width:72px;height:72px;background:#dbeafe;border-radius:20px;display:flex;align-items:center;justify-content:center;margin:0 auto 24px;font-size:32px;color:#2563eb;">
-      <i class="fas fa-university"></i>
-    </div>
-    <h2 style="font-size:24px;font-weight:900;color:#0f172a;margin-bottom:8px;">SACCO<span style="color:#2563eb;">Sync</span></h2>
-    <p style="color:#64748b;font-size:14px;margin-bottom:32px;line-height:1.6;">Millennial Group S&amp;L — Management System</p>
-    <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:14px;padding:20px;margin-bottom:24px;text-align:left;">
-      <label style="display:block;font-size:12px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">Apps Script API URL</label>
-      <input type="url" id="setup-url-input" placeholder="https://script.google.com/macros/s/.../exec"
-        style="width:100%;padding:12px 14px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:13px;outline:none;color:#0f172a;font-family:inherit;transition:border-color .2s;"
-        onfocus="this.style.borderColor='#2563eb'" onblur="this.style.borderColor='#e2e8f0'">
-      <p id="setup-error" style="color:#ef4444;font-size:12px;margin-top:8px;display:none;">❌ Invalid URL. Please paste the correct Apps Script URL.</p>
-    </div>
-    <button onclick="saveSetupUrl()" id="setup-save-btn"
-      style="width:100%;padding:14px;background:#2563eb;color:white;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px;">
-      <i class="fas fa-plug"></i> Connect & Launch
-    </button>
-    <p style="margin-top:16px;font-size:11px;color:#94a3b8;">This is saved on this device only. Other devices will ask once too.</p>
+<div id="m-member" class="modal">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeModal('m-member')">&times;</button>
+    <h2><i class="fas fa-user-plus" style="color:var(--primary)"></i> Register New Member</h2>
+    <form id="f-member" onsubmit="submitMember(event)">
+      <div class="form-group"><label>Full Name</label><input type="text" id="fi-mname" required></div>
+      <div class="form-row">
+        <div class="form-group"><label>Phone Number</label><input type="tel" id="fi-mphone" required></div>
+        <div class="form-group"><label>ID Number</label><input type="text" id="fi-midno" required></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Email Address</label><input type="email" id="fi-memail"></div>
+        <div class="form-group"><label>Member Type</label><select id="fi-mtype" required><option value="">Select</option><option value="Member">Member</option><option value="External">External</option></select></div>
+      </div>
+      <div class="form-group"><label>Address</label><textarea id="fi-maddress" style="min-height:55px;"></textarea></div>
+      <button type="submit" class="btn-submit" id="btn-member-submit">Register Member</button>
+    </form>
   </div>
 </div>
 
+<!-- CONTRIBUTION -->
+<div id="m-contribution" class="modal">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeModal('m-contribution')">&times;</button>
+    <h2><i class="fas fa-hand-holding-usd" style="color:var(--primary)"></i> Log Contribution</h2>
+    <form id="f-contribution" onsubmit="submitContribution(event)">
+      <div class="form-group">
+        <label>Member</label>
+        <input type="text" id="fi-cmember" placeholder="Type name or ID..." required autocomplete="off">
+        <input type="hidden" id="fi-cmid"><input type="hidden" id="fi-cmname">
+        <div id="ac-cmember" class="ac-list"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Amount (KES)</label><input type="number" id="fi-camount" required min="1"></div>
+        <div class="form-group"><label>Type</label><select id="fi-ctype"><option>Members Savings</option><option>Welfare Funds</option><option>Merry Go Round</option></select></div>
+      </div>
+      <button type="submit" class="btn-submit" id="btn-contrib-submit">Submit Contribution</button>
+    </form>
+  </div>
+</div>
+
+<!-- LOAN -->
+<div id="m-loan" class="modal">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeModal('m-loan')">&times;</button>
+    <h2><i class="fas fa-file-invoice-dollar" style="color:var(--primary)"></i> Issue New Loan</h2>
+    <form id="f-loan" onsubmit="submitLoan(event)">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Borrower</label>
+          <input type="text" id="fi-lmember" placeholder="Search borrower..." required autocomplete="off">
+          <input type="hidden" id="fi-lmid"><input type="hidden" id="fi-lmname">
+          <div id="ac-lmember" class="ac-list"></div>
+        </div>
+        <div class="form-group"><label>Borrower Type</label><select id="fi-lbtype" disabled style="opacity:.7;cursor:not-allowed;background:#f9fafb;"><option value="Member">Member</option><option value="External">External</option></select></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Amount (KES)</label><input type="number" id="fi-lamount" required min="1"></div>
+        <div class="form-group"><label>Term (Months)</label><input type="number" id="fi-lterm" min="1" max="36" value="1" required></div>
+      </div>
+      <button type="submit" class="btn-submit" id="btn-loan-submit">Issue Loan</button>
+    </form>
+  </div>
+</div>
+
+<!-- REPAYMENT -->
+<div id="m-repayment" class="modal">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeModal('m-repayment')">&times;</button>
+    <h2><i class="fas fa-coins" style="color:var(--primary)"></i> Register Repayment</h2>
+    <form id="f-repayment" onsubmit="submitRepayment(event)">
+      <div class="form-group">
+        <label>Loan (Name or Loan ID)</label>
+        <input type="text" id="fi-rloan" placeholder="Search active loan..." required autocomplete="off">
+        <input type="hidden" id="fi-rlid"><input type="hidden" id="fi-rmid"><input type="hidden" id="fi-rmname"><input type="hidden" id="fi-rbtype">
+        <div id="ac-rloan" class="ac-list"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Principal Amount (KES)</label><input type="number" id="fi-ramount" required min="1" placeholder="0.00"></div>
+        <div class="form-group"><label>Interest (blank = auto)</label><input type="number" id="fi-rinterest" placeholder="Auto-calculated"></div>
+      </div>
+      <div class="form-group"><label>Penalty (KES)</label><input type="number" id="fi-rpenalty" value="0" min="0"></div>
+      <button type="submit" class="btn-submit" id="btn-repay-submit">Register Payment</button>
+    </form>
+  </div>
+</div>
+
+<!-- MGR SCHEDULE -->
+<div id="m-mgr" class="modal">
+  <div class="modal-content" style="max-width:600px;">
+    <button class="modal-close" onclick="closeModal('m-mgr')">&times;</button>
+    <h2><i class="fas fa-sync-alt" style="color:var(--primary)"></i> Schedule MGR Distribution</h2>
+    <form id="f-mgr" onsubmit="submitMGR(event)">
+      <div class="form-row">
+        <div class="form-group"><label>Month</label><select id="fi-mgrmonth" required><option value="">Month</option><option value="1">January</option><option value="2">February</option><option value="3">March</option><option value="4">April</option><option value="5">May</option><option value="6">June</option><option value="7">July</option><option value="8">August</option><option value="9">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option></select></div>
+        <div class="form-group"><label>Year</label><select id="fi-mgryear" required><option value="2025">2025</option><option value="2026" selected>2026</option><option value="2027">2027</option></select></div>
+      </div>
+      <div class="bene-box bene-green"><p><i class="fas fa-user"></i> Beneficiary 1</p><div class="form-group" style="margin-bottom:0;position:relative;"><input type="text" id="fi-mgrb1" placeholder="Search member..." autocomplete="off"><input type="hidden" id="fi-mgrb1id"><input type="hidden" id="fi-mgrb1name"><div id="ac-mgrb1" class="ac-list"></div></div></div>
+      <div class="bene-box bene-blue"><p><i class="fas fa-user"></i> Beneficiary 2</p><div class="form-group" style="margin-bottom:0;position:relative;"><input type="text" id="fi-mgrb2" placeholder="Search member..." autocomplete="off"><input type="hidden" id="fi-mgrb2id"><input type="hidden" id="fi-mgrb2name"><div id="ac-mgrb2" class="ac-list"></div></div></div>
+      <div class="form-row">
+        <div class="form-group"><label>Amount Each (KES)</label><input type="number" id="fi-mgreach" required min="1" oninput="document.getElementById('fi-mgrtotal').value=((+this.value)||0)*2"></div>
+        <div class="form-group"><label>Total (auto)</label><input type="number" id="fi-mgrtotal" readonly style="background:#f9fafb;cursor:not-allowed;opacity:.7;"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Status</label><select id="fi-mgrstatus" required><option value="Scheduled">Scheduled</option><option value="Distributed">Distributed</option><option value="Pending">Pending</option></select></div>
+        <div class="form-group"><label>Distribution Date</label><input type="date" id="fi-mgrddate"></div>
+      </div>
+      <div class="form-group"><label>Notes</label><textarea id="fi-mgrnotes" style="min-height:50px;" placeholder="Optional notes..."></textarea></div>
+      <button type="submit" class="btn-submit" id="btn-mgr-submit">Save Schedule</button>
+    </form>
+  </div>
+</div>
+
+<!-- MGR MARK DISTRIBUTED -->
+<div id="m-mgrmark" class="modal">
+  <div class="modal-content" style="max-width:400px;">
+    <button class="modal-close" onclick="closeModal('m-mgrmark')">&times;</button>
+    <h2><i class="fas fa-check-circle" style="color:var(--primary)"></i> Mark as Distributed</h2>
+    <p style="color:var(--text-muted);margin-bottom:18px;font-size:13px;">Confirming: <strong id="mgrmark-label"></strong></p>
+    <input type="hidden" id="mgrmark-id">
+    <div class="form-group"><label>Distribution Date</label><input type="date" id="mgrmark-date" required></div>
+    <div class="form-group"><label>Notes</label><textarea id="mgrmark-notes" style="min-height:50px;"></textarea></div>
+    <button class="btn-submit" onclick="confirmMarkDistributed()">Confirm Distribution</button>
+  </div>
+</div>
+
+<!-- MEMBER PROFILE -->
+<div id="m-profile" class="modal">
+  <div class="modal-content" style="max-width:540px;">
+    <button class="modal-close" onclick="closeModal('m-profile')">&times;</button>
+    <h2>Member Profile</h2>
+    <div class="profile-header">
+      <div class="profile-avatar" id="pa-initials">?</div>
+      <div class="profile-meta">
+        <h3 id="pa-name">—</h3>
+        <p id="pa-id">—</p>
+      </div>
+    </div>
+    <div class="profile-stats">
+      <div class="profile-stat"><p>Total Savings</p><h4 id="pa-savings">KES 0</h4></div>
+      <div class="profile-stat"><p>Loan Balance</p><h4 id="pa-loan">KES 0</h4></div>
+    </div>
+    <div class="profile-details">
+      <div><span>Phone: </span><span id="pa-phone">—</span></div>
+      <div><span>Email: </span><span id="pa-email">—</span></div>
+      <div><span>ID Number: </span><span id="pa-idno">—</span></div>
+      <div><span>Status: </span><span id="pa-status">—</span></div>
+      <div><span>Type: </span><span id="pa-type">—</span></div>
+      <div><span>Address: </span><span id="pa-address">—</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- MEMBER EDIT -->
+<div id="m-edit" class="modal">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeModal('m-edit')">&times;</button>
+    <h2><i class="fas fa-user-edit" style="color:var(--primary)"></i> Edit Member</h2>
+    <form id="f-edit" onsubmit="submitEditMember(event)">
+      <input type="hidden" id="fi-eid">
+      <div class="form-group"><label>Full Name</label><input type="text" id="fi-ename" required></div>
+      <div class="form-row">
+        <div class="form-group"><label>Phone</label><input type="tel" id="fi-ephone" required></div>
+        <div class="form-group"><label>Email</label><input type="email" id="fi-eemail"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>ID No. (read-only)</label><input type="text" id="fi-eidno" readonly style="opacity:.65;cursor:not-allowed;background:#f9fafb;"></div>
+        <div class="form-group"><label>Type</label><select id="fi-etype"><option value="Member">Member</option><option value="External">External</option></select></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Status</label><select id="fi-estatus"><option value="Active">Active</option><option value="Inactive">Inactive</option></select></div>
+        <div class="form-group"><label>Address</label><input type="text" id="fi-eaddress"></div>
+      </div>
+      <button type="submit" class="btn-submit" id="btn-edit-submit">Save Changes</button>
+    </form>
+  </div>
+</div>
+
+<!-- SETUP OVERLAY -->
+<div id="setup-overlay">
+  <div class="setup-box">
+    <svg class="setup-logo" viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="36" cy="36" r="36" fill="#16a34a"/>
+      <ellipse cx="28" cy="37" rx="11" ry="14" fill="#a16207" transform="rotate(-18 28 37)"/>
+      <ellipse cx="28" cy="37" rx="6" ry="8.5" fill="#854d0e" transform="rotate(-18 28 37)"/>
+      <path d="M25 44 Q31 47 40 44 Q47 41 49 35 Q40 34 33 36 Q28 38 25 44Z" fill="#fbbf24"/>
+      <path d="M40 44 Q47 41 49 35 L50 33 Q51 31 49 30 Q47 29 45 32 Q43 35 40 36 Q37 37 33 36 L25 44Z" fill="#fde68a"/>
+      <rect x="46" y="25" width="10" height="17" rx="3.5" fill="#f97316" transform="rotate(10 51 33)"/>
+    </svg>
+    <div class="setup-title">SACCO<b>Sync</b></div>
+    <p class="setup-sub">Millennial Group S&L Management System<br>Enter your Apps Script API URL to connect.</p>
+    <div class="setup-field">
+      <label>Apps Script API URL</label>
+      <input type="url" id="setup-url" placeholder="https://script.google.com/macros/s/.../exec" id="setup-url-input">
+      <p id="setup-error">❌ Invalid or unreachable URL. Please check and try again.</p>
+    </div>
+    <button class="setup-cta" onclick="saveSetupUrl()" id="setup-btn">
+      <i class="fas fa-plug"></i> Connect & Launch
+    </button>
+    <p class="setup-note">Saved on this device only. Other devices will be asked once.</p>
+  </div>
+</div>
+
+<div id="toast-container" class="toast-cont"></div>
+
 <script>
-// ============================================================
-//  localStorage-based API URL — asked ONCE per device/browser
-//  No hardcoded URL needed in code
-// ============================================================
-var API_BASE_URL = localStorage.getItem('sacco_api_url') || '';
+// ═══════════════════════════════════════════════════
+//  CORE STATE — Single source of truth, never reload
+// ═══════════════════════════════════════════════════
+var S = {
+  apiUrl: localStorage.getItem('sacco_api_url') || '',
+  members: [],       // array of member objects
+  contributions: [], // raw rows (incl header)
+  loans: [],
+  repayments: [],
+  mgr: [],
+  dashboard: null,
+  currentView: 'dashboard',
+  loading: { members: false, contributions: false, loans: false, repayments: false, mgr: false, dashboard: false }
+};
 
-// ============================================================
-//  API CLIENT — replaces google.script.run
-//  All calls go through fetch() to the Apps Script Web App
-// ============================================================
+// ─── API ───
 var api = {
-    get: function(action, params) {
-        var url = new URL(API_BASE_URL);
-        url.searchParams.set('action', action);
-        if (params) Object.keys(params).forEach(function(k) { url.searchParams.set(k, params[k]); });
-        return fetch(url.toString())
-            .then(function(r) { return r.json(); })
-            .then(function(r) { if (!r.success) throw new Error(r.error || 'API Error'); return r.data; });
-    },
-    post: function(action, body, params) {
-        var url = new URL(API_BASE_URL);
-        url.searchParams.set('action', action);
-        if (params) Object.keys(params).forEach(function(k) { url.searchParams.set(k, params[k]); });
-        return fetch(url.toString(), {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(body || {})
-        }).then(function(r) { return r.json(); })
-          .then(function(r) { if (!r.success) throw new Error(r.error || 'API Error'); return r.data; });
-    }
+  get: function(action, params) {
+    var u = new URL(S.apiUrl);
+    u.searchParams.set('action', action);
+    if (params) Object.keys(params).forEach(function(k){ u.searchParams.set(k, params[k]); });
+    return fetch(u.toString()).then(function(r){ return r.json(); }).then(function(r){ if (!r.success) throw new Error(r.error || 'API Error'); return r.data; });
+  },
+  post: function(action, body, params) {
+    var u = new URL(S.apiUrl);
+    u.searchParams.set('action', action);
+    if (params) Object.keys(params).forEach(function(k){ u.searchParams.set(k, params[k]); });
+    return fetch(u.toString(), { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body||{}) })
+      .then(function(r){ return r.json(); }).then(function(r){ if (!r.success) throw new Error(r.error || 'API Error'); return r.data; });
+  }
 };
 
-// ============================================================
-//  APP STATE
-// ============================================================
-var memberState = { limit: 50, offset: 0, search: '' };
-
-var appCache = {
-    TTL: 30 * 60 * 1000,
-    data: {},
-    get: function(k) { var e=this.data[k]; if(!e)return null; if(Date.now()-e.ts>this.TTL){delete this.data[k];return null;} return e.d; },
-    set: function(k,d) { this.data[k]={d:d,ts:Date.now()}; },
-    clear: function() { this.data={}; }
-};
-
-// ============================================================
-//  UI UTILITIES
-// ============================================================
-function showToast(msg, type) {
-    type = type || 'success';
-    var c = document.getElementById('toast-container'); if(!c)return;
-    var t = document.createElement('div');
-    t.className = 'toast ' + type;
-    var icon = type==='success'?'check-circle':type==='warning'?'exclamation-triangle':'exclamation-circle';
-    t.innerHTML = '<i class="fas fa-'+icon+'"></i> <span>'+msg+'</span>';
-    c.appendChild(t);
-    setTimeout(function(){t.classList.add('fade-out');setTimeout(function(){if(t.parentNode)t.parentNode.removeChild(t);},400);},3000);
+// ─── TOAST ───
+function toast(msg, type) {
+  type = type || 'success';
+  var c = document.getElementById('toast-container'); if (!c) return;
+  var t = document.createElement('div');
+  t.className = 'toast t-' + type;
+  var icon = type==='success' ? 'check-circle' : type==='warning' ? 'exclamation-triangle' : 'exclamation-circle';
+  t.innerHTML = '<i class="fas fa-'+icon+'"></i><span>'+msg+'</span>';
+  c.appendChild(t);
+  setTimeout(function(){ t.classList.add('fade-out'); setTimeout(function(){ if(t.parentNode) t.parentNode.removeChild(t); },380); }, 3000);
 }
-function handleServerError(e) { showToast('Error: '+((e&&e.message)||String(e||'Unknown')),'error'); }
-function skelRows(cols,n){var cell='';for(var c=0;c<cols;c++)cell+='<td><div class="skel-cell"></div></td>';var out='';for(var r=0;r<(n||5);r++)out+='<tr>'+cell+'</tr>';return out;}
 
+// ─── MODALS — instant open/close ───
 function openModal(id) {
-    var m=document.getElementById(id); if(!m)return;
-    m.style.display='flex'; document.body.style.overflow='hidden';
-    if(id==='mgr-modal'){setTimeout(function(){setupMGRAutocomplete('mgr-b1-input','mgr-b1-id','mgr-b1-name');setupMGRAutocomplete('mgr-b2-input','mgr-b2-id','mgr-b2-name');},60);}
-    if(id==='contribution-modal') setupAutocomplete('contrib-member-input','contrib-member-id','Members');
-    if(id==='loan-modal')         setupAutocomplete('loan-member-input','loan-member-id','Members');
-    if(id==='repayment-modal')    setupAutocomplete('repay-loan-input','repay-loan-id','Loans');
+  var m = document.getElementById(id); if (!m) return;
+  m.classList.add('open'); m.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+  // Setup autocompletes on demand
+  var acMap = {
+    'm-contribution': function(){ setupAC('fi-cmember','ac-cmember','fi-cmid','fi-cmname','member'); },
+    'm-loan':         function(){ setupAC('fi-lmember','ac-lmember','fi-lmid','fi-lmname','member'); },
+    'm-repayment':    function(){ setupAC('fi-rloan','ac-rloan','fi-rlid',null,'loan'); },
+    'm-mgr':          function(){ setupAC('fi-mgrb1','ac-mgrb1','fi-mgrb1id','fi-mgrb1name','member'); setupAC('fi-mgrb2','ac-mgrb2','fi-mgrb2id','fi-mgrb2name','member'); }
+  };
+  if (acMap[id]) setTimeout(acMap[id], 30);
 }
-function closeModal(id){var m=document.getElementById(id);if(m)m.style.display='none';document.body.style.overflow='';}
-function btnSubmitting(btn,loading,orig){if(!btn)return;if(loading){btn.disabled=true;btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Saving...';}else{btn.disabled=false;btn.innerHTML=orig||'Submit';}}
-
-// ============================================================
-//  NAVIGATION
-// ============================================================
-function showView(viewId) {
-    document.querySelectorAll('.view').forEach(function(v){v.style.display='none';});
-    var target=document.getElementById(viewId+'-view'); if(!target)return;
-    target.style.display='block';
-    document.querySelectorAll('.nav-item').forEach(function(n){
-        n.classList.remove('active');
-        if((n.getAttribute('onclick')||'').indexOf("'"+viewId+"'")!==-1) n.classList.add('active');
-    });
-    var titles={dashboard:'Dashboard Overview',members:'Member Directory',contributions:'Contributions Tracking',loans:'Loan Management',repayments:'Loan Repayments',mgr:'Merry Go Round',reports:'Financial Reports',downloads:'Download Reports'};
-    var te=document.getElementById('view-title'); if(te)te.innerText=titles[viewId]||'SACCO Sync';
-    if(viewId==='dashboard')     renderDashboard();
-    if(viewId==='members')       renderMembers();
-    if(viewId==='contributions') renderSheet('Contributions','#contributions-table','contrib');
-    if(viewId==='loans')         renderSheet('Loans','#loans-table','loan');
-    if(viewId==='repayments')    renderSheet('Repayments','#repayments-table','repay');
-    if(viewId==='mgr')           renderMGR();
-    if(viewId==='reports')       renderReports();
+function closeModal(id) {
+  var m = document.getElementById(id); if (!m) return;
+  m.classList.remove('open'); m.style.display = 'none';
+  document.body.style.overflow = '';
 }
-function activeView(){var ai=document.querySelector('.nav-item.active');if(!ai)return'dashboard';var m=(ai.getAttribute('onclick')||'').match(/'([^']+)'/);return m?m[1]:'dashboard';}
-function handleGlobalFilter(){var v=activeView();if(v==='members'){memberState.search=((document.getElementById('global-search')||{}).value||'');memberState.offset=0;appCache.clear();}showView(v);}
-function handleGlobalSearch(){handleGlobalFilter();}
+// Close on backdrop click
+document.addEventListener('click', function(e) {
+  if (e.target && e.target.classList && e.target.classList.contains('modal') && e.target.classList.contains('open')) {
+    closeModal(e.target.id);
+  }
+});
 
-// ============================================================
-//  PREFETCH ALL
-// ============================================================
-function prefetchAll() {
-    return Promise.all([
-        api.get('getDashboardStats').then(function(d){if(d)appCache.set('dashboard',d);return d;}).catch(function(){return null;}),
-        api.get('getMembers',{limit:200,offset:0}).then(function(d){if(d&&d.length){appCache.set('Members',d);appCache.set('members_default',d);}return d;}).catch(function(){return[];}),
-        api.get('getSheet',{sheet:'Contributions'}).then(function(d){if(d&&d.length)appCache.set('Contributions',d);return d;}).catch(function(){return[];}),
-        api.get('getSheet',{sheet:'Loans'}).then(function(d){if(d&&d.length)appCache.set('Loans',d);return d;}).catch(function(){return[];}),
-        api.get('getSheet',{sheet:'Repayments'}).then(function(d){if(d&&d.length)appCache.set('Repayments',d);return d;}).catch(function(){return[];}),
-        api.get('getSheet',{sheet:'MerryGoRound'}).then(function(d){if(d&&d.length)appCache.set('MerryGoRound',d);return d;}).catch(function(){return[];})
-    ]);
+// ─── NAVIGATION ───
+var viewTitles = {
+  dashboard:'Dashboard Overview', members:'Member Directory', contributions:'Contributions Tracking',
+  loans:'Loan Management', repayments:'Loan Repayments', mgr:'Merry Go Round',
+  reports:'Financial Reports', downloads:'Download Reports'
+};
+document.getElementById('main-nav').addEventListener('click', function(e) {
+  var btn = e.target.closest('[data-view]'); if (!btn) return;
+  showView(btn.dataset.view);
+});
+function showView(v) {
+  S.currentView = v;
+  document.querySelectorAll('.view').forEach(function(el){ el.style.display='none'; });
+  var target = document.getElementById('v-'+v); if (target) target.style.display = 'block';
+  document.querySelectorAll('.nav-item').forEach(function(n){
+    n.classList.toggle('active', n.dataset.view === v);
+  });
+  var titleEl = document.getElementById('view-title'); if (titleEl) titleEl.innerText = viewTitles[v]||'SACCOSync';
+  // Render from state — instant, no reload
+  var renders = {
+    dashboard: renderDashboard,
+    members: renderMembersTable,
+    contributions: function(){ renderSheet('contributions','tb-contributions','contrib'); },
+    loans: function(){ renderSheet('loans','tb-loans','loan'); },
+    repayments: function(){ renderSheet('repayments','tb-repayments','repay'); },
+    mgr: renderMGR,
+    reports: renderReports,
+    downloads: function(){}
+  };
+  if (renders[v]) renders[v]();
 }
 
-function loadAllData() {
-    var list=document.getElementById('recent-contributions-list');
-    if(list)list.innerHTML='<div class="skel-row"></div><div class="skel-row"></div><div class="skel-row"></div><div class="skel-row"></div>';
-    prefetchAll().then(function(){showView(activeView());}).catch(function(e){handleServerError(e);showView('dashboard');});
+// ─── INITIAL DATA LOAD ───
+function loadAll(force) {
+  if (force) { S.members=[]; S.contributions=[]; S.loans=[]; S.repayments=[]; S.mgr=[]; S.dashboard=null; }
+  var p = [];
+  // Parallel fetch all sheets
+  p.push(api.get('getDashboardStats').then(function(d){ S.dashboard=d; }).catch(function(){}));
+  p.push(api.get('getMembers',{limit:2000,offset:0}).then(function(d){ if(d&&d.length) S.members=d; }).catch(function(){}));
+  p.push(api.get('getSheet',{sheet:'Contributions'}).then(function(d){ if(d) S.contributions=d; }).catch(function(){}));
+  p.push(api.get('getSheet',{sheet:'Loans'}).then(function(d){ if(d) S.loans=d; }).catch(function(){}));
+  p.push(api.get('getSheet',{sheet:'Repayments'}).then(function(d){ if(d) S.repayments=d; }).catch(function(){}));
+  p.push(api.get('getSheet',{sheet:'MerryGoRound'}).then(function(d){ if(d) S.mgr=d; }).catch(function(){}));
+  return Promise.all(p).then(function(){ showView(S.currentView); });
 }
 
 function forceSync() {
-    var icon=document.getElementById('sync-icon'); if(icon)icon.classList.add('spinning');
-    showToast('Syncing all data...');
-    appCache.clear();
-    api.get('clearCache').catch(function(){}).then(function(){return prefetchAll();}).then(function(){showView(activeView());showToast('Sync complete!');}).catch(handleServerError).then(function(){if(icon)icon.classList.remove('spinning');});
+  var icon = document.getElementById('sync-icon'); if(icon) icon.classList.add('spinning');
+  toast('Syncing all data...');
+  api.get('clearCache').catch(function(){}).then(function(){ return loadAll(true); })
+    .then(function(){ toast('Sync complete!'); }).catch(function(e){ toast('Sync failed: '+e.message,'error'); })
+    .then(function(){ if(icon) icon.classList.remove('spinning'); });
 }
 
-// ============================================================
-//  DASHBOARD
-// ============================================================
+// ─── SEARCH & FILTER ───
+var searchTimer = null;
+function onSearchInput() {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(function(){ showView(S.currentView); }, 120);
+}
+function onFilterChange() { showView(S.currentView); }
+function getSearchVal() { return ((document.getElementById('global-search')||{}).value||'').toLowerCase().trim(); }
+function getMonthFilter() { var v=(document.getElementById('global-month')||{}).value; return v===''?null:parseInt(v); }
+function getYearFilter() { var v=(document.getElementById('global-year')||{}).value; return v===''?null:parseInt(v); }
+
+function matchesDateFilter(dateVal) {
+  var m = getMonthFilter(), y = getYearFilter();
+  if (m===null && y===null) return true;
+  var d = new Date(dateVal); if (isNaN(d.getTime())) return true;
+  return (m===null || d.getMonth()===m) && (y===null || d.getFullYear()===y);
+}
+
+// ─── DASHBOARD ───
 function renderDashboard() {
-    var cached=appCache.get('dashboard');
-    if(cached)updateDashboardUI(cached);
-    api.get('getDashboardStats').then(function(d){if(d){appCache.set('dashboard',d);updateDashboardUI(d);}}).catch(function(){});
+  if (S.dashboard) updateDashStats(S.dashboard);
+  // Background refresh
+  api.get('getDashboardStats').then(function(d){ S.dashboard=d; updateDashStats(d); }).catch(function(){});
 }
-
-function updateDashboardUI(s) {
-    if(!s)return;
-    function se(id,v){var el=document.getElementById(id);if(el)el.innerText=v;}
-    se('total-members',s.totalMembers||0);
-    se('active-members-stat',s.activeMembers||0);
-    se('inactive-members-stat',s.inactiveMembers||0);
-    se('total-loans',s.totalLoans||0);
-    se('total-outstanding','KES '+Number(s.outstandingBalance||0).toLocaleString());
-    se('total-members-savings','KES '+Number(s.totalMembersSavings||0).toLocaleString());
-    se('total-welfare-funds','KES '+Number(s.totalWelfareFunds||0).toLocaleString());
-    se('total-merry-go-round','KES '+Number(s.totalMerryGoRound||0).toLocaleString());
-    var list=document.getElementById('recent-contributions-list'); if(!list)return;
-    if(s.recentContributions&&s.recentContributions.length){
-        list.innerHTML=s.recentContributions.map(function(c){
-            var d=new Date(c[3]),amt=Number(c[4]); if(isNaN(amt))return'';
-            return'<div class="list-item"><div class="item-info"><strong>'+(c[2]||'')+'</strong><span>'+(isNaN(d.getTime())?'N/A':d.toLocaleDateString())+'</span></div><div class="item-amount">+KES '+amt.toLocaleString()+'</div></div>';
-        }).join('');
-    }else{list.innerHTML='<p class="empty-msg">No recent activity</p>';}
-}
-
-// ============================================================
-//  MEMBERS
-// ============================================================
-function renderMembers() {
-    var cached=appCache.get('members_default')||appCache.get('Members');
-    if(cached&&Array.isArray(cached)&&cached.length&&cached[0].ID){updateMembersUI(cached);}
-    else{var tbody=document.querySelector('#members-table tbody');if(tbody)tbody.innerHTML=skelRows(7,6);}
-    api.get('getMembers',memberState).then(function(d){if(d&&d.length){appCache.set('Members',d);appCache.set('members_default',d);updateMembersUI(d);}}).catch(function(){});
-}
-
-function updateMembersUI(members) {
-    if(!Array.isArray(members)||!members.length||!members[0].ID)return;
-    var tbody=document.querySelector('#members-table tbody'); if(!tbody)return;
-    if(memberState.offset===0)tbody.innerHTML='';
-    var search=((document.getElementById('global-search')||{}).value||'').toLowerCase();
-    var rows=search?members.filter(function(m){return(String(m.Name||'')+String(m.ID||'')+String(m.Phone||'')).toLowerCase().indexOf(search)!==-1;}):members;
-    if(!rows.length){tbody.innerHTML='<tr><td colspan="7" style="text-align:center;padding:30px;color:var(--text-muted);">No members found</td></tr>';return;}
-    tbody.insertAdjacentHTML('beforeend',rows.map(function(m){
-        var st=String(m.Status||'').toLowerCase();
-        return'<tr><td><span style="font-size:12px;color:var(--text-muted);">'+(m.ID||'')+'</span></td><td><strong>'+(m.Name||'')+'</strong></td><td>'+(m.Phone||'')+'</td><td>KES '+Number(m.TotalSavings||0).toLocaleString()+'</td><td>KES '+Number(m.CurrentLoanBalance||0).toLocaleString()+'</td><td><span class="badge '+st+'">'+(m.Status||'')+'</span></td><td><div class="actions-cell"><button class="btn-icon-action btn-view" title="View" onclick="viewMember(\''+m.ID+'\')"><i class="fas fa-eye"></i></button><button class="btn-icon-action btn-edit" title="Edit" onclick="editMember(\''+m.ID+'\')"><i class="fas fa-pencil-alt"></i></button></div></td></tr>';
-    }).join(''));
-}
-
-// ============================================================
-//  GENERIC SHEET RENDER
-// ============================================================
-function renderSheet(cacheKey,tableId,type) {
-    var cols={contrib:5,loan:6,repay:7}[type]||5;
-    var cached=appCache.get(cacheKey);
-    if(cached)buildTable(tableId,cached,type);
-    else{var tbody=document.querySelector(tableId+' tbody');if(tbody)tbody.innerHTML=skelRows(cols,6);}
-    api.get('getSheet',{sheet:cacheKey}).then(function(d){if(d&&d.length){appCache.set(cacheKey,d);buildTable(tableId,d,type);}}).catch(function(){});
-}
-
-function buildTable(tableId,data,type) {
-    var tbody=document.querySelector(tableId+' tbody'); if(!tbody)return;
-    if(!data||!Array.isArray(data)||data.length<=1){tbody.innerHTML='<tr><td colspan="10" style="text-align:center;padding:30px;color:var(--text-muted);">No records found</td></tr>';return;}
-    var rows=data.slice(1);
-    var monthF=(document.getElementById('global-month')||{}).value||'';
-    var yearF=(document.getElementById('global-year')||{}).value||'';
-    var search=((document.getElementById('global-search')||{}).value||'').toLowerCase();
-    if(monthF!==''||yearF!==''){rows=rows.filter(function(r){var dv=r[3]||r[7]||r[8];if(!dv)return true;var d=new Date(dv);if(isNaN(d.getTime()))return true;return(monthF===''||d.getMonth()===parseInt(monthF))&&(yearF===''||d.getFullYear()===parseInt(yearF));});}
-    if(search){rows=rows.filter(function(r){return r.some(function(c){return String(c||'').toLowerCase().indexOf(search)!==-1;});});}
-    if(!rows.length){tbody.innerHTML='<tr><td colspan="10" style="text-align:center;padding:30px;color:var(--text-muted);">No matching records</td></tr>';return;}
-    tbody.innerHTML=rows.map(function(r){
-        if(type==='loan')return'<tr><td>'+(r[0]||'')+'</td><td><strong>'+(r[2]||'')+'</strong></td><td>KES '+Number(r[4]||0).toLocaleString()+'</td><td>'+(r[5]||'')+' Mon</td><td>'+(r[8]?new Date(r[8]).toLocaleDateString():'N/A')+'</td><td><span class="badge '+String(r[9]||'active').toLowerCase()+'">'+(r[9]||'Active')+'</span></td></tr>';
-        if(type==='repay')return'<tr><td>'+(r[3]?new Date(r[3]).toLocaleDateString():'N/A')+'</td><td><strong>'+(r[2]||'')+'</strong></td><td>'+(r[1]||'')+'</td><td>KES '+Number(r[4]||0).toLocaleString()+'</td><td>KES '+Number(r[5]||0).toLocaleString()+'</td><td>KES '+Number(r[6]||0).toLocaleString()+'</td><td>KES '+Number(r[7]||0).toLocaleString()+'</td></tr>';
-        return'<tr><td>'+(r[3]?new Date(r[3]).toLocaleDateString():'N/A')+'</td><td><strong>'+(r[2]||'')+'</strong></td><td>KES '+Number(r[4]||0).toLocaleString()+'</td><td>'+(r[5]||'')+'</td><td>'+(r[6]||'')+'</td></tr>';
+function updateDashStats(s) {
+  if (!s) return;
+  function se(id,v){ var el=document.getElementById(id); if(el) el.innerText=v; }
+  se('s-totalMembers', s.totalMembers||0);
+  se('s-activeMembers', s.activeMembers||0);
+  se('s-inactiveMembers', s.inactiveMembers||0);
+  se('s-totalLoans', s.totalLoans||0);
+  se('s-outstandingBalance', 'KES '+Number(s.outstandingBalance||0).toLocaleString());
+  se('s-totalMembersSavings', 'KES '+Number(s.totalMembersSavings||0).toLocaleString());
+  se('s-totalWelfareFunds', 'KES '+Number(s.totalWelfareFunds||0).toLocaleString());
+  se('s-totalMerryGoRound', 'KES '+Number(s.totalMerryGoRound||0).toLocaleString());
+  var list = document.getElementById('recent-list'); if (!list) return;
+  if (s.recentContributions && s.recentContributions.length) {
+    list.innerHTML = s.recentContributions.map(function(c){
+      var d=new Date(c[3]), amt=Number(c[4]); if(isNaN(amt)) return '';
+      return '<div class="recent-item"><div class="ri-info"><strong>'+(c[2]||'')+'</strong><span>'+(isNaN(d.getTime())?'N/A':d.toLocaleDateString())+'</span></div><div class="ri-amount">+KES '+amt.toLocaleString()+'</div></div>';
     }).join('');
+  } else { list.innerHTML='<p class="empty-msg">No recent activity</p>'; }
 }
 
-// ============================================================
-//  MGR
-// ============================================================
-var MONTHS=['','January','February','March','April','May','June','July','August','September','October','November','December'];
-function updateMGRTotal(){var e=parseFloat((document.getElementById('mgr-amount-each')||{}).value)||0;var t=document.getElementById('mgr-total-amount');if(t)t.value=e*2;}
-
-function renderMGR() {
-    var cached=appCache.get('MerryGoRound');
-    if(cached)buildMGRTable(cached);
-    else{var tbody=document.querySelector('#mgr-table tbody');if(tbody)tbody.innerHTML=skelRows(9,4);}
-    api.get('getSheet',{sheet:'MerryGoRound'}).then(function(d){if(d){appCache.set('MerryGoRound',d);buildMGRTable(d);}}).catch(function(){});
-}
-function loadMGR(){renderMGR();}
-
-function buildMGRTable(data) {
-    var tbody=document.querySelector('#mgr-table tbody'); if(!tbody)return;
-    var allRows=(data&&Array.isArray(data)&&data.length>1)?data.slice(1).filter(function(r){return r[0];}):[];
-    var tot=allRows.length,done=0,totalDist=0;
-    allRows.forEach(function(r){if(String(r[11]||'').trim()==='Distributed')done++;totalDist+=Number(r[8]||0);});
-    var latestDist=allRows.filter(function(r){return String(r[11]||'').trim()==='Distributed';}).sort(function(a,b){var y=Number(b[2])-Number(a[2]);return y!==0?y:Number(b[1])-Number(a[1]);})[0];
-    function se(id,v){var el=document.getElementById(id);if(el)el.innerText=v;}
-    se('mgr-total-schedules',tot);se('mgr-distributed-count',done);se('mgr-pending-count',tot-done);
-    se('mgr-total-distributed','KES '+totalDist.toLocaleString());
-    se('mgr-latest-each','KES '+(latestDist?Number(latestDist[7]||0).toLocaleString():'0'));
-    var dash=appCache.get('dashboard');se('mgr-total-contributions','KES '+(dash?Number(dash.totalMerryGoRound||0).toLocaleString():'0'));
-    if(!allRows.length){tbody.innerHTML='<tr><td colspan="9" style="text-align:center;padding:40px;color:var(--text-muted);">No MGR schedules yet. Click "Schedule Distribution" to add one.</td></tr>';return;}
-    var stF=(document.getElementById('mgr-filter-status')||{}).value||'';
-    var yrF=(document.getElementById('mgr-filter-year')||{}).value||'';
-    var rows=allRows.slice();
-    if(stF)rows=rows.filter(function(r){return String(r[11]||'').trim()===stF;});
-    if(yrF)rows=rows.filter(function(r){return String(r[2]||'')===yrF;});
-    rows.sort(function(a,b){var y=Number(b[2])-Number(a[2]);return y!==0?y:Number(b[1])-Number(a[1]);});
-    if(!rows.length){tbody.innerHTML='<tr><td colspan="9" style="text-align:center;padding:40px;color:var(--text-muted);">No records match the filter.</td></tr>';return;}
-    tbody.innerHTML=rows.map(function(r){
-        var st=String(r[11]||'Scheduled').trim();
-        var bc=st==='Distributed'?'active':(st==='Pending'?'inactive':'');
-        var bs=st==='Scheduled'?'background:#eff6ff;color:#2563eb;':'';
-        var dd=r[10]?new Date(r[10]).toLocaleDateString():'—';
-        var ml=MONTHS[Number(r[1])]||r[1];
-        var lbl=ml+' '+r[2];
-        var rid=String(r[0]||'');
-        var ab=st!=='Distributed'?'<button class="btn-icon-action btn-view" title="Mark Distributed" onclick="openMarkDistributed(\''+rid.replace(/'/g,"\\'")+'\',\''+lbl.replace(/'/g,"\\'")+'\')"><i class="fas fa-check"></i></button>':'<span style="color:#16a34a;font-size:18px;font-weight:700;">&#10003;</span>';
-        return'<tr><td><strong>'+lbl+'</strong></td><td><span style="display:inline-block;width:7px;height:7px;background:#16a34a;border-radius:50%;margin-right:5px;vertical-align:middle;"></span><strong>'+(r[4]||'—')+'</strong><br><span style="font-size:11px;color:var(--text-muted);">'+(r[3]||'')+'</span></td><td>'+(r[3]===r[5]?'<span style="font-size:11px;background:#fef3c7;color:#92400e;padding:3px 8px;border-radius:6px;font-weight:600;">Single Beneficiary</span>':'<span style="display:inline-block;width:7px;height:7px;background:#2563eb;border-radius:50%;margin-right:5px;vertical-align:middle;"></span><strong>'+(r[6]||'—')+'</strong><br><span style="font-size:11px;color:var(--text-muted);">'+(r[5]||'')+'</span>')+'</td><td><strong>KES '+Number(r[7]||0).toLocaleString()+'</strong></td><td><strong style="color:var(--accent);">KES '+Number(r[8]||0).toLocaleString()+'</strong></td><td><span class="badge '+bc+'" style="'+bs+'">'+st+'</span></td><td>'+dd+'</td><td style="max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text-muted);font-size:12px;">'+(r[12]||'—')+'</td><td>'+ab+'</td></tr>';
-    }).join('');
+// ─── MEMBERS TABLE ───
+function renderMembersTable() {
+  var search = getSearchVal();
+  var rows = S.members;
+  if (!rows || !rows.length) { skelTable('tb-members',7,6); return; }
+  if (search) {
+    rows = rows.filter(function(m){
+      return (String(m.Name||'')+String(m.ID||'')+String(m.Phone||'')).toLowerCase().indexOf(search) !== -1;
+    });
+  }
+  var tbody = document.getElementById('tb-members'); if (!tbody) return;
+  if (!rows.length) { tbody.innerHTML='<tr><td colspan="7" style="text-align:center;padding:28px;color:var(--text-muted);">No members found</td></tr>'; return; }
+  tbody.innerHTML = rows.map(function(m){
+    var st = String(m.Status||'').toLowerCase();
+    var bc = st==='active'?'badge-active':st==='inactive'?'badge-inactive':'badge-closed';
+    return '<tr><td><span style="font-size:11px;color:var(--text-muted);">'+m.ID+'</span></td><td><strong>'+m.Name+'</strong></td><td>'+m.Phone+'</td><td>KES '+Number(m.TotalSavings||0).toLocaleString()+'</td><td>KES '+Number(m.CurrentLoanBalance||0).toLocaleString()+'</td><td><span class="badge '+bc+'">'+m.Status+'</span></td><td><div class="actions-cell"><button class="btn-icon btn-view" onclick="viewMember(\''+m.ID+'\')"><i class="fas fa-eye"></i></button><button class="btn-icon btn-edit" onclick="editMember(\''+m.ID+'\')"><i class="fas fa-pencil-alt"></i></button></div></td></tr>';
+  }).join('');
 }
 
-function openMarkDistributed(id,label){
-    var a=document.getElementById('mgr-mark-id'),b=document.getElementById('mgr-mark-label'),c=document.getElementById('mgr-mark-date'),d=document.getElementById('mgr-mark-notes');
-    if(a)a.value=id;if(b)b.innerText=label;if(c)c.value=new Date().toISOString().split('T')[0];if(d)d.value='';
-    openModal('mgr-mark-modal');
-}
-
-function confirmMarkDistributed() {
-    var id=(document.getElementById('mgr-mark-id')||{}).value||'';
-    var dt=(document.getElementById('mgr-mark-date')||{}).value||'';
-    var nt=(document.getElementById('mgr-mark-notes')||{}).value||'';
-    if(!id||!dt){showToast('Please select a date','error');return;}
-    api.post('markMGRDistributed',{id:id,distDate:dt,notes:nt}).then(function(){
-        showToast('Marked as Distributed!');closeModal('mgr-mark-modal');appCache.clear();
-        api.get('getSheet',{sheet:'MerryGoRound'}).then(function(d){if(d){appCache.set('MerryGoRound',d);buildMGRTable(d);}});
-    }).catch(handleServerError);
-}
-
-// ============================================================
-//  AUTOCOMPLETE
-// ============================================================
-function setupMGRAutocomplete(inputId,hidFld,hidName) {
-    var inp=document.getElementById(inputId);if(!inp)return;
-    var lst=document.getElementById(inputId.replace('-input','-list'));if(!lst)return;
-    var ni=inp.cloneNode(true);inp.parentNode.replaceChild(ni,inp);inp=ni;lst=document.getElementById(inputId.replace('-input','-list'));
-    inp.oninput=function(){
-        var val=this.value.trim();lst.innerHTML='';if(val.length<2)return;
-        function render(items){
-            var hits=items.filter(function(m){return(String(m.Name||'')+String(m.ID||'')+String(m.Phone||'')).toLowerCase().indexOf(val.toLowerCase())!==-1;}).slice(0,8);
-            if(!hits.length){lst.innerHTML='<div style="color:var(--text-muted);padding:10px 14px;">No results</div>';return;}
-            hits.forEach(function(m){
-                var d=document.createElement('div');
-                d.innerHTML='<strong>'+m.Name+'</strong> <span style="color:var(--text-muted);font-size:12px;">('+m.ID+')</span>';
-                d.onclick=function(){inp.value=m.Name;document.getElementById(hidFld).value=m.ID;document.getElementById(hidName).value=m.Name;lst.innerHTML='';};
-                lst.appendChild(d);
-            });
-        }
-        var c=appCache.get('Members');
-        if(c&&Array.isArray(c)&&c.length&&c[0].ID){render(c);}
-        else{api.get('getMembers',{limit:500}).then(function(d){appCache.set('Members',d);render(d);}).catch(function(){});}
-    };
-    document.addEventListener('click',function(e){if(e.target!==inp)lst.innerHTML='';});
-}
-
-function setupAutocomplete(inputId,hidId,type) {
-    var inp=document.getElementById(inputId);if(!inp)return;
-    var lst=document.getElementById(inputId.replace('-input','-list'));if(!lst)return;
-    var ni=inp.cloneNode(true);inp.parentNode.replaceChild(ni,inp);inp=ni;lst=document.getElementById(inputId.replace('-input','-list'));
-    inp.oninput=function(){
-        var val=this.value.trim();lst.innerHTML='';if(val.length<2)return;
-        function render(items){
-            var seen={},hits=[];
-            if(type==='Members'){hits=items.filter(function(m){var ok=(String(m.Name||'')+String(m.ID||'')+String(m.Phone||'')).toLowerCase().indexOf(val.toLowerCase())!==-1;if(ok&&!seen[m.ID]){seen[m.ID]=1;return true;}return false;});}
-            else{var rowz=Array.isArray(items)&&items.length>1?items.slice(1):[];hits=rowz.filter(function(l){var ok=l[9]==='Active'&&(String(l[2]||'').toLowerCase().indexOf(val.toLowerCase())!==-1||String(l[0]||'').toLowerCase().indexOf(val.toLowerCase())!==-1);if(ok&&!seen[l[0]]){seen[l[0]]=1;return true;}return false;});}
-            if(!hits.length){lst.innerHTML='<div style="color:var(--text-muted);padding:10px 14px;">No results</div>';return;}
-            hits.slice(0,8).forEach(function(item){
-                var div=document.createElement('div');
-                var label=type==='Members'?item.Name+' ('+item.ID+')':item[2]+' — '+item[0]+' (KES '+Number(item[4]||0).toLocaleString()+')';
-                div.innerHTML=label;
-                div.onclick=function(){
-                    inp.value=label;document.getElementById(hidId).value=type==='Members'?item.ID:item[0];
-                    if(inputId==='repay-loan-input'){var a=document.getElementById('repay-member-id'),b=document.getElementById('repay-member-name'),c=document.getElementById('repay-borrower-type');if(a)a.value=item[1];if(b)b.value=item[2];if(c)c.value=item[3]||'Member';showToast('Loan: '+item[2]);}
-                    if(inputId==='contrib-member-input'){var x=document.getElementById('contrib-member-name');if(x)x.value=item.Name;}
-                    if(inputId==='loan-member-input'){var y=document.getElementById('loan-member-name'),z=document.getElementById('borrower-type');if(y)y.value=item.Name;if(z)z.value=item.Type||'Member';}
-                    lst.innerHTML='';
-                };
-                lst.appendChild(div);
-            });
-        }
-        var c=appCache.get(type);
-        if(c){render(c);}
-        else{var p=type==='Members'?api.get('getMembers',{limit:500}):api.get('getSheet',{sheet:type});p.then(function(d){appCache.set(type,d);render(d);}).catch(function(){});}
-    };
-    document.addEventListener('click',function(e){if(e.target!==inp)lst.innerHTML='';});
-}
-
-// ============================================================
-//  MEMBER VIEW / EDIT
-// ============================================================
-function viewMember(id) {
-    api.get('getMemberById',{id:id}).then(function(m){
-        if(!m){showToast('Member not found','error');return;}
-        function se(eid,v){var el=document.getElementById(eid);if(el)el.innerText=v||'N/A';}
-        se('profile-name',m.Name);se('profile-id',m.ID);se('profile-phone',m.Phone);se('profile-email',m.Email);se('profile-id-no',m.ID_Number);se('profile-status',m.Status);se('profile-type',m.Type);se('profile-address',m.Address);
-        var ps=document.getElementById('profile-savings'),pl=document.getElementById('profile-loan');
-        if(ps)ps.innerText='KES '+Number(m.TotalSavings||0).toLocaleString();if(pl)pl.innerText='KES '+Number(m.CurrentLoanBalance||0).toLocaleString();
-        var av=document.getElementById('profile-avatar');if(av)av.src='https://ui-avatars.com/api/?name='+encodeURIComponent(m.Name)+'&background=6366f1&color=fff&size=128';
-        openModal('member-profile-modal');
-    }).catch(handleServerError);
-}
-
-function editMember(id) {
-    api.get('getMemberById',{id:id}).then(function(m){
-        if(!m){showToast('Member not found','error');return;}
-        function sv(eid,v){var el=document.getElementById(eid);if(el)el.value=v||'';}
-        sv('edit-member-id',m.ID);sv('edit-member-name',m.Name);sv('edit-member-phone',m.Phone);sv('edit-member-email',m.Email);sv('edit-member-id-no',m.ID_Number);sv('edit-member-type',m.Type||'Member');sv('edit-member-address',m.Address);
-        var st=document.getElementById('edit-member-status');if(st)st.value=m.Status||'Active';
-        openModal('member-edit-modal');
-    }).catch(handleServerError);
-}
-
-// ============================================================
-//  REPORTS
-// ============================================================
-function renderReports() {
-    var tbody=document.querySelector('#overdue-table tbody');if(tbody)tbody.innerHTML=skelRows(5,3);
-    api.get('getDashboardStats').then(function(s){
-        function se(id,v){var el=document.getElementById(id);if(el)el.innerText=v;}
-        se('total-penalties','KES '+Number(s.totalPenalties||0).toLocaleString());se('active-borrowers',s.totalLoans||0);se('total-interests','KES '+Number(s.totalInterests||0).toLocaleString());
-        if(tbody){if(s.overdueLoans&&s.overdueLoans.length){tbody.innerHTML=s.overdueLoans.map(function(l){return'<tr><td><span class="badge" style="background:rgba(239,68,68,.1);color:#ef4444;">'+l.id+'</span></td><td><strong>'+l.memberName+'</strong></td><td>'+new Date(l.dueDate).toLocaleDateString()+'</td><td style="color:#f59e0b;font-weight:600;">'+l.daysLate+' Days</td><td style="color:#ef4444;font-weight:700;">KES '+l.penaltyAmount.toLocaleString()+'</td></tr>';}).join('');}else{tbody.innerHTML='<tr><td colspan="5" style="text-align:center;padding:30px;color:var(--text-muted);">No overdue installments.</td></tr>';}}
-    }).catch(handleServerError);
-}
-
-// ============================================================
-//  EXPORT
-// ============================================================
-function exportToCSV(type) {
-    showToast('Preparing '+type+'...');
-    var p=type==='Members'?api.get('getMembers',{limit:10000}).then(function(ms){if(!ms||!ms.length)return[];var h=Object.keys(ms[0]);return[h].concat(ms.map(function(m){return h.map(function(k){return m[k];});}));}):api.get('getSheet',{sheet:type});
-    p.then(function(data){
-        if(!data||data.length<=1){showToast('No data to export','warning');return;}
-        var csv=data.filter(function(r){return r&&r.length&&r[0]!=='';}).map(function(r){return r.map(function(c){var v=c==null?'':String(c);if(v.indexOf(',')!==-1||v.indexOf('"')!==-1||v.indexOf('\n')!==-1)v='"'+v.replace(/"/g,'""')+'"';return v;}).join(',');}).join('\n');
-        var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8;'}));a.download='SACCO_'+type+'_'+new Date().toISOString().split('T')[0]+'.csv';a.style.display='none';document.body.appendChild(a);a.click();document.body.removeChild(a);
-        showToast(type+' exported!');
-    }).catch(function(){showToast('Export failed','error');});
-}
-
-function downloadFullWorkbook() {
-    showToast('Generating workbook...');
-    api.get('getExportUrl').then(function(url){var a=document.createElement('a');a.href=url;a.target='_blank';document.body.appendChild(a);a.click();document.body.removeChild(a);showToast('Download started!');}).catch(function(){showToast('Download failed','error');});
-}
-
-// ============================================================
-//  FORM HANDLERS
-// ============================================================
-// ============================================================
-//  SETUP FUNCTIONS
-// ============================================================
-function saveSetupUrl() {
-    var inp = document.getElementById('setup-url-input');
-    var err = document.getElementById('setup-error');
-    var btn = document.getElementById('setup-save-btn');
-    var url = (inp.value || '').trim();
-    if (!url || url.indexOf('script.google.com') === -1) {
-        err.style.display = 'block'; return;
+// ─── GENERIC SHEET TABLE ───
+function renderSheet(key, tbId, type) {
+  var data = S[key];
+  var tbody = document.getElementById(tbId); if (!tbody) return;
+  if (!data || data.length <= 1) { skelTable(tbId, type==='repay'?7:type==='loan'?6:5, 5); return; }
+  var rows = data.slice(1).filter(function(r){ return r[0]; });
+  var search = getSearchVal(), mf = getMonthFilter(), yf = getYearFilter();
+  // Client-side filter — zero network calls
+  if (search) rows = rows.filter(function(r){ return r.some(function(c){ return String(c||'').toLowerCase().indexOf(search)!==-1; }); });
+  if (mf!==null || yf!==null) {
+    rows = rows.filter(function(r){
+      var dv = r[3]||r[7]||r[8]; return matchesDateFilter(dv);
+    });
+  }
+  if (!rows.length) { tbody.innerHTML='<tr><td colspan="10" style="text-align:center;padding:28px;color:var(--text-muted);">No matching records</td></tr>'; return; }
+  tbody.innerHTML = rows.map(function(r){
+    if (type==='loan') {
+      var st2=String(r[9]||'Active').toLowerCase();
+      var lbc=st2==='active'?'badge-active':st2==='closed'?'badge-closed':'badge-inactive';
+      return '<tr><td>'+r[0]+'</td><td><strong>'+r[2]+'</strong></td><td>KES '+Number(r[4]||0).toLocaleString()+'</td><td>'+r[5]+' Mon</td><td>'+(r[8]?new Date(r[8]).toLocaleDateString():'N/A')+'</td><td><span class="badge '+lbc+'">'+r[9]+'</span></td></tr>';
     }
-    err.style.display = 'none';
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connecting...';
-    btn.disabled = true;
-    // Test the URL before saving
-    fetch(url + '?action=getDashboardStats')
-        .then(function(r) { return r.json(); })
-        .then(function(r) {
-            if (r && r.success !== false) {
-                localStorage.setItem('sacco_api_url', url);
-                API_BASE_URL = url;
-                document.getElementById('setup-overlay').style.display = 'none';
-                initApp();
-            } else {
-                throw new Error('API test failed');
-            }
-        })
-        .catch(function() {
-            btn.innerHTML = '<i class="fas fa-plug"></i> Connect & Launch';
-            btn.disabled = false;
-            err.textContent = '❌ Could not connect. Check the URL and try again.';
-            err.style.display = 'block';
-        });
+    if (type==='repay') return '<tr><td>'+(r[3]?new Date(r[3]).toLocaleDateString():'N/A')+'</td><td><strong>'+r[2]+'</strong></td><td>'+r[1]+'</td><td>KES '+Number(r[4]||0).toLocaleString()+'</td><td>KES '+Number(r[5]||0).toLocaleString()+'</td><td>KES '+Number(r[6]||0).toLocaleString()+'</td><td>KES '+Number(r[7]||0).toLocaleString()+'</td></tr>';
+    return '<tr><td>'+(r[3]?new Date(r[3]).toLocaleDateString():'N/A')+'</td><td><strong>'+r[2]+'</strong></td><td>KES '+Number(r[4]||0).toLocaleString()+'</td><td>'+r[5]+'</td><td>'+r[6]+'</td></tr>';
+  }).join('');
 }
 
-// Allow Enter key in URL input
-document.addEventListener('DOMContentLoaded', function() {
-    var inp = document.getElementById('setup-url-input');
-    if (inp) inp.addEventListener('keydown', function(e) { if (e.key === 'Enter') saveSetupUrl(); });
-});
+// ─── MGR ───
+var MONTHS = ['','January','February','March','April','May','June','July','August','September','October','November','December'];
+function renderMGR() { renderMGRTable(); }
+function renderMGRTable() {
+  var data = S.mgr;
+  var allRows = (data&&data.length>1) ? data.slice(1).filter(function(r){return r[0];}) : [];
+  var tot=allRows.length, done=0, totalDist=0;
+  allRows.forEach(function(r){ if(String(r[11]||'').trim()==='Distributed') done++; totalDist+=Number(r[8]||0); });
+  var latest = allRows.filter(function(r){return String(r[11]||'').trim()==='Distributed';}).sort(function(a,b){return Number(b[2])-Number(a[2])||Number(b[1])-Number(a[1]);})[0];
+  function se(id,v){var el=document.getElementById(id);if(el)el.innerText=v;}
+  se('mgr-s-total',tot); se('mgr-s-done',done); se('mgr-s-pending',tot-done);
+  se('mgr-s-distamt','KES '+totalDist.toLocaleString());
+  se('mgr-s-latest','KES '+(latest?Number(latest[7]||0).toLocaleString():'0'));
+  se('mgr-s-contrib','KES '+(S.dashboard?Number(S.dashboard.totalMerryGoRound||0).toLocaleString():'0'));
+  var tbody = document.getElementById('tb-mgr'); if (!tbody) return;
+  if (!allRows.length) { tbody.innerHTML='<tr><td colspan="9" style="text-align:center;padding:36px;color:var(--text-muted);">No MGR schedules yet.</td></tr>'; return; }
+  var stF=(document.getElementById('mgr-fs')||{}).value||'';
+  var yrF=(document.getElementById('mgr-fy')||{}).value||'';
+  var rows = allRows.slice();
+  if (stF) rows = rows.filter(function(r){ return String(r[11]||'').trim()===stF; });
+  if (yrF) rows = rows.filter(function(r){ return String(r[2])===yrF; });
+  rows.sort(function(a,b){return (Number(b[2])-Number(a[2]))||Number(b[1])-Number(a[1]);});
+  if (!rows.length) { tbody.innerHTML='<tr><td colspan="9" style="text-align:center;padding:28px;color:var(--text-muted);">No records match filter.</td></tr>'; return; }
+  tbody.innerHTML = rows.map(function(r){
+    var st=String(r[11]||'Scheduled').trim();
+    var bc=st==='Distributed'?'badge-distributed':st==='Pending'?'badge-pending':'badge-scheduled';
+    var dd=r[10]?new Date(r[10]).toLocaleDateString():'—';
+    var lbl=(MONTHS[Number(r[1])]||r[1])+' '+r[2];
+    var rid=String(r[0]||'').replace(/'/g,"\\'");
+    var lble=lbl.replace(/'/g,"\\'");
+    var ab=st!=='Distributed'?'<button class="btn-icon btn-view" title="Mark Distributed" onclick="openMarkDist(\''+rid+'\',\''+lble+'\')"><i class="fas fa-check"></i></button>':'<span style="color:var(--primary);font-size:16px;">✓</span>';
+    var b2cell = r[3]===r[5] ? '<span style="font-size:11px;background:#fef3c7;color:#92400e;padding:3px 7px;border-radius:6px;font-weight:700;">Single</span>' :
+      '<strong>'+(r[6]||'—')+'</strong><br><span style="font-size:10.5px;color:var(--text-muted);">'+(r[5]||'')+'</span>';
+    return '<tr><td><strong>'+lbl+'</strong></td><td><strong>'+(r[4]||'—')+'</strong><br><span style="font-size:10.5px;color:var(--text-muted);">'+(r[3]||'')+'</span></td><td>'+b2cell+'</td><td><strong>KES '+Number(r[7]||0).toLocaleString()+'</strong></td><td><strong style="color:var(--primary);">KES '+Number(r[8]||0).toLocaleString()+'</strong></td><td><span class="badge '+bc+'">'+st+'</span></td><td>'+dd+'</td><td style="max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11.5px;color:var(--text-muted);">'+(r[12]||'—')+'</td><td>'+ab+'</td></tr>';
+  }).join('');
+}
+function openMarkDist(id,label) {
+  document.getElementById('mgrmark-id').value=id;
+  document.getElementById('mgrmark-label').innerText=label;
+  document.getElementById('mgrmark-date').value=new Date().toISOString().split('T')[0];
+  document.getElementById('mgrmark-notes').value='';
+  openModal('m-mgrmark');
+}
+function confirmMarkDistributed() {
+  var id=document.getElementById('mgrmark-id').value;
+  var dt=document.getElementById('mgrmark-date').value;
+  var nt=document.getElementById('mgrmark-notes').value;
+  if(!id||!dt){toast('Please select a date','error');return;}
+  // Optimistic update
+  S.mgr = S.mgr.map(function(row, idx){
+    if (idx===0) return row;
+    if (String(row[0])===String(id)) { var r=row.slice(); r[11]='Distributed'; r[10]=dt; r[12]=nt||r[12]; return r; }
+    return row;
+  });
+  renderMGRTable();
+  closeModal('m-mgrmark');
+  toast('Marked as Distributed!');
+  api.post('markMGRDistributed',{id:id,distDate:dt,notes:nt}).then(function(){
+    api.get('getSheet',{sheet:'MerryGoRound'}).then(function(d){if(d){S.mgr=d;renderMGRTable();}});
+  }).catch(function(e){ toast('Server error: '+e.message,'error'); loadAll(true); });
+}
+
+// ─── REPORTS ───
+function renderReports() {
+  var tbody=document.getElementById('tb-overdue'); if(tbody) tbody.innerHTML=skelRows(5,3);
+  var s=S.dashboard;
+  if (s) {
+    function se(id,v){var el=document.getElementById(id);if(el)el.innerText=v;}
+    se('r-penalties','KES '+Number(s.totalPenalties||0).toLocaleString());
+    se('r-borrowers',s.totalLoans||0);
+    se('r-interests','KES '+Number(s.totalInterests||0).toLocaleString());
+    if(tbody){
+      if(s.overdueLoans&&s.overdueLoans.length){
+        tbody.innerHTML=s.overdueLoans.map(function(l){return'<tr><td><span class="badge badge-inactive">'+l.id+'</span></td><td><strong>'+l.memberName+'</strong></td><td>'+new Date(l.dueDate).toLocaleDateString()+'</td><td style="color:var(--warning);font-weight:700;">'+l.daysLate+' days</td><td style="color:var(--danger);font-weight:700;">KES '+l.penaltyAmount.toLocaleString()+'</td></tr>';}).join('');
+      } else { tbody.innerHTML='<tr><td colspan="5" style="text-align:center;padding:28px;color:var(--text-muted);">No overdue installments</td></tr>'; }
+    }
+  }
+  api.get('getDashboardStats').then(function(d){ S.dashboard=d; renderReports(); }).catch(function(){});
+}
+
+// ─── AUTOCOMPLETE ───
+function setupAC(inputId, listId, hiddenId, hiddenNameId, acType) {
+  var inp = document.getElementById(inputId); if (!inp) return;
+  var lst = document.getElementById(listId); if (!lst) return;
+  // Clone to remove old listeners
+  var ni = inp.cloneNode(true); inp.parentNode.replaceChild(ni, inp); inp=ni;
+  function getItems() {
+    if (acType==='member') return S.members;
+    if (acType==='loan') {
+      var rows = (S.loans&&S.loans.length>1)?S.loans.slice(1):[];
+      return rows.filter(function(r){return r[9]==='Active';});
+    }
+    return [];
+  }
+  function render(val) {
+    lst.innerHTML=''; if(!val||val.length<2) return;
+    var items=getItems();
+    var hits;
+    if(acType==='member'){
+      hits=items.filter(function(m){return (String(m.Name||'')+String(m.ID||'')+String(m.Phone||'')).toLowerCase().indexOf(val.toLowerCase())!==-1;}).slice(0,8);
+      if(!hits.length){lst.innerHTML='<div style="color:var(--text-muted);padding:9px 13px;">No results</div>';return;}
+      hits.forEach(function(m){
+        var d=document.createElement('div');
+        d.innerHTML='<strong>'+m.Name+'</strong> <span style="color:var(--text-muted);font-size:11px;">('+m.ID+')</span>';
+        d.onclick=function(){
+          inp.value=m.Name;
+          if(hiddenId)document.getElementById(hiddenId).value=m.ID;
+          if(hiddenNameId)document.getElementById(hiddenNameId).value=m.Name;
+          // Loan modal: set borrower type
+          if(inputId==='fi-lmember'){var bt=document.getElementById('fi-lbtype');if(bt)bt.value=m.Type||'Member';}
+          lst.innerHTML='';
+        };
+        lst.appendChild(d);
+      });
+    } else {
+      // Loan search for repayment
+      hits=items.filter(function(l){return (String(l[2]||'').toLowerCase().indexOf(val.toLowerCase())!==-1||String(l[0]||'').toLowerCase().indexOf(val.toLowerCase())!==-1);}).slice(0,8);
+      if(!hits.length){lst.innerHTML='<div style="color:var(--text-muted);padding:9px 13px;">No active loans</div>';return;}
+      hits.forEach(function(l){
+        var d=document.createElement('div');
+        d.innerHTML='<strong>'+l[2]+'</strong> <span style="color:var(--text-muted);font-size:11px;">'+l[0]+' — KES '+Number(l[4]||0).toLocaleString()+'</span>';
+        d.onclick=function(){
+          inp.value=l[2]+' — '+l[0];
+          if(hiddenId)document.getElementById(hiddenId).value=l[0];
+          var rmid=document.getElementById('fi-rmid'),rmname=document.getElementById('fi-rmname'),rbtype=document.getElementById('fi-rbtype');
+          if(rmid)rmid.value=l[1];if(rmname)rmname.value=l[2];if(rbtype)rbtype.value=l[3]||'Member';
+          toast('Loan: '+l[2]+' loaded');
+          lst.innerHTML='';
+        };
+        lst.appendChild(d);
+      });
+    }
+  }
+  inp.addEventListener('input', function(){ render(this.value.trim()); });
+  document.addEventListener('click', function(e){ if(e.target!==inp) lst.innerHTML=''; });
+}
+
+// ─── MEMBER PROFILE / EDIT ───
+function viewMember(id) {
+  var m = S.members.find(function(x){ return x.ID===id; });
+  if (!m) { api.get('getMemberById',{id:id}).then(function(d){ if(d){fillProfile(d);openModal('m-profile');}}).catch(function(){toast('Not found','error');}); return; }
+  fillProfile(m); openModal('m-profile');
+}
+function fillProfile(m) {
+  function se(id,v){var el=document.getElementById(id);if(el)el.innerText=v||'—';}
+  var initials = (m.Name||'?').split(' ').map(function(w){return w[0];}).join('').substring(0,2).toUpperCase();
+  var pi=document.getElementById('pa-initials');if(pi)pi.innerText=initials;
+  se('pa-name',m.Name);se('pa-id',m.ID);se('pa-phone',m.Phone);se('pa-email',m.Email);se('pa-idno',m.ID_Number);se('pa-status',m.Status);se('pa-type',m.Type);se('pa-address',m.Address);
+  var ps=document.getElementById('pa-savings'),pl=document.getElementById('pa-loan');
+  if(ps)ps.innerText='KES '+Number(m.TotalSavings||0).toLocaleString();if(pl)pl.innerText='KES '+Number(m.CurrentLoanBalance||0).toLocaleString();
+}
+function editMember(id) {
+  var m = S.members.find(function(x){ return x.ID===id; });
+  if (!m) { api.get('getMemberById',{id:id}).then(function(d){ if(d){fillEditForm(d);openModal('m-edit');}}).catch(function(){toast('Not found','error');}); return; }
+  fillEditForm(m); openModal('m-edit');
+}
+function fillEditForm(m) {
+  function sv(id,v){var el=document.getElementById(id);if(el)el.value=v||'';}
+  sv('fi-eid',m.ID);sv('fi-ename',m.Name);sv('fi-ephone',m.Phone);sv('fi-eemail',m.Email);sv('fi-eidno',m.ID_Number);sv('fi-eaddress',m.Address);
+  var et=document.getElementById('fi-etype'),es=document.getElementById('fi-estatus');
+  if(et)et.value=m.Type||'Member';if(es)es.value=m.Status||'Active';
+}
+
+// ─── FORM SUBMISSIONS — Optimistic Updates ───
+function submitMember(e) {
+  e.preventDefault();
+  var phone=(document.getElementById('fi-mphone')||{}).value.trim();
+  if(phone.length!==10||isNaN(phone)){toast('Enter valid 10-digit phone','error');return;}
+  var btn=document.getElementById('btn-member-submit');
+  setBtnLoading(btn,true);
+  var payload={name:(document.getElementById('fi-mname')||{}).value,phone:phone,email:(document.getElementById('fi-memail')||{}).value||'',idNumber:(document.getElementById('fi-midno')||{}).value,type:(document.getElementById('fi-mtype')||{}).value,address:(document.getElementById('fi-maddress')||{}).value||''};
+  // Optimistic local add
+  var tempId='M'+Math.random().toString(36).substr(2,6).toUpperCase();
+  var newMember={ID:tempId,Name:payload.name,Phone:payload.phone,Email:payload.email,ID_Number:payload.idNumber,Type:payload.type,Address:payload.address,Status:'Active',TotalSavings:0,CurrentLoanBalance:0};
+  S.members.unshift(newMember);
+  renderMembersTable();
+  toast('Member registered!');
+  closeModal('m-member');
+  document.getElementById('f-member').reset();
+  setBtnLoading(btn,false);
+  // Backend confirm + get real ID
+  api.post('addMember',payload).then(function(r){
+    // Replace temp with real
+    api.get('getMembers',{limit:2000,offset:0}).then(function(d){if(d&&d.length){S.members=d;renderMembersTable();}});
+    api.get('getDashboardStats').then(function(d){S.dashboard=d;if(S.currentView==='dashboard')updateDashStats(d);});
+  }).catch(function(err){
+    toast('Server error: '+err.message,'error');
+    S.members=S.members.filter(function(m){return m.ID!==tempId;});
+    renderMembersTable();
+  });
+}
+
+function submitContribution(e) {
+  e.preventDefault();
+  var mid=(document.getElementById('fi-cmid')||{}).value;
+  if(!mid){toast('Select a member from list','error');return;}
+  var btn=document.getElementById('btn-contrib-submit');
+  setBtnLoading(btn,true);
+  var ref='WEB-'+Date.now();
+  var amt=parseFloat((document.getElementById('fi-camount')||{}).value)||0;
+  var mname=(document.getElementById('fi-cmname')||{}).value;
+  var ctype=(document.getElementById('fi-ctype')||{}).value;
+  var payload={memberId:mid,memberName:mname,amount:amt,type:ctype,reference:ref};
+  // Optimistic add
+  var nowIso=new Date().toISOString();
+  var newRow=['C'+Date.now(),mid,mname,nowIso,amt,ctype,ref];
+  if(!S.contributions||!S.contributions.length) S.contributions=[['ID','MemberID','MemberName','Date','Amount','Type','Reference']];
+  S.contributions.push(newRow);
+  // Update member savings in state
+  var mi=S.members.findIndex(function(m){return m.ID===mid;});
+  if(mi>=0) S.members[mi].TotalSavings=(Number(S.members[mi].TotalSavings)||0)+amt;
+  if(S.dashboard){
+    if(ctype==='Members Savings') S.dashboard.totalMembersSavings=(Number(S.dashboard.totalMembersSavings)||0)+amt;
+    if(ctype==='Welfare Funds') S.dashboard.totalWelfareFunds=(Number(S.dashboard.totalWelfareFunds)||0)+amt;
+    if(ctype==='Merry Go Round') S.dashboard.totalMerryGoRound=(Number(S.dashboard.totalMerryGoRound)||0)+amt;
+    if(S.currentView==='dashboard') updateDashStats(S.dashboard);
+  }
+  if(S.currentView==='contributions') renderSheet('contributions','tb-contributions','contrib');
+  toast('Contribution recorded!');
+  closeModal('m-contribution');
+  document.getElementById('f-contribution').reset();
+  document.getElementById('fi-cmid').value='';document.getElementById('fi-cmname').value='';
+  setBtnLoading(btn,false);
+  api.post('addContribution',payload).then(function(){
+    api.get('getSheet',{sheet:'Contributions'}).then(function(d){if(d)S.contributions=d;});
+    api.get('getDashboardStats').then(function(d){S.dashboard=d;if(S.currentView==='dashboard')updateDashStats(d);});
+  }).catch(function(err){toast('Server error: '+err.message,'error');loadAll(true);});
+}
+
+function submitLoan(e) {
+  e.preventDefault();
+  var mid=(document.getElementById('fi-lmid')||{}).value;
+  if(!mid){toast('Select a member from list','error');return;}
+  var btn=document.getElementById('btn-loan-submit');
+  setBtnLoading(btn,true);
+  var amt=parseFloat((document.getElementById('fi-lamount')||{}).value)||0;
+  var term=(document.getElementById('fi-lterm')||{}).value;
+  var btype=(document.getElementById('fi-lbtype')||{}).value||'Member';
+  var mname=(document.getElementById('fi-lmname')||{}).value;
+  var payload={memberId:mid,memberName:mname,amount:amt,borrowerType:btype,term:term};
+  var ir=btype.toLowerCase()==='member'?0.10:0.20;
+  var sd=new Date();var dd=new Date();dd.setMonth(dd.getMonth()+parseInt(term));
+  var tempId='L'+Math.random().toString(36).substr(2,6).toUpperCase();
+  var newRow=[tempId,mid,mname,btype,amt,term,ir,sd.toISOString(),dd.toISOString(),'Active'];
+  if(!S.loans||!S.loans.length) S.loans=[['ID','MemberID','MemberName','BorrowerType','Amount','TermMonths','InterestRate','StartDate','DueDate','Status']];
+  S.loans.push(newRow);
+  var mi=S.members.findIndex(function(m){return m.ID===mid;});
+  if(mi>=0) S.members[mi].CurrentLoanBalance=(Number(S.members[mi].CurrentLoanBalance)||0)+amt;
+  if(S.dashboard){S.dashboard.totalLoans=(Number(S.dashboard.totalLoans)||0)+1;S.dashboard.outstandingBalance=(Number(S.dashboard.outstandingBalance)||0)+amt;if(S.currentView==='dashboard')updateDashStats(S.dashboard);}
+  if(S.currentView==='loans') renderSheet('loans','tb-loans','loan');
+  toast('Loan disbursed!');
+  closeModal('m-loan');
+  document.getElementById('f-loan').reset();
+  document.getElementById('fi-lmid').value='';document.getElementById('fi-lmname').value='';
+  setBtnLoading(btn,false);
+  api.post('disburseLoan',payload).then(function(){
+    api.get('getSheet',{sheet:'Loans'}).then(function(d){if(d)S.loans=d;if(S.currentView==='loans')renderSheet('loans','tb-loans','loan');});
+    api.get('getDashboardStats').then(function(d){S.dashboard=d;if(S.currentView==='dashboard')updateDashStats(d);});
+  }).catch(function(err){toast('Server error: '+err.message,'error');loadAll(true);});
+}
+
+function submitRepayment(e) {
+  e.preventDefault();
+  var lid=(document.getElementById('fi-rlid')||{}).value;
+  var mbid=(document.getElementById('fi-rmid')||{}).value;
+  if(!lid||!mbid){toast('Select a valid loan','error');return;}
+  var btn=document.getElementById('btn-repay-submit');
+  setBtnLoading(btn,true);
+  var principal=parseFloat((document.getElementById('fi-ramount')||{}).value)||0;
+  var miVal=(document.getElementById('fi-rinterest')||{}).value;
+  var bt=(document.getElementById('fi-rbtype')||{}).value||'Member';
+  var interest=miVal===''?principal*(bt.toLowerCase()==='member'?0.10:0.20):(parseFloat(miVal)||0);
+  var pen=parseFloat((document.getElementById('fi-rpenalty')||{}).value)||0;
+  var total=principal+interest+pen;
+  var mname=(document.getElementById('fi-rmname')||{}).value;
+  var payload={loanId:lid,memberId:mbid,memberName:mname,amount:total,penalty:pen,principal:principal,interest:interest};
+  var nowIso=new Date().toISOString();
+  var newRow=['R'+Date.now(),lid,mname,nowIso,total,principal,interest,pen,'Completed'];
+  if(!S.repayments||!S.repayments.length) S.repayments=[['ID','LoanID','MemberName','Date','Amount','PrincipalPortion','InterestPortion','PenaltyPaid','Status']];
+  S.repayments.push(newRow);
+  // Update member balance
+  var mi=S.members.findIndex(function(m){return m.ID===mbid;});
+  if(mi>=0) S.members[mi].CurrentLoanBalance=Math.max(0,(Number(S.members[mi].CurrentLoanBalance)||0)-principal);
+  if(miVal==='') toast('Auto Interest: KES '+interest.toLocaleString());
+  if(S.currentView==='repayments') renderSheet('repayments','tb-repayments','repay');
+  if(S.currentView==='members') renderMembersTable();
+  toast('Repayment recorded!');
+  closeModal('m-repayment');
+  document.getElementById('f-repayment').reset();
+  ['fi-rlid','fi-rmid','fi-rmname','fi-rbtype'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
+  setBtnLoading(btn,false);
+  api.post('addRepayment',payload).then(function(){
+    api.get('getSheet',{sheet:'Repayments'}).then(function(d){if(d)S.repayments=d;});
+    api.get('getSheet',{sheet:'Loans'}).then(function(d){if(d)S.loans=d;});
+    api.get('getMembers',{limit:2000,offset:0}).then(function(d){if(d&&d.length)S.members=d;});
+    api.get('getDashboardStats').then(function(d){S.dashboard=d;if(S.currentView==='dashboard')updateDashStats(d);});
+  }).catch(function(err){toast('Server error: '+err.message,'error');loadAll(true);});
+}
+
+function submitEditMember(e) {
+  e.preventDefault();
+  var id=(document.getElementById('fi-eid')||{}).value;
+  var btn=document.getElementById('btn-edit-submit');
+  setBtnLoading(btn,true);
+  var payload={name:(document.getElementById('fi-ename')||{}).value,phone:(document.getElementById('fi-ephone')||{}).value,email:(document.getElementById('fi-eemail')||{}).value,idNumber:(document.getElementById('fi-eidno')||{}).value,status:(document.getElementById('fi-estatus')||{}).value,type:(document.getElementById('fi-etype')||{}).value,address:(document.getElementById('fi-eaddress')||{}).value};
+  // Optimistic update in state
+  var mi=S.members.findIndex(function(m){return m.ID===id;});
+  if(mi>=0){S.members[mi].Name=payload.name;S.members[mi].Phone=payload.phone;S.members[mi].Email=payload.email;S.members[mi].Status=payload.status;S.members[mi].Type=payload.type;S.members[mi].Address=payload.address;}
+  renderMembersTable();
+  toast('Member updated!');
+  closeModal('m-edit');
+  setBtnLoading(btn,false);
+  api.post('updateMember',payload,{id:id}).then(function(){
+    api.get('getMembers',{limit:2000,offset:0}).then(function(d){if(d&&d.length){S.members=d;if(S.currentView==='members')renderMembersTable();}});
+  }).catch(function(err){toast('Server error: '+err.message,'error');loadAll(true);});
+}
+
+function submitMGR(e) {
+  e.preventDefault();
+  var b1=(document.getElementById('fi-mgrb1id')||{}).value;
+  var b2=(document.getElementById('fi-mgrb2id')||{}).value;
+  if(!b1){toast('Select at least Beneficiary 1','error');return;}
+  if(!b2){b2=b1;document.getElementById('fi-mgrb2id').value=b1;document.getElementById('fi-mgrb2name').value=document.getElementById('fi-mgrb1name').value;}
+  var ae=parseFloat((document.getElementById('fi-mgreach')||{}).value)||0;
+  if(ae<=0){toast('Enter a valid amount','error');return;}
+  var btn=document.getElementById('btn-mgr-submit');
+  setBtnLoading(btn,true);
+  var payload={month:(document.getElementById('fi-mgrmonth')||{}).value,year:(document.getElementById('fi-mgryear')||{}).value,b1Id:b1,b1Name:(document.getElementById('fi-mgrb1name')||{}).value,b2Id:b2,b2Name:(document.getElementById('fi-mgrb2name')||{}).value,amountEach:ae,totalDistributed:ae*2,status:(document.getElementById('fi-mgrstatus')||{}).value||'Scheduled',distDate:(document.getElementById('fi-mgrddate')||{}).value||'',notes:(document.getElementById('fi-mgrnotes')||{}).value||''};
+  var tempId='MGR'+Math.random().toString(36).substr(2,6).toUpperCase();
+  var newRow=[tempId,Number(payload.month),Number(payload.year),b1,payload.b1Name,b2,payload.b2Name,ae,ae*2,ae*2,payload.distDate||'',payload.status,payload.notes];
+  if(!S.mgr||!S.mgr.length) S.mgr=[['TimestampID','Month','Year','Beneficiary1_ID','Beneficiary1_Name','Beneficiary2_ID','Beneficiary2_Name','AmountEach','TotalDistributed','TotalPoolAmount','DistributedDate','Status','Notes']];
+  S.mgr.push(newRow);
+  renderMGRTable();
+  toast('MGR Schedule saved!');
+  closeModal('m-mgr');
+  document.getElementById('f-mgr').reset();
+  ['fi-mgrb1','fi-mgrb1id','fi-mgrb1name','fi-mgrb2','fi-mgrb2id','fi-mgrb2name'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
+  setBtnLoading(btn,false);
+  api.post('addMGRSchedule',payload).then(function(){
+    api.get('getSheet',{sheet:'MerryGoRound'}).then(function(d){if(d){S.mgr=d;renderMGRTable();}});
+  }).catch(function(err){toast('Server error: '+err.message,'error');S.mgr=S.mgr.filter(function(r,i){return i===0||r[0]!==tempId;});renderMGRTable();});
+}
+
+// ─── EXPORT ───
+function exportCSV(type) {
+  toast('Preparing '+type+'...');
+  var getData = {
+    Members: function(){ return S.members.length ? [Object.keys(S.members[0])].concat(S.members.map(function(m){return Object.values(m);})) : []; },
+    Contributions: function(){ return S.contributions; },
+    Loans: function(){ return S.loans; },
+    Repayments: function(){ return S.repayments; },
+    MerryGoRound: function(){ return S.mgr; }
+  };
+  var data = (getData[type]||function(){return[];})();
+  if(!data||data.length<=1){toast('No data to export','warning');return;}
+  var csv=data.filter(function(r){return r&&r.length&&r[0]!=='';}).map(function(r){return r.map(function(c){var v=c==null?'':String(c);if(v.indexOf(',')!==-1||v.indexOf('"')!==-1||v.indexOf('\n')!==-1)v='"'+v.replace(/"/g,'""')+'"';return v;}).join(',');}).join('\n');
+  var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8;'}));a.download='SACCO_'+type+'_'+new Date().toISOString().split('T')[0]+'.csv';a.style.display='none';document.body.appendChild(a);a.click();document.body.removeChild(a);
+  toast(type+' exported!');
+}
+function downloadFullWorkbook() {
+  toast('Generating workbook...');
+  api.get('getExportUrl').then(function(url){var a=document.createElement('a');a.href=url;a.target='_blank';document.body.appendChild(a);a.click();document.body.removeChild(a);toast('Download started!');}).catch(function(){toast('Download failed','error');});
+}
+
+// ─── UTILITIES ───
+function skelTable(tbId, cols, rows) {
+  var tbody=document.getElementById(tbId); if(!tbody)return;
+  var cell=''; for(var c=0;c<cols;c++) cell+='<td><span class="skel" style="height:13px;width:80%;display:block;"></span></td>';
+  var out=''; for(var r=0;r<rows;r++) out+='<tr>'+cell+'</tr>';
+  tbody.innerHTML=out;
+}
+function skelRows(cols,n){var cell='';for(var c=0;c<cols;c++)cell+='<td><span class="skel" style="height:13px;width:80%;display:block;"></span></td>';var out='';for(var r=0;r<n;r++)out+='<tr>'+cell+'</tr>';return out;}
+function setBtnLoading(btn,loading){if(!btn)return;if(loading){btn.disabled=true;btn._orig=btn.innerHTML;btn.innerHTML='<i class="fas fa-spinner spinning"></i> Saving...';}else{btn.disabled=false;if(btn._orig)btn.innerHTML=btn._orig;}}
+
+// ─── SETUP ───
+function saveSetupUrl() {
+  var inp=document.getElementById('setup-url'); var err=document.getElementById('setup-error'); var btn=document.getElementById('setup-btn');
+  var url=(inp.value||'').trim();
+  if(!url||url.indexOf('script.google.com')===-1){err.style.display='block';return;}
+  err.style.display='none';
+  btn.innerHTML='<i class="fas fa-spinner spinning"></i> Connecting...'; btn.disabled=true;
+  fetch(url+'?action=getDashboardStats').then(function(r){return r.json();}).then(function(r){
+    if(r&&r.success!==false){
+      localStorage.setItem('sacco_api_url',url); S.apiUrl=url;
+      document.getElementById('setup-overlay').style.display='none';
+      initApp();
+    } else { throw new Error('API test failed'); }
+  }).catch(function(){
+    btn.innerHTML='<i class="fas fa-plug"></i> Connect & Launch'; btn.disabled=false;
+    err.textContent='❌ Could not connect. Check the URL and try again.'; err.style.display='block';
+  });
+}
 
 function initApp() {
-    var de=document.getElementById('current-date');
-    if(de)de.innerText=new Date().toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'});
-    attachFormHandlers();
-    loadAllData();
+  var de=document.getElementById('current-date');
+  if(de) de.innerText=new Date().toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  // Show skeleton immediately, then fetch
+  showView('dashboard');
+  loadAll(false);
 }
 
+window.addEventListener('DOMContentLoaded', function(){
+  var urlInp=document.getElementById('setup-url');
+  if(urlInp) urlInp.addEventListener('keydown',function(e){if(e.key==='Enter')saveSetupUrl();});
+});
 window.onload = function() {
-    if (!API_BASE_URL) {
-        // First time on this device — show setup overlay
-        document.getElementById('setup-overlay').style.display = 'flex';
-    } else {
-        // Already configured — launch directly
-        var de=document.getElementById('current-date');
-        if(de)de.innerText=new Date().toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'});
-        attachFormHandlers();
-        loadAllData();
-    }
+  if (!S.apiUrl) {
+    document.getElementById('setup-overlay').style.display='flex';
+  } else {
+    initApp();
+  }
 };
-
-function attachFormHandlers() {
-    // MEMBER FORM
-    var mf=document.getElementById('member-form');
-    if(mf)mf.onsubmit=function(e){
-        e.preventDefault();
-        var btn=this.querySelector('button[type="submit"]'),orig=btn.innerHTML;
-        var phone=(document.getElementById('member-phone')||{}).value.trim();
-        if(phone.length!==10||isNaN(phone)){showToast('Enter valid 10-digit phone','error');return;}
-        btnSubmitting(btn,true);
-        api.post('addMember',{name:(document.getElementById('member-name')||{}).value,phone:phone,email:(document.getElementById('member-email')||{}).value,idNumber:(document.getElementById('member-id-number')||{}).value,type:(document.getElementById('member-type')||{}).value,address:(document.getElementById('member-address')||{}).value}).then(function(r){btnSubmitting(btn,false,orig);showToast('Member registered!');closeModal('member-modal');mf.reset();appCache.clear();loadAllData();}).catch(function(err){handleServerError(err);btnSubmitting(btn,false,orig);});
-    };
-
-    // MEMBER EDIT FORM
-    var ef=document.getElementById('member-edit-form');
-    if(ef)ef.onsubmit=function(e){
-        e.preventDefault();
-        var btn=this.querySelector('button[type="submit"]'),orig=btn.innerHTML;
-        btnSubmitting(btn,true);
-        api.post('updateMember',{name:(document.getElementById('edit-member-name')||{}).value,phone:(document.getElementById('edit-member-phone')||{}).value,email:(document.getElementById('edit-member-email')||{}).value,idNumber:(document.getElementById('edit-member-id-no')||{}).value,status:(document.getElementById('edit-member-status')||{}).value,type:(document.getElementById('edit-member-type')||{}).value,address:(document.getElementById('edit-member-address')||{}).value},{id:(document.getElementById('edit-member-id')||{}).value}).then(function(){btnSubmitting(btn,false,orig);showToast('Member updated!');closeModal('member-edit-modal');appCache.clear();loadAllData();}).catch(function(err){handleServerError(err);btnSubmitting(btn,false,orig);});
-    };
-
-    // CONTRIBUTION FORM
-    var cf=document.getElementById('contribution-form');
-    if(cf)cf.onsubmit=function(e){
-        e.preventDefault();
-        var btn=this.querySelector('button[type="submit"]'),orig=btn.innerHTML;
-        var mid=(document.getElementById('contrib-member-id')||{}).value;
-        if(!mid){showToast('Select a member from the list','error');return;}
-        btnSubmitting(btn,true);
-        var ref=document.getElementById('contrib-ref');if(ref&&!ref.value)ref.value='WEB-'+Date.now();
-        api.post('addContribution',{memberId:mid,memberName:(document.getElementById('contrib-member-name')||{}).value,amount:parseFloat((document.getElementById('contrib-amount')||{}).value)||0,type:(document.getElementById('contrib-type')||{}).value,reference:ref?ref.value:('WEB-'+Date.now())}).then(function(){btnSubmitting(btn,false,orig);showToast('Contribution recorded!');closeModal('contribution-modal');cf.reset();if(ref)ref.value='';appCache.clear();loadAllData();}).catch(function(err){handleServerError(err);btnSubmitting(btn,false,orig);});
-    };
-
-    // LOAN FORM
-    var lf=document.getElementById('loan-form');
-    if(lf)lf.onsubmit=function(e){
-        e.preventDefault();
-        var btn=this.querySelector('button[type="submit"]'),orig=btn.innerHTML;
-        var mid=(document.getElementById('loan-member-id')||{}).value;
-        if(!mid){showToast('Select a member from the list','error');return;}
-        btnSubmitting(btn,true);
-        api.post('disburseLoan',{memberId:mid,memberName:(document.getElementById('loan-member-name')||{}).value,amount:parseFloat((document.getElementById('loan-amount')||{}).value)||0,borrowerType:(document.getElementById('borrower-type')||{}).value,term:(document.getElementById('loan-term')||{}).value}).then(function(){btnSubmitting(btn,false,orig);showToast('Loan disbursed!');closeModal('loan-modal');lf.reset();appCache.clear();loadAllData();}).catch(function(err){handleServerError(err);btnSubmitting(btn,false,orig);});
-    };
-
-    // REPAYMENT FORM
-    var rf=document.getElementById('repayment-form');
-    if(rf)rf.onsubmit=function(e){
-        e.preventDefault();
-        var btn=this.querySelector('button[type="submit"]'),orig=btn.innerHTML;
-        var lid=(document.getElementById('repay-loan-id')||{}).value;
-        var mbid=(document.getElementById('repay-member-id')||{}).value;
-        if(!lid||!mbid){showToast('Select a valid loan','error');return;}
-        var loans=appCache.get('Loans')||[];
-        var loanRows=Array.isArray(loans)&&loans.length>1?loans.slice(1):[];
-        var existing=loanRows.filter(function(l){return l[0]===lid;})[0];
-        if(existing&&existing[9]==='Closed'){showToast('Loan already settled!','warning');return;}
-        btnSubmitting(btn,true);
-        var principal=parseFloat((document.getElementById('repay-amount')||{}).value)||0;
-        var mi=(document.getElementById('repay-interest')||{}).value;
-        var bt=(document.getElementById('repay-borrower-type')||{}).value||'Member';
-        var interest=(mi==='')?principal*(bt.toLowerCase()==='member'?0.10:0.20):(parseFloat(mi)||0);
-        if(mi==='')showToast('Auto Interest: KES '+interest.toLocaleString());
-        var pen=parseFloat((document.getElementById('repay-penalty')||{}).value)||0;
-        api.post('addRepayment',{loanId:lid,memberId:mbid,memberName:(document.getElementById('repay-member-name')||{}).value,amount:principal+interest+pen,penalty:pen,principal:principal,interest:interest}).then(function(){btnSubmitting(btn,false,orig);showToast('Repayment recorded!');closeModal('repayment-modal');rf.reset();appCache.clear();loadAllData();}).catch(function(err){handleServerError(err);btnSubmitting(btn,false,orig);});
-    };
-
-    // MGR FORM
-    var mgrf=document.getElementById('mgr-form');
-    if(mgrf)mgrf.onsubmit=function(e){
-        e.preventDefault();
-        var btn=this.querySelector('button[type="submit"]'),orig=btn.innerHTML;
-        var b1=(document.getElementById('mgr-b1-id')||{}).value;
-        var b2=(document.getElementById('mgr-b2-id')||{}).value;
-        if(!b1){showToast('Select at least Beneficiary 1','error');return;}
-        if(!b2){b2=b1;document.getElementById('mgr-b2-id').value=b1;document.getElementById('mgr-b2-name').value=document.getElementById('mgr-b1-name').value;}
-        var ae=parseFloat((document.getElementById('mgr-amount-each')||{}).value)||0;
-        if(ae<=0){showToast('Enter a valid amount','error');return;}
-        btnSubmitting(btn,true);
-        api.post('addMGRSchedule',{month:(document.getElementById('mgr-month')||{}).value,year:(document.getElementById('mgr-year')||{}).value,b1Id:b1,b1Name:(document.getElementById('mgr-b1-name')||{}).value,b2Id:b2,b2Name:(document.getElementById('mgr-b2-name')||{}).value,amountEach:ae,totalDistributed:ae*2,status:(document.getElementById('mgr-status')||{}).value||'Scheduled',distDate:(document.getElementById('mgr-dist-date')||{}).value||'',notes:(document.getElementById('mgr-notes')||{}).value||''}).then(function(){btnSubmitting(btn,false,orig);showToast('MGR Schedule saved!');closeModal('mgr-modal');mgrf.reset();['mgr-b1-id','mgr-b1-name','mgr-b1-input','mgr-b2-id','mgr-b2-name','mgr-b2-input'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});appCache.clear();renderMGR();}).catch(function(err){handleServerError(err);btnSubmitting(btn,false,orig);});
-    };
-} // end attachFormHandlers
 </script>
 </body>
 </html>
-    /* Other styles */
-    .some-class { z-index: 1000; } /* Fixed z-index */
-</style>
