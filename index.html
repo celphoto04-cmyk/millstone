@@ -96,6 +96,21 @@ tr:last-child td{border-bottom:none;}
 tbody tr{transition:background .1s;}
 tbody tr:hover td{background:rgba(22,163,74,0.035);}
 
+/* ─── STICKY TABLE SCROLL ─── */
+.table-scroll-wrap{overflow:auto;max-height:calc(100vh - 300px);}
+.table-scroll-wrap table{width:100%;border-spacing:0;}
+.table-scroll-wrap thead th{position:sticky;top:0;z-index:10;background:#f0fdf4 !important;box-shadow:0 1px 0 var(--border);}
+.table-scroll-wrap.mgr-scroll{max-height:calc(100vh - 420px);overflow-x:auto;overflow-y:auto;}
+
+/* ─── PAGINATION ─── */
+.pagination-bar{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#f0fdf4;border-top:1.5px solid var(--border);flex-wrap:wrap;gap:8px;}
+.pagination-info{font-size:12px;font-weight:600;color:var(--text-muted);}
+.pagination-btns{display:flex;gap:5px;align-items:center;flex-wrap:wrap;}
+.pagination-btns button{padding:5px 11px;border-radius:8px;border:1.5px solid var(--border);background:white;font-size:12px;font-weight:600;cursor:pointer;color:var(--text);transition:all .15s;font-family:inherit;}
+.pagination-btns button:hover:not(:disabled){background:var(--primary-xlight);border-color:var(--primary);color:var(--primary);}
+.pagination-btns button.pg-active{background:var(--primary);color:white;border-color:var(--primary);}
+.pagination-btns button:disabled{opacity:.38;cursor:not-allowed;}
+
 /* ─── EMPTY STATE ─── */
 .empty-state{text-align:center;padding:48px 20px;}
 .empty-state-icon{font-size:40px;opacity:.18;margin-bottom:14px;display:block;}
@@ -271,24 +286,8 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
 
 /* ─── RESPONSIVE ─── */
 @media(max-width:1024px){.sidebar{width:64px;padding:16px 6px;}.logo-text,.nav-item span,.sidebar-brand,.btn-sync span{display:none;}.content{margin-left:64px;padding:16px;}.nav-item{justify-content:center;padding:11px;}.two-col{grid-template-columns:1fr;}}
-@media(max-width:768px){.stats-grid{grid-template-columns:1fr 1fr;}.dl-grid{grid-template-columns:1fr 1fr;}.header-filters{max-width:100%;}}
-@media(max-width:480px){.stats-grid{grid-template-columns:1fr;}.dl-grid{grid-template-columns:1fr;}.content{padding:10px;}.two-col{grid-template-columns:1fr;}}
-/* ─── PAGINATION ─── */
-.pagination-bar{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#f0fdf4;border-top:1.5px solid var(--border);flex-wrap:wrap;gap:8px;}
-.pagination-info{font-size:12px;font-weight:600;color:var(--text-muted);}
-.pagination-btns{display:flex;gap:6px;align-items:center;}
-.pagination-btns button{padding:6px 12px;border-radius:8px;border:1.5px solid var(--border);background:white;font-size:12px;font-weight:600;cursor:pointer;color:var(--text);transition:all .15s;font-family:inherit;}
-.pagination-btns button:hover{background:var(--primary-xlight);border-color:var(--primary);color:var(--primary);}
-.pagination-btns button.active{background:var(--primary);color:white;border-color:var(--primary);}
-.pagination-btns button:disabled{opacity:.4;cursor:not-allowed;}
-.pagination-btns .page-num{padding:6px 10px;font-size:12px;font-weight:700;color:var(--text-muted);}
-
-/* ─── STICKY TABLE ─── */
-.table-scroll-wrap{overflow:auto;max-height:calc(100vh - 280px);}
-.table-scroll-wrap table{width:100%;border-spacing:0;}
-.table-scroll-wrap thead th{position:sticky;top:0;z-index:10;background:#f0fdf4 !important;}
-.table-scroll-wrap.no-maxheight{max-height:none;overflow:visible;}
-
+@media(max-width:768px){.stats-grid{grid-template-columns:1fr 1fr;}.dl-grid{grid-template-columns:1fr 1fr;}.header-filters{max-width:100%;}.table-scroll-wrap{max-height:calc(100vh - 340px);}}
+@media(max-width:480px){.stats-grid{grid-template-columns:1fr;}.dl-grid{grid-template-columns:1fr;}.content{padding:10px;}.two-col{grid-template-columns:1fr;}.table-scroll-wrap{max-height:calc(100vh - 380px);}}
 </style>
 </head>
 <body>
@@ -307,7 +306,7 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
       </svg>
       <div class="logo-text">
         <span class="logo-name">SACCO<b>Sync</b></span>
-        <span class="logo-ver">v3.1.0</span>
+        <span class="logo-ver">v3.2.0</span>
       </div>
     </a>
     <nav id="main-nav">
@@ -409,8 +408,10 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
       <div class="view-action-bar"><button class="btn-primary" onclick="openModal('m-member')"><i class="fas fa-user-plus"></i> Add Member</button></div>
       <div class="table-wrap">
         <div class="table-scroll-wrap">
-          <table><thead><tr><th>ID</th><th>Name</th><th>Phone</th><th>Savings</th><th>Loan Bal</th><th>Nominee 1</th><th>Status</th><th>Actions</th></tr></thead>
-          <tbody id="tb-members"></tbody></table>
+          <table>
+            <thead><tr><th>ID</th><th>Name</th><th>Phone</th><th>Savings</th><th>Loan Bal</th><th>Nominee 1</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody id="tb-members"></tbody>
+          </table>
         </div>
         <div id="pg-members" class="pagination-bar" style="display:none;"></div>
       </div>
@@ -421,8 +422,10 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
       <div class="view-action-bar"><button class="btn-primary" onclick="openModal('m-contribution')"><i class="fas fa-plus"></i> Log Contribution</button></div>
       <div class="table-wrap">
         <div class="table-scroll-wrap">
-          <table><thead><tr><th>Date</th><th>Member</th><th>Amount</th><th>Type</th><th>Reference</th></tr></thead>
-          <tbody id="tb-contributions"></tbody></table>
+          <table>
+            <thead><tr><th>Date</th><th>Member</th><th>Amount</th><th>Type</th><th>Reference</th></tr></thead>
+            <tbody id="tb-contributions"></tbody>
+          </table>
         </div>
         <div id="pg-contributions" class="pagination-bar" style="display:none;"></div>
       </div>
@@ -433,8 +436,10 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
       <div class="view-action-bar"><button class="btn-primary" onclick="openModal('m-loan')"><i class="fas fa-plus"></i> Issue Loan</button></div>
       <div class="table-wrap">
         <div class="table-scroll-wrap">
-          <table><thead><tr><th>ID</th><th>Borrower</th><th>Amount</th><th>Term</th><th>Due Date</th><th>Due Days</th><th>Nominee</th><th>Status</th></tr></thead>
-          <tbody id="tb-loans"></tbody></table>
+          <table>
+            <thead><tr><th>ID</th><th>Borrower</th><th>Amount</th><th>Term</th><th>Due Date</th><th>Due Days</th><th>Nominee</th><th>Status</th></tr></thead>
+            <tbody id="tb-loans"></tbody>
+          </table>
         </div>
         <div id="pg-loans" class="pagination-bar" style="display:none;"></div>
       </div>
@@ -445,14 +450,16 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
       <div class="view-action-bar"><button class="btn-primary" onclick="openModal('m-repayment')"><i class="fas fa-plus"></i> Register Repayment</button></div>
       <div class="table-wrap">
         <div class="table-scroll-wrap">
-          <table><thead><tr><th>Date</th><th>Member</th><th>Loan ID</th><th>Total Paid</th><th>Principal</th><th>Interest</th><th>Penalty</th></tr></thead>
-          <tbody id="tb-repayments"></tbody></table>
+          <table>
+            <thead><tr><th>Date</th><th>Member</th><th>Loan ID</th><th>Total Paid</th><th>Principal</th><th>Interest</th><th>Penalty</th></tr></thead>
+            <tbody id="tb-repayments"></tbody>
+          </table>
         </div>
         <div id="pg-repayments" class="pagination-bar" style="display:none;"></div>
       </div>
     </div>
 
-    <!-- MGR VIEW — added Timestamp, LastUpdated, UpdatedBy columns -->
+    <!-- MGR VIEW -->
     <div id="v-mgr" class="view" style="display:none">
       <div class="stats-grid" style="margin-bottom:20px;">
         <div class="stat-card"><div class="stat-icon si-green"><i class="fas fa-calendar-check"></i></div><div class="stat-info"><p>Total Schedules</p><h2 id="mgr-s-total">—</h2></div></div>
@@ -470,13 +477,16 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
         </div>
         <button class="btn-primary" onclick="openModal('m-mgr')"><i class="fas fa-plus"></i> Schedule Distribution</button>
       </div>
-        <div class="table-wrap">
-        <div class="table-scroll-wrap" style="overflow-x:auto;">
-          <table style="min-width:1200px;"><thead><tr><th>Month/Year</th><th>Beneficiary 1</th><th>Beneficiary 2</th><th>Each</th><th>Total</th><th>Status</th><th>Dist. Date</th><th>Notes</th><th>Timestamp</th><th>Last Updated</th><th>Updated By</th><th>Actions</th></tr></thead>
-          <tbody id="tb-mgr"></tbody></table>
+      <div class="table-wrap">
+        <div class="table-scroll-wrap mgr-scroll">
+          <table style="min-width:1200px;">
+            <thead><tr><th>Month/Year</th><th>Beneficiary 1</th><th>Beneficiary 2</th><th>Each</th><th>Total</th><th>Status</th><th>Dist. Date</th><th>Notes</th><th>Timestamp</th><th>Last Updated</th><th>Updated By</th><th>Actions</th></tr></thead>
+            <tbody id="tb-mgr"></tbody>
+          </table>
         </div>
         <div id="pg-mgr" class="pagination-bar" style="display:none;"></div>
       </div>
+    </div>
 
     <!-- EXPENSES VIEW -->
     <div id="v-expenses" class="view" style="display:none">
@@ -489,11 +499,14 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
       <div class="view-action-bar"><button class="btn-primary" onclick="openModal('m-expense')"><i class="fas fa-plus"></i> Add Expense</button></div>
       <div class="table-wrap">
         <div class="table-scroll-wrap">
-          <table><thead><tr><th>Date</th><th>Category</th><th>Description</th><th>Amount</th><th>Paid By</th><th>Approved By</th><th>Reference</th><th>Action</th></tr></thead>
-          <tbody id="tb-expenses"></tbody></table>
+          <table>
+            <thead><tr><th>Date</th><th>Category</th><th>Description</th><th>Amount</th><th>Paid By</th><th>Approved By</th><th>Reference</th><th>Action</th></tr></thead>
+            <tbody id="tb-expenses"></tbody>
+          </table>
         </div>
         <div id="pg-expenses" class="pagination-bar" style="display:none;"></div>
       </div>
+    </div>
 
     <!-- REPORTS VIEW -->
     <div id="v-reports" class="view" style="display:none">
@@ -504,8 +517,12 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
       </div>
       <div class="table-wrap">
         <div style="padding:18px 20px 10px;"><h3 style="font-size:15px;font-weight:700;">Overdue Installments</h3></div>
-        <table><thead><tr><th>Loan ID</th><th>Member</th><th>Due Date</th><th>Days Late</th><th>Penalty</th></tr></thead>
-        <tbody id="tb-overdue"></tbody></table>
+        <div class="table-scroll-wrap">
+          <table>
+            <thead><tr><th>Loan ID</th><th>Member</th><th>Due Date</th><th>Days Late</th><th>Penalty</th></tr></thead>
+            <tbody id="tb-overdue"></tbody>
+          </table>
+        </div>
       </div>
     </div>
 
@@ -533,11 +550,14 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
       </div>
       <div class="table-wrap">
         <div class="table-scroll-wrap">
-          <table><thead><tr><th>Time</th><th>Table</th><th>Record</th><th>Action</th><th>Field</th><th>Old Value</th><th>New Value</th><th>By</th></tr></thead>
-          <tbody id="tb-audit"></tbody></table>
+          <table>
+            <thead><tr><th>Time</th><th>Table</th><th>Record</th><th>Action</th><th>Field</th><th>Old Value</th><th>New Value</th><th>By</th></tr></thead>
+            <tbody id="tb-audit"></tbody>
+          </table>
         </div>
         <div id="pg-auditlog" class="pagination-bar" style="display:none;"></div>
       </div>
+    </div>
 
     <!-- DOWNLOADS VIEW -->
     <div id="v-downloads" class="view" style="display:none">
@@ -590,7 +610,7 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
         </div>
         <div class="form-row">
           <div class="form-group" style="margin-bottom:0;"><label>Phone</label><input type="tel" id="fi-n1phone" required></div>
-          <div class="form-group" style="margin-bottom:0;"><label>ID Number</label><input type="text" id="fi-n1idno"></div>
+          <div class="form-group" style="margin-bottom:0;"><label>ID Number <span class="optional">(auto if blank)</span></label><input type="text" id="fi-n1idno" placeholder="Auto-generated if blank"></div>
         </div>
         <div class="form-group" style="margin-top:10px;margin-bottom:0;"><label>Address <span class="optional">(optional)</span></label><input type="text" id="fi-n1address"></div>
       </div>
@@ -602,7 +622,7 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
         </div>
         <div class="form-row">
           <div class="form-group" style="margin-bottom:0;"><label>Phone</label><input type="tel" id="fi-n2phone"></div>
-          <div class="form-group" style="margin-bottom:0;"><label>ID Number</label><input type="text" id="fi-n2idno"></div>
+          <div class="form-group" style="margin-bottom:0;"><label>ID Number <span class="optional">(auto if blank)</span></label><input type="text" id="fi-n2idno" placeholder="Auto-generated if blank"></div>
         </div>
         <div class="form-group" style="margin-top:10px;margin-bottom:0;"><label>Address <span class="optional">(optional)</span></label><input type="text" id="fi-n2address"></div>
       </div>
@@ -739,7 +759,7 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
   </div>
 </div>
 
-<!-- MGR REJECT (no note required — just confirm) -->
+<!-- MGR REJECT -->
 <div id="m-mgrreject" class="modal">
   <div class="modal-content" style="max-width:400px;">
     <button class="modal-close" onclick="closeModal('m-mgrreject')">&times;</button>
@@ -748,7 +768,7 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
     <input type="hidden" id="mgrreject-id">
     <div style="background:#fef2f2;border:1.5px solid #fca5a5;border-radius:11px;padding:14px;margin-bottom:18px;font-size:13px;color:#991b1b;">
       <i class="fas fa-exclamation-triangle" style="margin-right:6px;"></i>
-      This will mark the schedule as <strong>Rejected</strong>. Status will be updated immediately.
+      This will mark the schedule as <strong>Rejected</strong>. You can re-schedule for the same month after rejection.
     </div>
     <button class="btn-submit" style="background:#dc2626;box-shadow:0 4px 14px rgba(220,38,38,0.25);" onclick="confirmRejectMGR()">
       <i class="fas fa-times"></i> Confirm Rejection
@@ -910,9 +930,10 @@ var S = {
   mgr: [],
   dashboard: null,
   currentView: 'dashboard',
-  pages: { members:1, contributions:1, loans:1, repayments:1, expenses:1, auditlog:1 }
+  // Pagination state — ek jagah sab pages track honge
+  pages: { members:1, contributions:1, loans:1, repayments:1, expenses:1, auditlog:1, mgr:1 }
 };
-var PAGE_SIZE = 50;
+var PAGE_SIZE = 50; // Har page par 50 records
 
 // ═══════════════════════════════════════════════════
 //  API LAYER
@@ -1029,6 +1050,7 @@ function forceSync() {
 }
 
 // ─── SEARCH & FILTER ───
+// Search/filter change hone par page 1 par reset karo
 var searchTimer = null;
 function onSearchInput() {
   clearTimeout(searchTimer);
@@ -1051,13 +1073,48 @@ function matchesDateFilter(dateVal) {
   return (m===null||d.getMonth()===m)&&(y===null||d.getFullYear()===y);
 }
 
+// ─── PAGINATION HELPER ───
+function renderPagination(pgId, currentPage, totalRows, onPageChangeFn) {
+  var pgEl = document.getElementById(pgId);
+  if (!pgEl) return;
+  var totalPages = Math.max(1, Math.ceil(totalRows / PAGE_SIZE));
+  if (totalPages <= 1 && totalRows <= PAGE_SIZE) { pgEl.style.display = 'none'; return; }
+  pgEl.style.display = 'flex';
+  var start = (currentPage - 1) * PAGE_SIZE + 1;
+  var end   = Math.min(currentPage * PAGE_SIZE, totalRows);
+  var html  = '<span class="pagination-info">Showing ' + start + '–' + end + ' of ' + totalRows + ' records</span>';
+  html += '<div class="pagination-btns">';
+  html += '<button onclick="'+onPageChangeFn+'(1)" '+(currentPage===1?'disabled':'')+' title="First">«</button>';
+  html += '<button onclick="'+onPageChangeFn+'('+(currentPage-1)+')" '+(currentPage===1?'disabled':'')+' title="Previous">‹ Prev</button>';
+  // Page number window — max 5 pages dikhao
+  var startP = Math.max(1, currentPage - 2);
+  var endP   = Math.min(totalPages, startP + 4);
+  if (endP - startP < 4) startP = Math.max(1, endP - 4);
+  for (var p = startP; p <= endP; p++) {
+    html += '<button class="'+(p===currentPage?'pg-active':'')+'" onclick="'+onPageChangeFn+'('+p+')">'+p+'</button>';
+  }
+  html += '<button onclick="'+onPageChangeFn+'('+(currentPage+1)+')" '+(currentPage===totalPages?'disabled':'')+' title="Next">Next ›</button>';
+  html += '<button onclick="'+onPageChangeFn+'('+totalPages+')" '+(currentPage===totalPages?'disabled':'')+' title="Last">»</button>';
+  html += '</div>';
+  pgEl.innerHTML = html;
+}
+
+// Pagination go-to functions — har section ke liye alag
+function goPageMembers(p)      { S.pages.members=p;      renderMembersTable(); }
+function goPageContributions(p){ S.pages.contributions=p; renderSheet('contributions','tb-contributions','contrib'); }
+function goPageLoans(p)        { S.pages.loans=p;         renderSheet('loans','tb-loans','loan'); }
+function goPageRepayments(p)   { S.pages.repayments=p;    renderSheet('repayments','tb-repayments','repay'); }
+function goPageExpenses(p)     { S.pages.expenses=p;      renderExpenses(); }
+function goPageAuditlog(p)     { S.pages.auditlog=p;      renderAuditTable(); }
+function goPageMgr(p)          { S.pages.mgr=p;           renderMGRTable(); }
+
 // ─── EMPTY STATE HELPER ───
 function emptyState(msg, sub) {
   sub = sub || 'No records match your current filters.';
   return '<tr><td colspan="20"><div class="empty-state"><span class="empty-state-icon">📭</span><div class="empty-state-text">'+msg+'</div><div class="empty-state-sub">'+sub+'</div></div></td></tr>';
 }
 
-// ─── DUE DAYS HELPER ───
+// ─── DUE DAYS HELPER (FIX: Math.floor se sahi calculation) ───
 function dueDaysBadge(dueDateStr, status) {
   if (!dueDateStr || status === 'Closed') return '<span style="color:#94a3b8;font-size:11.5px;">—</span>';
   var due = new Date(dueDateStr);
@@ -1065,7 +1122,8 @@ function dueDaysBadge(dueDateStr, status) {
   var today = new Date();
   today.setHours(0,0,0,0);
   due.setHours(0,0,0,0);
-  var diff = Math.ceil((due - today) / 86400000);
+  // Math.floor use karo — sahi din count ke liye
+  var diff = Math.floor((due.getTime() - today.getTime()) / 86400000);
   if (diff < 0) {
     var cls = diff < -30 ? 'very-overdue' : 'overdue';
     return '<span class="due-days '+cls+'"><i class="fas fa-exclamation-triangle"></i> '+Math.abs(diff)+' days overdue</span>';
@@ -1129,15 +1187,22 @@ function renderMembersTable() {
   if (!rows||!rows.length) {
     var tbody=document.getElementById('tb-members');
     if(tbody) tbody.innerHTML = emptyState('No Members Found', 'Register your first member to get started.');
+    renderPagination('pg-members',1,0,'goPageMembers');
     return;
   }
   if (search) rows=rows.filter(function(m){ return (String(m.Name||'')+String(m.ID||'')+String(m.Phone||'')).toLowerCase().indexOf(search)!==-1; });
   var tbody=document.getElementById('tb-members'); if(!tbody) return;
-  if (!rows.length) { tbody.innerHTML=emptyState('No Members Match Search'); renderPagination('pg-members',1,0,'goPageMembers'); return; }
+  if (!rows.length) {
+    tbody.innerHTML=emptyState('No Members Match Search');
+    renderPagination('pg-members',1,0,'goPageMembers');
+    return;
+  }
+  // Pagination
   var totalRows = rows.length;
   var page = S.pages.members || 1;
   rows = rows.slice((page-1)*PAGE_SIZE, page*PAGE_SIZE);
   renderPagination('pg-members', page, totalRows, 'goPageMembers');
+
   tbody.innerHTML=rows.map(function(m){
     var st=String(m.Status||'').toLowerCase();
     var bc=st==='active'?'badge-active':st==='inactive'?'badge-inactive':'badge-closed';
@@ -1150,8 +1215,13 @@ function renderMembersTable() {
 function renderSheet(key, tbId, type) {
   var data=S[key];
   var tbody=document.getElementById(tbId); if(!tbody) return;
+  var pgKey  = type==='loan'?'loans':type==='repay'?'repayments':'contributions';
+  var pgElId = type==='loan'?'pg-loans':type==='repay'?'pg-repayments':'pg-contributions';
+  var pgFn   = type==='loan'?'goPageLoans':type==='repay'?'goPageRepayments':'goPageContributions';
+
   if (!data||data.length<=1) {
     tbody.innerHTML = emptyState('No Records Yet', 'Records will appear here once you start adding data.');
+    renderPagination(pgElId,1,0,pgFn);
     return;
   }
   var rows=data.slice(1).filter(function(r){return r[0];});
@@ -1160,25 +1230,24 @@ function renderSheet(key, tbId, type) {
   if (mf!==null||yf!==null) rows=rows.filter(function(r){var dv=r[3]||r[7]||r[8];return matchesDateFilter(dv);});
   if (!rows.length) {
     tbody.innerHTML=emptyState('No Matching Records');
-    var pgKey2 = type==='loan'?'pg-loans':type==='repay'?'pg-repayments':'pg-contributions';
-    renderPagination(pgKey2,1,0,'goPage'+( type==='loan'?'Loans':type==='repay'?'Repayments':'Contributions'));
+    renderPagination(pgElId,1,0,pgFn);
     return;
   }
-  var totalRows2 = rows.length;
-  var pgKey = type==='loan'?'loans':type==='repay'?'repayments':'contributions';
-  var page2 = S.pages[pgKey] || 1;
-  rows = rows.slice((page2-1)*PAGE_SIZE, page2*PAGE_SIZE);
-  var pgElKey = type==='loan'?'pg-loans':type==='repay'?'pg-repayments':'pg-contributions';
-  var pgFnKey = type==='loan'?'goPageLoans':type==='repay'?'goPageRepayments':'goPageContributions';
-  renderPagination(pgElKey, page2, totalRows2, pgFnKey);
+  // Pagination
+  var totalRows = rows.length;
+  var page = S.pages[pgKey] || 1;
+  rows = rows.slice((page-1)*PAGE_SIZE, page*PAGE_SIZE);
+  renderPagination(pgElId, page, totalRows, pgFn);
+
   tbody.innerHTML=rows.map(function(r){
     if (type==='loan') {
       var st2=String(r[9]||'Active').toLowerCase();
       var lbc=st2==='active'?'badge-active':st2==='closed'?'badge-closed':'badge-inactive';
       var dueDays = dueDaysBadge(r[8], r[9]);
+      // Nominee — member ke data se fetch karo
       var loanMember = S.members.find(function(m){ return m.ID === r[1]; });
       var nomineeInfo = loanMember && loanMember.Nominee1_Name
-        ? '<span style="font-size:11px;font-weight:600;">'+loanMember.Nominee1_Name+'</span><br><span style="font-size:10px;color:var(--text-muted);">'+( loanMember.Nominee1_Relationship||'')+'</span>'
+        ? '<span style="font-size:11px;font-weight:600;">'+loanMember.Nominee1_Name+'</span><br><span style="font-size:10px;color:var(--text-muted);">'+(loanMember.Nominee1_Relationship||'')+'</span>'
         : '<span style="color:var(--text-muted);font-size:11px;">—</span>';
       return '<tr><td>'+r[0]+'</td><td><strong>'+r[2]+'</strong></td><td>KES '+Number(r[4]||0).toLocaleString()+'</td><td>'+r[5]+' Mon</td><td>'+(r[8]?new Date(r[8]).toLocaleDateString():'N/A')+'</td><td>'+dueDays+'</td><td>'+nomineeInfo+'</td><td><span class="badge '+lbc+'">'+r[9]+'</span></td></tr>';
     }
@@ -1199,17 +1268,27 @@ function renderExpenses() {
   }
   var data = S.expenses;
   var tbody = document.getElementById('tb-expenses'); if(!tbody) return;
-  if (!data||data.length<=1) { tbody.innerHTML=emptyState('No Expenses Recorded', 'Add your first expense entry to begin tracking.'); return; }
+  if (!data||data.length<=1) {
+    tbody.innerHTML=emptyState('No Expenses Recorded', 'Add your first expense entry to begin tracking.');
+    renderPagination('pg-expenses',1,0,'goPageExpenses');
+    return;
+  }
   var rows = data.slice(1).filter(function(r){return r[0];});
   var search=getSearchVal(),mf=getMonthFilter(),yf=getYearFilter();
   if (search) rows=rows.filter(function(r){return r.some(function(c){return String(c||'').toLowerCase().indexOf(search)!==-1;});});
   if (mf!==null||yf!==null) rows=rows.filter(function(r){return matchesDateFilter(r[1]);});
   rows = rows.slice().reverse();
-  if (!rows.length) { tbody.innerHTML=emptyState('No Matching Expenses'); renderPagination('pg-expenses',1,0,'goPageExpenses'); return; }
+  if (!rows.length) {
+    tbody.innerHTML=emptyState('No Matching Expenses');
+    renderPagination('pg-expenses',1,0,'goPageExpenses');
+    return;
+  }
+  // Pagination
   var totalRowsExp = rows.length;
   var pageExp = S.pages.expenses || 1;
   rows = rows.slice((pageExp-1)*PAGE_SIZE, pageExp*PAGE_SIZE);
   renderPagination('pg-expenses', pageExp, totalRowsExp, 'goPageExpenses');
+
   tbody.innerHTML=rows.map(function(r){
     var d=r[1]?new Date(r[1]).toLocaleDateString():'';
     var rid=String(r[0]).replace(/'/g,"\\'");
@@ -1232,6 +1311,7 @@ function renderAuditTable() {
   if (!data||data.length<=1) {
     api.get('getSheet',{sheet:'AuditLog'}).then(function(d){ if(d){S.auditlog=d;renderAuditTable();} }).catch(function(){});
     tbody.innerHTML = emptyState('No Audit Records', 'System changes will appear here.');
+    renderPagination('pg-auditlog',1,0,'goPageAuditlog');
     return;
   }
   var rows = data.slice(1).filter(function(r){return r[0];});
@@ -1242,11 +1322,17 @@ function renderAuditTable() {
   if (af) rows=rows.filter(function(r){return String(r[5]||'').indexOf(af)===0;});
   if (search) rows=rows.filter(function(r){return r.some(function(c){return String(c||'').toLowerCase().indexOf(search)!==-1;});});
   rows = rows.slice().reverse();
-  if (!rows.length) { tbody.innerHTML=emptyState('No Audit Records Match Filter'); renderPagination('pg-auditlog',1,0,'goPageAuditlog'); return; }
+  if (!rows.length) {
+    tbody.innerHTML=emptyState('No Audit Records Match Filter');
+    renderPagination('pg-auditlog',1,0,'goPageAuditlog');
+    return;
+  }
+  // Pagination
   var totalRowsAudit = rows.length;
   var pageAudit = S.pages.auditlog || 1;
   rows = rows.slice((pageAudit-1)*PAGE_SIZE, pageAudit*PAGE_SIZE);
   renderPagination('pg-auditlog', pageAudit, totalRowsAudit, 'goPageAuditlog');
+
   tbody.innerHTML=rows.map(function(r){
     var ts=r[1]?new Date(r[1]).toLocaleString():'';
     var act=String(r[5]||'');
@@ -1279,18 +1365,28 @@ function renderMGRTable() {
   se('mgr-s-latest','KES '+(latest?Number(latest[7]||0).toLocaleString():'0'));
   se('mgr-s-contrib','KES '+(S.dashboard?Number(S.dashboard.totalMerryGoRound||0).toLocaleString():'0'));
   var tbody=document.getElementById('tb-mgr'); if(!tbody) return;
-  if (!allRows.length) { tbody.innerHTML=emptyState('No MGR Schedules Yet', 'Create your first Merry Go Round schedule.'); return; }
+  if (!allRows.length) {
+    tbody.innerHTML=emptyState('No MGR Schedules Yet', 'Create your first Merry Go Round schedule.');
+    renderPagination('pg-mgr',1,0,'goPageMgr');
+    return;
+  }
   var stF=(document.getElementById('mgr-fs')||{}).value||'';
   var yrF=(document.getElementById('mgr-fy')||{}).value||'';
   var rows=allRows.slice();
   if (stF) rows=rows.filter(function(r){return String(r[11]||'').trim()===stF;});
   if (yrF) rows=rows.filter(function(r){return String(r[2])===yrF;});
   rows.sort(function(a,b){return(Number(b[2])-Number(a[2]))||Number(b[1])-Number(a[1]);});
-  if (!rows.length) { tbody.innerHTML=emptyState('No Records Match Filter'); renderPagination('pg-mgr',1,0,'goPageMgr'); return; }
+  if (!rows.length) {
+    tbody.innerHTML=emptyState('No Records Match Filter');
+    renderPagination('pg-mgr',1,0,'goPageMgr');
+    return;
+  }
+  // Pagination
   var totalRowsMgr = rows.length;
   var pageMgr = S.pages.mgr || 1;
   rows = rows.slice((pageMgr-1)*PAGE_SIZE, pageMgr*PAGE_SIZE);
   renderPagination('pg-mgr', pageMgr, totalRowsMgr, 'goPageMgr');
+
   tbody.innerHTML=rows.map(function(r){
     var st=String(r[11]||'Scheduled').trim();
     var bc=st==='Distributed'?'badge-distributed':st==='Rejected'?'badge-rejected':st==='Pending'?'badge-pending':'badge-scheduled';
@@ -1299,28 +1395,26 @@ function renderMGRTable() {
     var rid=String(r[0]||'').replace(/'/g,"\\'");
     var lble=lbl.replace(/'/g,"\\'");
 
-    // Action buttons
+    // ── Action buttons — v3.2.0: Edit button Distributed/Rejected ke liye nahi ──
     var actionBtns = '<div class="actions-cell">';
-    // Edit button only for non-final statuses
     if (st !== 'Distributed' && st !== 'Rejected') {
+      // Edit — sirf active/pending/scheduled ke liye
       actionBtns += '<button class="btn-icon btn-edit" title="Edit Record" onclick="openEditMGR(\''+rid+'\')"><i class="fas fa-pencil-alt"></i></button>';
-    }
-    if (st !== 'Distributed' && st !== 'Rejected') {
-      // Mark distributed (green check)
+      // Mark distributed
       actionBtns += '<button class="btn-icon btn-view" title="Mark Distributed" onclick="openMarkDist(\''+rid+'\',\''+lble+'\')"><i class="fas fa-check"></i></button>';
-      // Reject (red X)
+      // Reject
       actionBtns += '<button class="btn-icon btn-reject" title="Reject" onclick="openRejectMGR(\''+rid+'\',\''+lble+'\')"><i class="fas fa-times"></i></button>';
     } else if (st === 'Distributed') {
-      actionBtns += '<span style="color:var(--primary);font-size:16px;padding:0 4px;">✓</span>';
+      actionBtns += '<span style="color:var(--primary);font-size:16px;padding:0 4px;" title="Distributed">✓ Done</span>';
     } else {
-      actionBtns += '<span style="color:#be185d;font-size:13px;padding:0 4px;">Rejected</span>';
+      // Rejected — koi action nahi, sirf label
+      actionBtns += '<span style="color:#be185d;font-size:11px;padding:0 4px;font-weight:700;">Rejected</span>';
     }
     actionBtns += '</div>';
 
-    // Timestamp (r[0] is TimestampID used as ID, actual create timestamp is tracked server-side)
-    var timestamp = r[13] ? new Date(r[13]).toLocaleString() : (r[0] ? '<span style="font-size:10px;color:#9ca3af;">'+r[0]+'</span>' : '—');
+    var timestamp   = r[13] ? new Date(r[13]).toLocaleString() : (r[0] ? '<span style="font-size:10px;color:#9ca3af;">'+r[0]+'</span>' : '—');
     var lastUpdated = r[14] ? new Date(r[14]).toLocaleString() : '—';
-    var updatedBy = r[15] || '—';
+    var updatedBy   = r[15] || '—';
 
     var b2cell=r[3]===r[5]?'<span style="font-size:11px;background:#fef3c7;color:#92400e;padding:3px 7px;border-radius:6px;font-weight:700;">Single</span>':'<strong>'+(r[6]||'—')+'</strong><br><span style="font-size:10.5px;color:var(--text-muted);">'+(r[5]||'')+'</span>';
     return '<tr><td><strong>'+lbl+'</strong></td><td><strong>'+(r[4]||'—')+'</strong><br><span style="font-size:10.5px;color:var(--text-muted);">'+(r[3]||'')+'</span></td><td>'+b2cell+'</td><td><strong>KES '+Number(r[7]||0).toLocaleString()+'</strong></td><td><strong style="color:var(--primary);">KES '+Number(r[8]||0).toLocaleString()+'</strong></td><td><span class="badge '+bc+'">'+st+'</span></td><td>'+dd+'</td><td style="max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11.5px;color:var(--text-muted);">'+(r[12]||'—')+'</td><td style="font-size:11px;color:var(--text-muted);white-space:nowrap;">'+timestamp+'</td><td style="font-size:11px;color:var(--text-muted);white-space:nowrap;">'+lastUpdated+'</td><td style="font-size:11px;color:var(--text-muted);">'+updatedBy+'</td><td>'+actionBtns+'</td></tr>';
@@ -1407,14 +1501,13 @@ function submitEditMGR(e) {
   var id = document.getElementById('fi-mgredit-id').value;
   var btn = document.getElementById('btn-mgr-edit-submit');
   setBtnLoading(btn, true);
-  var each = parseFloat(document.getElementById('fi-mgredit-each').value) || 0;
+  var each   = parseFloat(document.getElementById('fi-mgredit-each').value) || 0;
   var status = document.getElementById('fi-mgredit-status').value;
-  var ddate = document.getElementById('fi-mgredit-ddate').value;
-  var notes = document.getElementById('fi-mgredit-notes').value;
-  var month = document.getElementById('fi-mgredit-month').value;
-  var year = document.getElementById('fi-mgredit-year').value;
-  var now = new Date().toISOString();
-  // Optimistic update
+  var ddate  = document.getElementById('fi-mgredit-ddate').value;
+  var notes  = document.getElementById('fi-mgredit-notes').value;
+  var month  = document.getElementById('fi-mgredit-month').value;
+  var year   = document.getElementById('fi-mgredit-year').value;
+  var now    = new Date().toISOString();
   S.mgr = S.mgr.map(function(row, idx) {
     if (idx === 0) return row;
     if (String(row[0]) === String(id)) {
@@ -1455,7 +1548,7 @@ function renderReports() {
   api.get('getDashboardStats').then(function(d){S.dashboard=d;renderReports();}).catch(function(){});
 }
 
-// ─── AUTOCOMPLETE (updated to capture email) ───
+// ─── AUTOCOMPLETE ───
 function setupAC(inputId,listId,hiddenId,hiddenNameId,hiddenEmailId,acType) {
   var inp=document.getElementById(inputId); if(!inp) return;
   var lst=document.getElementById(listId); if(!lst) return;
@@ -1499,7 +1592,6 @@ function setupAC(inputId,listId,hiddenId,hiddenNameId,hiddenEmailId,acType) {
           if(hiddenId) document.getElementById(hiddenId).value=l[0];
           var rmid=document.getElementById('fi-rmid'),rmname=document.getElementById('fi-rmname'),rbtype=document.getElementById('fi-rbtype'),rmemail=document.getElementById('fi-rmemail');
           if(rmid)rmid.value=l[1];if(rmname)rmname.value=l[2];if(rbtype)rbtype.value=l[3]||'Member';
-          // Find member email for repayment
           if(rmemail){var mem=S.members.find(function(m){return m.ID===l[1];});if(mem)rmemail.value=mem.Email||'';}
           toast('Loan: '+l[2]+' loaded');
           lst.innerHTML='';
@@ -1531,14 +1623,18 @@ function fillProfile(m) {
   if(pl)pl.innerText='KES '+Number(m.CurrentLoanBalance||0).toLocaleString();
   var n1el=document.getElementById('pa-n1');
   if(n1el) n1el.innerHTML = m.Nominee1_Name
-    ? m.Nominee1_Name+' ('+m.Nominee1_Relationship+') — '+m.Nominee1_Phone+(m.Nominee1_Address?' — '+m.Nominee1_Address:'')
+    ? m.Nominee1_Name+' ('+m.Nominee1_Relationship+') — '+m.Nominee1_Phone
+      +(m.Nominee1_ID_Number ? ' — ID: '+m.Nominee1_ID_Number : '')
+      +(m.Nominee1_Address?' — '+m.Nominee1_Address:'')
     : '<span style="color:var(--text-muted);">Not set</span>';
   var n2box=document.getElementById('pa-n2-box');
   var n2el=document.getElementById('pa-n2');
   if(n2box && n2el){
     if(m.Nominee2_Name){
       n2box.style.display='block';
-      n2el.innerHTML = m.Nominee2_Name+' ('+m.Nominee2_Relationship+') — '+m.Nominee2_Phone+(m.Nominee2_Address?' — '+m.Nominee2_Address:'');
+      n2el.innerHTML = m.Nominee2_Name+' ('+m.Nominee2_Relationship+') — '+m.Nominee2_Phone
+        +(m.Nominee2_ID_Number ? ' — ID: '+m.Nominee2_ID_Number : '')
+        +(m.Nominee2_Address?' — '+m.Nominee2_Address:'');
     } else { n2box.style.display='none'; }
   }
 }
@@ -1588,6 +1684,7 @@ function submitMember(e) {
   var newMember=Object.assign({ID:tempId,Status:'Active',TotalSavings:0,CurrentLoanBalance:0,
     Nominee1_Name:payload.nominee1_name,Nominee1_Relationship:payload.nominee1_relationship,
     Nominee1_Phone:payload.nominee1_phone,Nominee1_Address:payload.nominee1_address,
+    Nominee1_ID_Number:payload.nominee1_id_number||'(auto)',
     Nominee2_Name:payload.nominee2_name,Nominee2_Relationship:payload.nominee2_relationship,
     Nominee2_Phone:payload.nominee2_phone,Name:payload.name,Phone:payload.phone,
     Email:payload.email,ID_Number:payload.idNumber,Type:payload.type,Address:payload.address},{});
@@ -1836,42 +1933,9 @@ function downloadFullWorkbook() {
   api.get('getExportUrl').then(function(url){var a=document.createElement('a');a.href=url;a.target='_blank';document.body.appendChild(a);a.click();document.body.removeChild(a);toast('Download started!');}).catch(function(){toast('Download failed','error');});
 }
 
-// ─── PAGINATION HELPER ───
-function renderPagination(pgId, currentPage, totalRows, onPageChange) {
-  var pgEl = document.getElementById(pgId);
-  if (!pgEl) return;
-  var totalPages = Math.max(1, Math.ceil(totalRows / PAGE_SIZE));
-  if (totalPages <= 1) { pgEl.style.display = 'none'; return; }
-  pgEl.style.display = 'flex';
-  var start = (currentPage - 1) * PAGE_SIZE + 1;
-  var end = Math.min(currentPage * PAGE_SIZE, totalRows);
-  var html = '<span class="pagination-info">Showing '+start+'–'+end+' of '+totalRows+'</span>';
-  html += '<div class="pagination-btns">';
-  html += '<button onclick="'+onPageChange+'(1)" '+(currentPage===1?'disabled':'')+'>«</button>';
-  html += '<button onclick="'+onPageChange+'('+(currentPage-1)+')" '+(currentPage===1?'disabled':'')+'>‹ Prev</button>';
-  // page numbers — show window of 5
-  var startPage = Math.max(1, currentPage - 2);
-  var endPage = Math.min(totalPages, startPage + 4);
-  if (endPage - startPage < 4) startPage = Math.max(1, endPage - 4);
-  for (var p = startPage; p <= endPage; p++) {
-    html += '<button class="'+(p===currentPage?'active':'')+'" onclick="'+onPageChange+'('+p+')">'+p+'</button>';
-  }
-  html += '<button onclick="'+onPageChange+'('+(currentPage+1)+')" '+(currentPage===totalPages?'disabled':'')+'>Next ›</button>';
-  html += '<button onclick="'+onPageChange+'('+totalPages+')" '+(currentPage===totalPages?'disabled':'')+'>»</button>';
-  html += '</div>';
-  pgEl.innerHTML = html;
-}
-function goPageMembers(p){ S.pages.members=p; renderMembersTable(); }
-function goPageContributions(p){ S.pages.contributions=p; renderSheet('contributions','tb-contributions','contrib'); }
-function goPageLoans(p){ S.pages.loans=p; renderSheet('loans','tb-loans','loan'); }
-function goPageRepayments(p){ S.pages.repayments=p; renderSheet('repayments','tb-repayments','repay'); }
-function goPageExpenses(p){ S.pages.expenses=p; renderExpenses(); }
-function goPageAuditlog(p){ S.pages.auditlog=p; renderAuditTable(); }
-function goPageMgr(p){ S.pages.mgr=p; renderMGRTable(); }
-
 // ─── UTILITIES ───
-function setBtnLoading(btn,loading){
-  
+function setBtnLoading(btn,loading){if(!btn)return;if(loading){btn.disabled=true;btn._orig=btn.innerHTML;btn.innerHTML='<i class="fas fa-spinner spinning"></i> Saving...';}else{btn.disabled=false;if(btn._orig)btn.innerHTML=btn._orig;}}
+
 // ─── SETUP ───
 function saveSetupUrl() {
   var inp=document.getElementById('setup-url');
