@@ -67,9 +67,13 @@ header{display:flex;justify-content:space-between;align-items:center;margin-bott
 .stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:14px;margin-bottom:22px;}
 .stat-card{padding:18px;background:var(--glass);backdrop-filter:blur(12px);border:1.5px solid rgba(255,255,255,.7);border-radius:var(--radius);box-shadow:var(--shadow);transition:transform .15s,box-shadow .15s;}
 .stat-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg);}
+.stat-card.highlight-green{border:2px solid #86efac;background:rgba(220,252,231,0.6);}
+.stat-card.highlight-red{border:2px solid #fca5a5;background:rgba(254,226,226,0.5);}
 .stat-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:12px;}
 .stat-info p{font-size:10.5px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px;}
 .stat-info h2{font-size:20px;font-weight:800;color:var(--text);}
+.stat-info h2.positive{color:#16a34a;}
+.stat-info h2.negative{color:#dc2626;}
 .si-green{background:#dcfce7;color:#16a34a;}
 .si-blue{background:#dbeafe;color:#2563eb;}
 .si-orange{background:#ffedd5;color:#ea580c;}
@@ -78,6 +82,10 @@ header{display:flex;justify-content:space-between;align-items:center;margin-bott
 .si-pink{background:#fce7f3;color:#db2777;}
 .si-cyan{background:#e0f2fe;color:#0369a1;}
 .si-red{background:#fee2e2;color:#dc2626;}
+.si-amber{background:#fef3c7;color:#d97706;}
+
+/* ─── SECTION LABEL ─── */
+.section-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--text-muted);margin-bottom:10px;padding-left:2px;}
 
 /* ─── TABLES ─── */
 .table-wrap{background:var(--glass);backdrop-filter:blur(12px);border:1.5px solid rgba(255,255,255,.7);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;}
@@ -87,6 +95,12 @@ td{padding:12px 16px;border-bottom:1px solid #f0fdf4;font-size:12.5px;font-weigh
 tr:last-child td{border-bottom:none;}
 tbody tr{transition:background .1s;}
 tbody tr:hover td{background:rgba(22,163,74,0.035);}
+
+/* ─── EMPTY STATE ─── */
+.empty-state{text-align:center;padding:48px 20px;}
+.empty-state-icon{font-size:40px;opacity:.18;margin-bottom:14px;display:block;}
+.empty-state-text{font-size:13.5px;font-weight:600;color:var(--text-muted);}
+.empty-state-sub{font-size:12px;color:#9ca3af;margin-top:4px;}
 
 /* ─── BUTTONS ─── */
 .btn-primary{background:var(--primary);color:white;border:none;padding:9px 18px;border-radius:10px;font-weight:700;font-size:12.5px;cursor:pointer;transition:all .15s;box-shadow:0 2px 8px rgba(22,163,74,0.25);display:inline-flex;align-items:center;gap:6px;font-family:inherit;}
@@ -102,6 +116,10 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
 .btn-view:hover{background:var(--primary-light);color:var(--primary-dark);}
 .btn-edit{background:#fff7ed;color:#ea580c;}
 .btn-edit:hover{background:#ffedd5;color:#c2410c;}
+.btn-del{background:#fee2e2;color:#dc2626;}
+.btn-del:hover{background:#fca5a5;color:#991b1b;}
+.btn-reject{background:#fef3c7;color:#92400e;}
+.btn-reject:hover{background:#fde68a;color:#78350f;}
 .actions-cell{display:flex;gap:5px;}
 
 /* ─── MODALS ─── */
@@ -116,9 +134,15 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
 /* ─── FORMS ─── */
 .form-group{position:relative;margin-bottom:15px;}
 .form-group label{display:block;margin-bottom:6px;font-size:12px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.3px;}
+.form-group label .optional{font-weight:400;color:#9ca3af;text-transform:none;letter-spacing:0;}
 .form-group input,.form-group select,.form-group textarea{width:100%;padding:11px 13px;background:#f9fafb;border:1.5px solid #e5e7eb;border-radius:10px;font-size:13.5px;color:var(--text);outline:none;transition:all .15s;font-family:inherit;}
 .form-group input:focus,.form-group select:focus,.form-group textarea:focus{background:white;border-color:var(--primary);box-shadow:0 0 0 3px rgba(22,163,74,0.1);}
 .form-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;}
+.nominee-box{background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:12px;padding:16px;margin-bottom:15px;}
+.nominee-box.required{border-color:#bbf7d0;background:#f0fdf4;}
+.nominee-box p{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px;display:flex;align-items:center;gap:6px;}
+.nominee-box.required p{color:#15803d;}
+.nominee-box p{color:#64748b;}
 
 /* ─── AUTOCOMPLETE ─── */
 .ac-list{position:absolute;border:1.5px solid var(--border);border-top:none;z-index:9999;top:100%;left:0;right:0;background:white;border-radius:0 0 10px 10px;box-shadow:var(--shadow-lg);max-height:200px;overflow-y:auto;}
@@ -134,6 +158,11 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
 .badge-scheduled{background:#dbeafe;color:#2563eb;}
 .badge-distributed{background:#dcfce7;color:#16a34a;}
 .badge-pending{background:#ffedd5;color:#ea580c;}
+.badge-rejected{background:#fce7f3;color:#be185d;}
+.badge-add{background:#dcfce7;color:#16a34a;}
+.badge-edit{background:#dbeafe;color:#2563eb;}
+.badge-delete{background:#fee2e2;color:#dc2626;}
+.badge-overdue{background:#fef3c7;color:#92400e;}
 
 /* ─── TOAST ─── */
 .toast-cont{position:fixed;bottom:22px;right:22px;z-index:99999;display:flex;flex-direction:column;gap:8px;}
@@ -171,16 +200,39 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
 .dl-btn{display:flex;align-items:center;justify-content:center;gap:6px;padding:9px 12px;background:#f0fdf4;border-radius:9px;font-size:12px;font-weight:700;color:var(--primary);transition:all .15px;border:1.5px solid var(--border);}
 .dl-card:hover .dl-btn{background:var(--primary);color:white;border-color:var(--primary);}
 
+/* ─── BALANCE SHEET ─── */
+.balance-sheet{background:var(--glass);border:1.5px solid rgba(255,255,255,.7);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;margin-bottom:22px;}
+.balance-sheet-header{background:#f0fdf4;padding:16px 20px;border-bottom:1.5px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+.balance-sheet-header h3{font-size:15px;font-weight:700;color:var(--text);}
+.balance-row{display:flex;justify-content:space-between;align-items:center;padding:12px 20px;border-bottom:1px solid #f0fdf4;}
+.balance-row:last-child{border-bottom:none;}
+.balance-row.total{background:#f0fdf4;font-weight:800;font-size:14px;}
+.balance-row.income .amount{color:#16a34a;}
+.balance-row.expense .amount{color:#dc2626;}
+.balance-row .label{font-size:13px;font-weight:500;color:var(--text);}
+.balance-row .amount{font-size:13px;font-weight:700;}
+.balance-divider{height:1.5px;background:var(--border);margin:4px 20px;}
+
 /* ─── RECENT ─── */
 .recent-list{display:flex;flex-direction:column;gap:8px;}
 .recent-item{display:flex;justify-content:space-between;align-items:center;padding:11px 14px;background:rgba(240,253,244,0.6);border-radius:10px;transition:background .1s;border:1px solid transparent;}
 .recent-item:hover{background:rgba(255,255,255,.9);border-color:var(--border);}
 .ri-info strong{display:block;font-size:13.5px;font-weight:700;}
 .ri-info span{font-size:11.5px;color:var(--text-muted);}
-.ri-amount{font-weight:800;color:var(--primary);font-size:14px;}
+.ri-amount{font-weight:800;font-size:14px;}
+.ri-amount.income{color:var(--primary);}
+.ri-amount.expense{color:var(--danger);}
 .chart-wrap{padding:20px;}
 .chart-wrap h3{font-size:15px;font-weight:700;margin-bottom:14px;color:var(--text);}
 .empty-msg{text-align:center;color:var(--text-muted);padding:30px;font-size:13px;}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+
+/* ─── DUE DAYS BADGE ─── */
+.due-days{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:6px;font-size:10.5px;font-weight:700;}
+.due-days.overdue{background:#fef3c7;color:#92400e;}
+.due-days.very-overdue{background:#fee2e2;color:#991b1b;}
+.due-days.upcoming{background:#dbeafe;color:#1d4ed8;}
+.due-days.today{background:#f3e8ff;color:#7c3aed;}
 
 /* ─── SETUP OVERLAY ─── */
 #setup-overlay{display:none;position:fixed;inset:0;z-index:99999;background:linear-gradient(135deg,#052e16 0%,#14532d 100%);align-items:center;justify-content:center;}
@@ -214,11 +266,13 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
 .profile-stat h4{font-size:16px;font-weight:800;}
 .profile-details{display:flex;flex-direction:column;gap:9px;font-size:13.5px;}
 .profile-details span{font-weight:600;color:var(--text-muted);}
+.profile-nominee{background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:10px;padding:12px;margin-top:12px;}
+.profile-nominee h4{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#64748b;margin-bottom:8px;}
 
 /* ─── RESPONSIVE ─── */
-@media(max-width:1024px){.sidebar{width:64px;padding:16px 6px;}.logo-text,.nav-item span,.sidebar-brand,.btn-sync span{display:none;}.content{margin-left:64px;padding:16px;}.nav-item{justify-content:center;padding:11px;}}
+@media(max-width:1024px){.sidebar{width:64px;padding:16px 6px;}.logo-text,.nav-item span,.sidebar-brand,.btn-sync span{display:none;}.content{margin-left:64px;padding:16px;}.nav-item{justify-content:center;padding:11px;}.two-col{grid-template-columns:1fr;}}
 @media(max-width:768px){.stats-grid{grid-template-columns:1fr 1fr;}.dl-grid{grid-template-columns:1fr 1fr;}.header-filters{max-width:100%;}}
-@media(max-width:480px){.stats-grid{grid-template-columns:1fr;}.dl-grid{grid-template-columns:1fr;}.content{padding:10px;}}
+@media(max-width:480px){.stats-grid{grid-template-columns:1fr;}.dl-grid{grid-template-columns:1fr;}.content{padding:10px;}.two-col{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
@@ -237,7 +291,7 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
       </svg>
       <div class="logo-text">
         <span class="logo-name">SACCO<b>Sync</b></span>
-        <span class="logo-ver">v2.2.0</span>
+        <span class="logo-ver">v3.1.0</span>
       </div>
     </a>
     <nav id="main-nav">
@@ -247,7 +301,9 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
       <button class="nav-item" data-view="loans"><i class="fas fa-file-invoice-dollar"></i><span>Loans</span></button>
       <button class="nav-item" data-view="repayments"><i class="fas fa-coins"></i><span>Repayments</span></button>
       <button class="nav-item" data-view="mgr"><i class="fas fa-sync-alt"></i><span>Merry Go Round</span></button>
+      <button class="nav-item" data-view="expenses"><i class="fas fa-receipt"></i><span>Expenses</span></button>
       <button class="nav-item" data-view="reports"><i class="fas fa-chart-line"></i><span>Reports</span></button>
+      <button class="nav-item" data-view="auditlog"><i class="fas fa-history"></i><span>Audit Log</span></button>
       <button class="nav-item" data-view="downloads"><i class="fas fa-file-download"></i><span>Downloads</span></button>
     </nav>
     <div class="sidebar-footer">
@@ -302,10 +358,33 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
         <div class="stat-card"><div class="stat-icon si-orange"><i class="fas fa-clock"></i></div><div class="stat-info"><p>Loans Disbursed</p><h2 id="s-outstandingBalance">KES —</h2></div></div>
         <div class="stat-card"><div class="stat-icon si-teal"><i class="fas fa-wallet"></i></div><div class="stat-info"><p>Members Savings</p><h2 id="s-totalMembersSavings">KES —</h2></div></div>
         <div class="stat-card"><div class="stat-icon si-pink"><i class="fas fa-hand-holding-medical"></i></div><div class="stat-info"><p>Welfare Funds</p><h2 id="s-totalWelfareFunds">KES —</h2></div></div>
+        <div class="stat-card highlight-red"><div class="stat-icon si-red"><i class="fas fa-receipt"></i></div><div class="stat-info"><p>Total Expenses</p><h2 id="s-totalExpenses" class="negative">KES —</h2></div></div>
+        <div class="stat-card highlight-green"><div class="stat-icon si-green"><i class="fas fa-balance-scale"></i></div><div class="stat-info"><p>Net Balance</p><h2 id="s-netBalance">KES —</h2></div></div>
       </div>
-      <div class="table-wrap chart-wrap">
-        <h3>Recent Contributions</h3>
-        <div id="recent-list" class="recent-list"><p class="empty-msg">Loading...</p></div>
+      <div class="balance-sheet" style="margin-bottom:22px;">
+        <div class="balance-sheet-header">
+          <h3><i class="fas fa-balance-scale" style="color:var(--primary);margin-right:8px;"></i>Balance Sheet Summary</h3>
+          <span style="font-size:11px;color:var(--text-muted);font-weight:600;">Auto-calculated</span>
+        </div>
+        <div class="balance-row income"><span class="label">Members Savings</span><span class="amount" id="bs-savings">KES —</span></div>
+        <div class="balance-row income"><span class="label">Welfare Funds</span><span class="amount" id="bs-welfare">KES —</span></div>
+        <div class="balance-row income"><span class="label">Merry Go Round Contributions</span><span class="amount" id="bs-mgr">KES —</span></div>
+        <div class="balance-row income"><span class="label">Interest Collected</span><span class="amount" id="bs-interest">KES —</span></div>
+        <div class="balance-divider"></div>
+        <div class="balance-row expense"><span class="label">Loans Disbursed (Outstanding)</span><span class="amount" id="bs-loans">KES —</span></div>
+        <div class="balance-row expense"><span class="label">Total Expenses</span><span class="amount" id="bs-expenses">KES —</span></div>
+        <div class="balance-divider"></div>
+        <div class="balance-row total"><span class="label">Net Balance</span><span class="amount" id="bs-net" style="font-size:16px;">KES —</span></div>
+      </div>
+      <div class="two-col">
+        <div class="table-wrap chart-wrap">
+          <h3>Recent Contributions</h3>
+          <div id="recent-list" class="recent-list"><p class="empty-msg">Loading...</p></div>
+        </div>
+        <div class="table-wrap chart-wrap">
+          <h3>Recent Expenses</h3>
+          <div id="recent-expenses" class="recent-list"><p class="empty-msg">Loading...</p></div>
+        </div>
       </div>
     </div>
 
@@ -313,7 +392,7 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
     <div id="v-members" class="view" style="display:none">
       <div class="view-action-bar"><button class="btn-primary" onclick="openModal('m-member')"><i class="fas fa-user-plus"></i> Add Member</button></div>
       <div class="table-wrap">
-        <table><thead><tr><th>ID</th><th>Name</th><th>Phone</th><th>Savings</th><th>Loan Bal</th><th>Status</th><th>Actions</th></tr></thead>
+        <table><thead><tr><th>ID</th><th>Name</th><th>Phone</th><th>Savings</th><th>Loan Bal</th><th>Nominee 1</th><th>Status</th><th>Actions</th></tr></thead>
         <tbody id="tb-members"></tbody></table>
       </div>
     </div>
@@ -327,11 +406,11 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
       </div>
     </div>
 
-    <!-- LOANS VIEW -->
+    <!-- LOANS VIEW — added Due Days column -->
     <div id="v-loans" class="view" style="display:none">
       <div class="view-action-bar"><button class="btn-primary" onclick="openModal('m-loan')"><i class="fas fa-plus"></i> Issue Loan</button></div>
       <div class="table-wrap">
-        <table><thead><tr><th>ID</th><th>Borrower</th><th>Amount</th><th>Term</th><th>Due Date</th><th>Status</th></tr></thead>
+        <table><thead><tr><th>ID</th><th>Borrower</th><th>Amount</th><th>Term</th><th>Due Date</th><th>Due Days</th><th>Status</th></tr></thead>
         <tbody id="tb-loans"></tbody></table>
       </div>
     </div>
@@ -345,26 +424,42 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
       </div>
     </div>
 
-    <!-- MGR VIEW -->
+    <!-- MGR VIEW — added Timestamp, LastUpdated, UpdatedBy columns -->
     <div id="v-mgr" class="view" style="display:none">
       <div class="stats-grid" style="margin-bottom:20px;">
         <div class="stat-card"><div class="stat-icon si-green"><i class="fas fa-calendar-check"></i></div><div class="stat-info"><p>Total Schedules</p><h2 id="mgr-s-total">—</h2></div></div>
         <div class="stat-card"><div class="stat-icon si-teal"><i class="fas fa-check-double"></i></div><div class="stat-info"><p>Distributed</p><h2 id="mgr-s-done">—</h2></div></div>
         <div class="stat-card"><div class="stat-icon si-orange"><i class="fas fa-hourglass-half"></i></div><div class="stat-info"><p>Pending</p><h2 id="mgr-s-pending">—</h2></div></div>
+        <div class="stat-card"><div class="stat-icon si-pink"><i class="fas fa-times-circle"></i></div><div class="stat-info"><p>Rejected</p><h2 id="mgr-s-rejected">—</h2></div></div>
         <div class="stat-card"><div class="stat-icon si-purple"><i class="fas fa-coins"></i></div><div class="stat-info"><p>Total Distributed</p><h2 id="mgr-s-distamt">KES —</h2></div></div>
         <div class="stat-card"><div class="stat-icon si-blue"><i class="fas fa-hand-holding-usd"></i></div><div class="stat-info"><p>Latest Amount Each</p><h2 id="mgr-s-latest">KES —</h2></div></div>
         <div class="stat-card" style="border:2px solid #bbf7d0;"><div class="stat-icon si-green"><i class="fas fa-piggy-bank"></i></div><div class="stat-info"><p>Total MGR Contributions</p><h2 id="mgr-s-contrib">KES —</h2></div></div>
       </div>
       <div class="mgr-filter-bar">
         <div class="mgr-filters">
-          <select id="mgr-fs" onchange="renderMGRTable()"><option value="">All Status</option><option value="Scheduled">Scheduled</option><option value="Distributed">Distributed</option><option value="Pending">Pending</option></select>
+          <select id="mgr-fs" onchange="renderMGRTable()"><option value="">All Status</option><option value="Scheduled">Scheduled</option><option value="Distributed">Distributed</option><option value="Pending">Pending</option><option value="Rejected">Rejected</option></select>
           <select id="mgr-fy" onchange="renderMGRTable()"><option value="">All Years</option><option value="2025">2025</option><option value="2026">2026</option><option value="2027">2027</option></select>
         </div>
         <button class="btn-primary" onclick="openModal('m-mgr')"><i class="fas fa-plus"></i> Schedule Distribution</button>
       </div>
-      <div class="table-wrap">
-        <table><thead><tr><th>Month/Year</th><th>Beneficiary 1</th><th>Beneficiary 2</th><th>Each</th><th>Total</th><th>Status</th><th>Dist. Date</th><th>Notes</th><th>Action</th></tr></thead>
+      <div class="table-wrap" style="overflow-x:auto;">
+        <table><thead><tr><th>Month/Year</th><th>Beneficiary 1</th><th>Beneficiary 2</th><th>Each</th><th>Total</th><th>Status</th><th>Dist. Date</th><th>Notes</th><th>Timestamp</th><th>Last Updated</th><th>Updated By</th><th>Actions</th></tr></thead>
         <tbody id="tb-mgr"></tbody></table>
+      </div>
+    </div>
+
+    <!-- EXPENSES VIEW -->
+    <div id="v-expenses" class="view" style="display:none">
+      <div class="stats-grid" style="margin-bottom:20px;">
+        <div class="stat-card"><div class="stat-icon si-red"><i class="fas fa-receipt"></i></div><div class="stat-info"><p>Total Expenses</p><h2 id="exp-s-total">KES —</h2></div></div>
+        <div class="stat-card"><div class="stat-icon si-orange"><i class="fas fa-building"></i></div><div class="stat-info"><p>Office</p><h2 id="exp-s-office">KES —</h2></div></div>
+        <div class="stat-card"><div class="stat-icon si-blue"><i class="fas fa-car"></i></div><div class="stat-info"><p>Transport</p><h2 id="exp-s-transport">KES —</h2></div></div>
+        <div class="stat-card"><div class="stat-icon si-purple"><i class="fas fa-handshake"></i></div><div class="stat-info"><p>Meeting</p><h2 id="exp-s-meeting">KES —</h2></div></div>
+      </div>
+      <div class="view-action-bar"><button class="btn-primary" onclick="openModal('m-expense')"><i class="fas fa-plus"></i> Add Expense</button></div>
+      <div class="table-wrap">
+        <table><thead><tr><th>Date</th><th>Category</th><th>Description</th><th>Amount</th><th>Paid By</th><th>Approved By</th><th>Reference</th><th>Action</th></tr></thead>
+        <tbody id="tb-expenses"></tbody></table>
       </div>
     </div>
 
@@ -382,6 +477,34 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
       </div>
     </div>
 
+    <!-- AUDIT LOG VIEW -->
+    <div id="v-auditlog" class="view" style="display:none">
+      <div style="margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+        <div>
+          <p class="section-label">System Activity</p>
+          <select id="audit-filter-table" onchange="renderAuditTable()" style="padding:8px 12px;border-radius:9px;border:1.5px solid var(--border);background:white;font-size:12.5px;font-weight:600;outline:none;font-family:inherit;margin-right:6px;">
+            <option value="">All Tables</option>
+            <option value="Members">Members</option>
+            <option value="Contributions">Contributions</option>
+            <option value="Loans">Loans</option>
+            <option value="Repayments">Repayments</option>
+            <option value="Expenses">Expenses</option>
+            <option value="MerryGoRound">Merry Go Round</option>
+          </select>
+          <select id="audit-filter-action" onchange="renderAuditTable()" style="padding:8px 12px;border-radius:9px;border:1.5px solid var(--border);background:white;font-size:12.5px;font-weight:600;outline:none;font-family:inherit;">
+            <option value="">All Actions</option>
+            <option value="ADD">ADD</option>
+            <option value="EDIT">EDIT</option>
+            <option value="DELETE">DELETE</option>
+          </select>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table><thead><tr><th>Time</th><th>Table</th><th>Record</th><th>Action</th><th>Field</th><th>Old Value</th><th>New Value</th><th>By</th></tr></thead>
+        <tbody id="tb-audit"></tbody></table>
+      </div>
+    </div>
+
     <!-- DOWNLOADS VIEW -->
     <div id="v-downloads" class="view" style="display:none">
       <div style="margin-bottom:24px;">
@@ -390,16 +513,18 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
       </div>
       <div onclick="downloadFullWorkbook()" style="background:linear-gradient(135deg,#16a34a 0%,#15803d 100%);border-radius:18px;padding:30px;display:flex;align-items:center;gap:20px;cursor:pointer;transition:all .25s;margin-bottom:32px;box-shadow:0 12px 36px rgba(22,163,74,.35);" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform=''">
         <div style="width:60px;height:60px;background:rgba(255,255,255,.18);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;color:white;flex-shrink:0;"><i class="fas fa-server"></i></div>
-        <div style="flex:1;"><h4 style="font-size:18px;font-weight:800;color:white;margin-bottom:5px;">Unified System Workbook (.xlsx)</h4><p style="color:rgba(255,255,255,.75);font-size:12.5px;">Master archive — Members, Loans, Contributions, Repayments, MGR all in one.</p></div>
+        <div style="flex:1;"><h4 style="font-size:18px;font-weight:800;color:white;margin-bottom:5px;">Unified System Workbook (.xlsx)</h4><p style="color:rgba(255,255,255,.75);font-size:12.5px;">Master archive — Members, Loans, Contributions, Repayments, Expenses, MGR, AuditLog all in one.</p></div>
         <div style="background:white;color:#15803d;padding:10px 20px;border-radius:10px;font-weight:700;font-size:13px;white-space:nowrap;display:flex;align-items:center;gap:7px;flex-shrink:0;"><i class="fas fa-download"></i> Generate</div>
       </div>
       <p style="font-size:10.5px;text-transform:uppercase;letter-spacing:2px;font-weight:700;color:var(--text-muted);margin-bottom:14px;">Modular Exports</p>
       <div class="dl-grid">
-        <div class="dl-card" onclick="exportCSV('Members')"><div class="dl-card-head"><div class="dl-icon si-blue"><i class="fas fa-id-card"></i></div><div class="dl-info"><h4>Members Registry</h4><p>Personal & KYC Data</p></div></div><div class="dl-btn"><i class="fas fa-file-csv"></i> Export CSV</div></div>
+        <div class="dl-card" onclick="exportCSV('Members')"><div class="dl-card-head"><div class="dl-icon si-blue"><i class="fas fa-id-card"></i></div><div class="dl-info"><h4>Members Registry</h4><p>Personal & KYC + Nominees</p></div></div><div class="dl-btn"><i class="fas fa-file-csv"></i> Export CSV</div></div>
         <div class="dl-card" onclick="exportCSV('Contributions')"><div class="dl-card-head"><div class="dl-icon si-green"><i class="fas fa-file-invoice-dollar"></i></div><div class="dl-info"><h4>Financial Ledger</h4><p>Savings & Collections</p></div></div><div class="dl-btn"><i class="fas fa-file-csv"></i> Export CSV</div></div>
         <div class="dl-card" onclick="exportCSV('Loans')"><div class="dl-card-head"><div class="dl-icon si-orange"><i class="fas fa-hand-holding-usd"></i></div><div class="dl-info"><h4>Loan Portfolio</h4><p>Active Agreements</p></div></div><div class="dl-btn"><i class="fas fa-file-csv"></i> Export CSV</div></div>
         <div class="dl-card" onclick="exportCSV('Repayments')"><div class="dl-card-head"><div class="dl-icon si-cyan"><i class="fas fa-coins"></i></div><div class="dl-info"><h4>Receipt Summary</h4><p>Installment History</p></div></div><div class="dl-btn"><i class="fas fa-file-csv"></i> Export CSV</div></div>
+        <div class="dl-card" onclick="exportCSV('Expenses')"><div class="dl-card-head"><div class="dl-icon si-red"><i class="fas fa-receipt"></i></div><div class="dl-info"><h4>Expenses Log</h4><p>All expenditures</p></div></div><div class="dl-btn"><i class="fas fa-file-csv"></i> Export CSV</div></div>
         <div class="dl-card" onclick="exportCSV('MerryGoRound')"><div class="dl-card-head"><div class="dl-icon si-green"><i class="fas fa-sync-alt"></i></div><div class="dl-info"><h4>MGR Schedule</h4><p>Distribution History</p></div></div><div class="dl-btn"><i class="fas fa-file-csv"></i> Export CSV</div></div>
+        <div class="dl-card" onclick="exportCSV('AuditLog')"><div class="dl-card-head"><div class="dl-icon si-purple"><i class="fas fa-history"></i></div><div class="dl-info"><h4>Audit Trail</h4><p>All system changes</p></div></div><div class="dl-btn"><i class="fas fa-file-csv"></i> Export CSV</div></div>
       </div>
     </div>
   </main>
@@ -409,7 +534,7 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
 
 <!-- ADD MEMBER -->
 <div id="m-member" class="modal">
-  <div class="modal-content">
+  <div class="modal-content" style="max-width:620px;">
     <button class="modal-close" onclick="closeModal('m-member')">&times;</button>
     <h2><i class="fas fa-user-plus" style="color:var(--primary)"></i> Register New Member</h2>
     <form id="f-member" onsubmit="submitMember(event)">
@@ -422,7 +547,31 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
         <div class="form-group"><label>Email Address</label><input type="email" id="fi-memail"></div>
         <div class="form-group"><label>Member Type</label><select id="fi-mtype" required><option value="">Select</option><option value="Member">Member</option><option value="External">External</option></select></div>
       </div>
-      <div class="form-group"><label>Address</label><textarea id="fi-maddress" style="min-height:55px;"></textarea></div>
+      <div class="form-group"><label>Address</label><textarea id="fi-maddress" style="min-height:45px;"></textarea></div>
+      <div class="nominee-box required">
+        <p><i class="fas fa-user-shield"></i> Nominee 1 <span style="color:#dc2626;font-size:10px;">(Required)</span></p>
+        <div class="form-row">
+          <div class="form-group" style="margin-bottom:10px;"><label>Full Name</label><input type="text" id="fi-n1name" required></div>
+          <div class="form-group" style="margin-bottom:10px;"><label>Relationship</label><select id="fi-n1rel" required><option value="">Select</option><option>Spouse</option><option>Child</option><option>Parent</option><option>Sibling</option><option>Other</option></select></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group" style="margin-bottom:0;"><label>Phone</label><input type="tel" id="fi-n1phone" required></div>
+          <div class="form-group" style="margin-bottom:0;"><label>ID Number</label><input type="text" id="fi-n1idno"></div>
+        </div>
+        <div class="form-group" style="margin-top:10px;margin-bottom:0;"><label>Address <span class="optional">(optional)</span></label><input type="text" id="fi-n1address"></div>
+      </div>
+      <div class="nominee-box">
+        <p><i class="fas fa-user-friends"></i> Nominee 2 <span style="font-size:10px;color:#9ca3af;">(Optional)</span></p>
+        <div class="form-row">
+          <div class="form-group" style="margin-bottom:10px;"><label>Full Name <span class="optional">(optional)</span></label><input type="text" id="fi-n2name"></div>
+          <div class="form-group" style="margin-bottom:10px;"><label>Relationship</label><select id="fi-n2rel"><option value="">Select</option><option>Spouse</option><option>Child</option><option>Parent</option><option>Sibling</option><option>Other</option></select></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group" style="margin-bottom:0;"><label>Phone</label><input type="tel" id="fi-n2phone"></div>
+          <div class="form-group" style="margin-bottom:0;"><label>ID Number</label><input type="text" id="fi-n2idno"></div>
+        </div>
+        <div class="form-group" style="margin-top:10px;margin-bottom:0;"><label>Address <span class="optional">(optional)</span></label><input type="text" id="fi-n2address"></div>
+      </div>
       <button type="submit" class="btn-submit" id="btn-member-submit">Register Member</button>
     </form>
   </div>
@@ -437,7 +586,7 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
       <div class="form-group">
         <label>Member</label>
         <input type="text" id="fi-cmember" placeholder="Type name or ID..." required autocomplete="off">
-        <input type="hidden" id="fi-cmid"><input type="hidden" id="fi-cmname">
+        <input type="hidden" id="fi-cmid"><input type="hidden" id="fi-cmname"><input type="hidden" id="fi-cmemail">
         <div id="ac-cmember" class="ac-list"></div>
       </div>
       <div class="form-row">
@@ -459,7 +608,7 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
         <div class="form-group">
           <label>Borrower</label>
           <input type="text" id="fi-lmember" placeholder="Search borrower..." required autocomplete="off">
-          <input type="hidden" id="fi-lmid"><input type="hidden" id="fi-lmname">
+          <input type="hidden" id="fi-lmid"><input type="hidden" id="fi-lmname"><input type="hidden" id="fi-lmemail">
           <div id="ac-lmember" class="ac-list"></div>
         </div>
         <div class="form-group"><label>Borrower Type</label><select id="fi-lbtype" disabled style="opacity:.7;cursor:not-allowed;background:#f9fafb;"><option value="Member">Member</option><option value="External">External</option></select></div>
@@ -482,7 +631,7 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
       <div class="form-group">
         <label>Loan (Name or Loan ID)</label>
         <input type="text" id="fi-rloan" placeholder="Search active loan..." required autocomplete="off">
-        <input type="hidden" id="fi-rlid"><input type="hidden" id="fi-rmid"><input type="hidden" id="fi-rmname"><input type="hidden" id="fi-rbtype">
+        <input type="hidden" id="fi-rlid"><input type="hidden" id="fi-rmid"><input type="hidden" id="fi-rmname"><input type="hidden" id="fi-rbtype"><input type="hidden" id="fi-rmemail">
         <div id="ac-rloan" class="ac-list"></div>
       </div>
       <div class="form-row">
@@ -491,6 +640,28 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
       </div>
       <div class="form-group"><label>Penalty (KES)</label><input type="number" id="fi-rpenalty" value="0" min="0"></div>
       <button type="submit" class="btn-submit" id="btn-repay-submit">Register Payment</button>
+    </form>
+  </div>
+</div>
+
+<!-- EXPENSE -->
+<div id="m-expense" class="modal">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeModal('m-expense')">&times;</button>
+    <h2><i class="fas fa-receipt" style="color:#dc2626"></i> Add Expense</h2>
+    <form id="f-expense" onsubmit="submitExpense(event)">
+      <div class="form-row">
+        <div class="form-group"><label>Category</label><select id="fi-ecat" required><option value="">Select</option><option>Office</option><option>Transport</option><option>Meeting</option><option>Maintenance</option><option>Welfare</option><option>Miscellaneous</option></select></div>
+        <div class="form-group"><label>Amount (KES)</label><input type="number" id="fi-eamt" required min="1"></div>
+      </div>
+      <div class="form-group"><label>Description</label><input type="text" id="fi-edesc" required placeholder="What was the expense for?"></div>
+      <div class="form-row">
+        <div class="form-group"><label>Paid By</label><input type="text" id="fi-epaidby" placeholder="Name of person who paid"></div>
+        <div class="form-group"><label>Approved By</label><input type="text" id="fi-eapprby" placeholder="Authorized by"></div>
+      </div>
+      <div class="form-group"><label>Reference / Receipt No. <span class="optional">(optional)</span></label><input type="text" id="fi-eref"></div>
+      <div class="form-group"><label>Notes <span class="optional">(optional)</span></label><textarea id="fi-enotes" style="min-height:45px;"></textarea></div>
+      <button type="submit" class="btn-submit" id="btn-expense-submit">Save Expense</button>
     </form>
   </div>
 </div>
@@ -534,9 +705,55 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
   </div>
 </div>
 
+<!-- MGR REJECT (no note required — just confirm) -->
+<div id="m-mgrreject" class="modal">
+  <div class="modal-content" style="max-width:400px;">
+    <button class="modal-close" onclick="closeModal('m-mgrreject')">&times;</button>
+    <h2><i class="fas fa-times-circle" style="color:#dc2626"></i> Reject MGR Schedule</h2>
+    <p style="color:var(--text-muted);margin-bottom:18px;font-size:13px;">Rejecting: <strong id="mgrreject-label"></strong></p>
+    <input type="hidden" id="mgrreject-id">
+    <div style="background:#fef2f2;border:1.5px solid #fca5a5;border-radius:11px;padding:14px;margin-bottom:18px;font-size:13px;color:#991b1b;">
+      <i class="fas fa-exclamation-triangle" style="margin-right:6px;"></i>
+      This will mark the schedule as <strong>Rejected</strong>. Status will be updated immediately.
+    </div>
+    <button class="btn-submit" style="background:#dc2626;box-shadow:0 4px 14px rgba(220,38,38,0.25);" onclick="confirmRejectMGR()">
+      <i class="fas fa-times"></i> Confirm Rejection
+    </button>
+  </div>
+</div>
+
+<!-- MGR EDIT -->
+<div id="m-mgreditmodal" class="modal">
+  <div class="modal-content" style="max-width:600px;">
+    <button class="modal-close" onclick="closeModal('m-mgreditmodal')">&times;</button>
+    <h2><i class="fas fa-pencil-alt" style="color:#ea580c"></i> Edit MGR Schedule</h2>
+    <form id="f-mgr-edit" onsubmit="submitEditMGR(event)">
+      <input type="hidden" id="fi-mgredit-id">
+      <div class="form-row">
+        <div class="form-group"><label>Month</label><select id="fi-mgredit-month"><option value="1">January</option><option value="2">February</option><option value="3">March</option><option value="4">April</option><option value="5">May</option><option value="6">June</option><option value="7">July</option><option value="8">August</option><option value="9">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option></select></div>
+        <div class="form-group"><label>Year</label><select id="fi-mgredit-year"><option value="2025">2025</option><option value="2026">2026</option><option value="2027">2027</option></select></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Beneficiary 1 Name</label><input type="text" id="fi-mgredit-b1name" readonly style="background:#f9fafb;opacity:.7;cursor:not-allowed;"></div>
+        <div class="form-group"><label>Beneficiary 2 Name</label><input type="text" id="fi-mgredit-b2name" readonly style="background:#f9fafb;opacity:.7;cursor:not-allowed;"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Amount Each (KES)</label><input type="number" id="fi-mgredit-each" min="1" required oninput="document.getElementById('fi-mgredit-total').value=((+this.value)||0)*2"></div>
+        <div class="form-group"><label>Total (auto)</label><input type="number" id="fi-mgredit-total" readonly style="background:#f9fafb;opacity:.7;cursor:not-allowed;"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Status</label><select id="fi-mgredit-status"><option value="Scheduled">Scheduled</option><option value="Distributed">Distributed</option><option value="Pending">Pending</option><option value="Rejected">Rejected</option></select></div>
+        <div class="form-group"><label>Distribution Date</label><input type="date" id="fi-mgredit-ddate"></div>
+      </div>
+      <div class="form-group"><label>Notes</label><textarea id="fi-mgredit-notes" style="min-height:60px;"></textarea></div>
+      <button type="submit" class="btn-submit" id="btn-mgr-edit-submit">Save Changes</button>
+    </form>
+  </div>
+</div>
+
 <!-- MEMBER PROFILE -->
 <div id="m-profile" class="modal">
-  <div class="modal-content" style="max-width:540px;">
+  <div class="modal-content" style="max-width:560px;">
     <button class="modal-close" onclick="closeModal('m-profile')">&times;</button>
     <h2>Member Profile</h2>
     <div class="profile-header">
@@ -557,13 +774,22 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
       <div><span>Status: </span><span id="pa-status">—</span></div>
       <div><span>Type: </span><span id="pa-type">—</span></div>
       <div><span>Address: </span><span id="pa-address">—</span></div>
+      <div><span>Last Updated: </span><span id="pa-updated">—</span></div>
+    </div>
+    <div class="profile-nominee">
+      <h4><i class="fas fa-user-shield" style="margin-right:5px;"></i>Nominee 1</h4>
+      <div id="pa-n1" style="font-size:13px;color:var(--text);">—</div>
+    </div>
+    <div class="profile-nominee" id="pa-n2-box" style="display:none;">
+      <h4><i class="fas fa-user-friends" style="margin-right:5px;"></i>Nominee 2</h4>
+      <div id="pa-n2" style="font-size:13px;color:var(--text);">—</div>
     </div>
   </div>
 </div>
 
 <!-- MEMBER EDIT -->
 <div id="m-edit" class="modal">
-  <div class="modal-content">
+  <div class="modal-content" style="max-width:620px;">
     <button class="modal-close" onclick="closeModal('m-edit')">&times;</button>
     <h2><i class="fas fa-user-edit" style="color:var(--primary)"></i> Edit Member</h2>
     <form id="f-edit" onsubmit="submitEditMember(event)">
@@ -580,6 +806,28 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
       <div class="form-row">
         <div class="form-group"><label>Status</label><select id="fi-estatus"><option value="Active">Active</option><option value="Inactive">Inactive</option></select></div>
         <div class="form-group"><label>Address</label><input type="text" id="fi-eaddress"></div>
+      </div>
+      <div class="nominee-box required">
+        <p><i class="fas fa-user-shield"></i> Nominee 1</p>
+        <div class="form-row">
+          <div class="form-group" style="margin-bottom:10px;"><label>Full Name</label><input type="text" id="fi-en1name"></div>
+          <div class="form-group" style="margin-bottom:10px;"><label>Relationship</label><select id="fi-en1rel"><option value="">Select</option><option>Spouse</option><option>Child</option><option>Parent</option><option>Sibling</option><option>Other</option></select></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group" style="margin-bottom:0;"><label>Phone</label><input type="tel" id="fi-en1phone"></div>
+          <div class="form-group" style="margin-bottom:0;"><label>Address</label><input type="text" id="fi-en1address"></div>
+        </div>
+      </div>
+      <div class="nominee-box">
+        <p><i class="fas fa-user-friends"></i> Nominee 2 <span style="font-size:10px;color:#9ca3af;">(Optional)</span></p>
+        <div class="form-row">
+          <div class="form-group" style="margin-bottom:10px;"><label>Full Name</label><input type="text" id="fi-en2name"></div>
+          <div class="form-group" style="margin-bottom:10px;"><label>Relationship</label><select id="fi-en2rel"><option value="">Select</option><option>Spouse</option><option>Child</option><option>Parent</option><option>Sibling</option><option>Other</option></select></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group" style="margin-bottom:0;"><label>Phone</label><input type="tel" id="fi-en2phone"></div>
+          <div class="form-group" style="margin-bottom:0;"><label>Address</label><input type="text" id="fi-en2address"></div>
+        </div>
       </div>
       <button type="submit" class="btn-submit" id="btn-edit-submit">Save Changes</button>
     </form>
@@ -623,53 +871,33 @@ var S = {
   contributions: [],
   loans: [],
   repayments: [],
+  expenses: [],
+  auditlog: [],
   mgr: [],
   dashboard: null,
   currentView: 'dashboard'
 };
 
 // ═══════════════════════════════════════════════════
-//  API LAYER — ALL via GET to avoid CORS preflight
-//  Write ops: body sent as ?payload=JSON in URL
+//  API LAYER
 // ═══════════════════════════════════════════════════
 var api = {
-  // GET request — for reads
   get: function(action, params) {
     var u = new URL(S.apiUrl);
     u.searchParams.set('action', action);
-    if (params) {
-      Object.keys(params).forEach(function(k) {
-        u.searchParams.set(k, params[k]);
-      });
-    }
+    if (params) Object.keys(params).forEach(function(k){ u.searchParams.set(k, params[k]); });
     return fetch(u.toString(), { method: 'GET', redirect: 'follow' })
-      .then(function(r) { return r.json(); })
-      .then(function(r) {
-        if (r.success === false) throw new Error(r.error || 'API Error');
-        return r.data;
-      });
+      .then(function(r){ return r.json(); })
+      .then(function(r){ if (r.success === false) throw new Error(r.error||'API Error'); return r.data; });
   },
-
-  // POST — body sent as ?payload=encodedJSON via GET to avoid CORS preflight
-  // Apps Script deployed as "Anyone" handles this fine
   post: function(action, body, params) {
     var u = new URL(S.apiUrl);
     u.searchParams.set('action', action);
-    if (params) {
-      Object.keys(params).forEach(function(k) {
-        u.searchParams.set(k, params[k]);
-      });
-    }
-    // Encode body as payload param — avoids OPTIONS preflight entirely
-    if (body && Object.keys(body).length > 0) {
-      u.searchParams.set('payload', encodeURIComponent(JSON.stringify(body)));
-    }
+    if (params) Object.keys(params).forEach(function(k){ u.searchParams.set(k, params[k]); });
+    if (body && Object.keys(body).length > 0) u.searchParams.set('payload', encodeURIComponent(JSON.stringify(body)));
     return fetch(u.toString(), { method: 'GET', redirect: 'follow' })
-      .then(function(r) { return r.json(); })
-      .then(function(r) {
-        if (r.success === false) throw new Error(r.error || 'API Error');
-        return r.data;
-      });
+      .then(function(r){ return r.json(); })
+      .then(function(r){ if (r.success === false) throw new Error(r.error||'API Error'); return r.data; });
   }
 };
 
@@ -679,7 +907,7 @@ function toast(msg, type) {
   var c = document.getElementById('toast-container'); if (!c) return;
   var t = document.createElement('div');
   t.className = 'toast t-' + type;
-  var icon = type==='success' ? 'check-circle' : type==='warning' ? 'exclamation-triangle' : 'exclamation-circle';
+  var icon = type==='success'?'check-circle':type==='warning'?'exclamation-triangle':'exclamation-circle';
   t.innerHTML = '<i class="fas fa-'+icon+'"></i><span>'+msg+'</span>';
   c.appendChild(t);
   setTimeout(function(){ t.classList.add('fade-out'); setTimeout(function(){ if(t.parentNode) t.parentNode.removeChild(t); },380); }, 3000);
@@ -691,10 +919,10 @@ function openModal(id) {
   m.classList.add('open'); m.style.display = 'flex';
   document.body.style.overflow = 'hidden';
   var acMap = {
-    'm-contribution': function(){ setupAC('fi-cmember','ac-cmember','fi-cmid','fi-cmname','member'); },
-    'm-loan':         function(){ setupAC('fi-lmember','ac-lmember','fi-lmid','fi-lmname','member'); },
-    'm-repayment':    function(){ setupAC('fi-rloan','ac-rloan','fi-rlid',null,'loan'); },
-    'm-mgr':          function(){ setupAC('fi-mgrb1','ac-mgrb1','fi-mgrb1id','fi-mgrb1name','member'); setupAC('fi-mgrb2','ac-mgrb2','fi-mgrb2id','fi-mgrb2name','member'); }
+    'm-contribution': function(){ setupAC('fi-cmember','ac-cmember','fi-cmid','fi-cmname','fi-cmemail','member'); },
+    'm-loan':         function(){ setupAC('fi-lmember','ac-lmember','fi-lmid','fi-lmname','fi-lmemail','member'); },
+    'm-repayment':    function(){ setupAC('fi-rloan','ac-rloan','fi-rlid',null,null,'loan'); },
+    'm-mgr':          function(){ setupAC('fi-mgrb1','ac-mgrb1','fi-mgrb1id','fi-mgrb1name',null,'member'); setupAC('fi-mgrb2','ac-mgrb2','fi-mgrb2id','fi-mgrb2name',null,'member'); }
   };
   if (acMap[id]) setTimeout(acMap[id], 30);
 }
@@ -713,7 +941,8 @@ document.addEventListener('click', function(e) {
 var viewTitles = {
   dashboard:'Dashboard Overview', members:'Member Directory', contributions:'Contributions Tracking',
   loans:'Loan Management', repayments:'Loan Repayments', mgr:'Merry Go Round',
-  reports:'Financial Reports', downloads:'Download Reports'
+  expenses:'Expenses Management', reports:'Financial Reports', auditlog:'Audit Log',
+  downloads:'Download Reports'
 };
 document.getElementById('main-nav').addEventListener('click', function(e) {
   var btn = e.target.closest('[data-view]'); if (!btn) return;
@@ -723,9 +952,7 @@ function showView(v) {
   S.currentView = v;
   document.querySelectorAll('.view').forEach(function(el){ el.style.display='none'; });
   var target = document.getElementById('v-'+v); if (target) target.style.display = 'block';
-  document.querySelectorAll('.nav-item').forEach(function(n){
-    n.classList.toggle('active', n.dataset.view === v);
-  });
+  document.querySelectorAll('.nav-item').forEach(function(n){ n.classList.toggle('active', n.dataset.view === v); });
   var titleEl = document.getElementById('view-title'); if (titleEl) titleEl.innerText = viewTitles[v]||'SACCOSync';
   var renders = {
     dashboard: renderDashboard,
@@ -734,7 +961,9 @@ function showView(v) {
     loans: function(){ renderSheet('loans','tb-loans','loan'); },
     repayments: function(){ renderSheet('repayments','tb-repayments','repay'); },
     mgr: renderMGR,
+    expenses: renderExpenses,
     reports: renderReports,
+    auditlog: renderAuditTable,
     downloads: function(){}
   };
   if (renders[v]) renders[v]();
@@ -742,14 +971,16 @@ function showView(v) {
 
 // ─── DATA LOAD ───
 function loadAll(force) {
-  if (force) { S.members=[]; S.contributions=[]; S.loans=[]; S.repayments=[]; S.mgr=[]; S.dashboard=null; }
+  if (force) { S.members=[]; S.contributions=[]; S.loans=[]; S.repayments=[]; S.mgr=[]; S.expenses=[]; S.auditlog=[]; S.dashboard=null; }
   var p = [];
-  p.push(api.get('getDashboardStats').then(function(d){ S.dashboard=d; }).catch(function(e){ console.warn('Dashboard stats error:',e.message); }));
-  p.push(api.get('getMembers',{limit:2000,offset:0}).then(function(d){ if(d&&d.length) S.members=d; }).catch(function(e){ console.warn('Members error:',e.message); }));
-  p.push(api.get('getSheet',{sheet:'Contributions'}).then(function(d){ if(d) S.contributions=d; }).catch(function(e){ console.warn('Contributions error:',e.message); }));
-  p.push(api.get('getSheet',{sheet:'Loans'}).then(function(d){ if(d) S.loans=d; }).catch(function(e){ console.warn('Loans error:',e.message); }));
-  p.push(api.get('getSheet',{sheet:'Repayments'}).then(function(d){ if(d) S.repayments=d; }).catch(function(e){ console.warn('Repayments error:',e.message); }));
-  p.push(api.get('getSheet',{sheet:'MerryGoRound'}).then(function(d){ if(d) S.mgr=d; }).catch(function(e){ console.warn('MGR error:',e.message); }));
+  p.push(api.get('getDashboardStats').then(function(d){ S.dashboard=d; }).catch(function(e){ console.warn('Dashboard:',e.message); }));
+  p.push(api.get('getMembers',{limit:2000,offset:0}).then(function(d){ if(d&&d.length) S.members=d; }).catch(function(e){ console.warn('Members:',e.message); }));
+  p.push(api.get('getSheet',{sheet:'Contributions'}).then(function(d){ if(d) S.contributions=d; }).catch(function(){}));
+  p.push(api.get('getSheet',{sheet:'Loans'}).then(function(d){ if(d) S.loans=d; }).catch(function(){}));
+  p.push(api.get('getSheet',{sheet:'Repayments'}).then(function(d){ if(d) S.repayments=d; }).catch(function(){}));
+  p.push(api.get('getSheet',{sheet:'MerryGoRound'}).then(function(d){ if(d) S.mgr=d; }).catch(function(){}));
+  p.push(api.get('getSheet',{sheet:'Expenses'}).then(function(d){ if(d) S.expenses=d; }).catch(function(){}));
+  p.push(api.get('getSheet',{sheet:'AuditLog'}).then(function(d){ if(d) S.auditlog=d; }).catch(function(){}));
   return Promise.all(p).then(function(){ showView(S.currentView); });
 }
 
@@ -770,12 +1001,39 @@ function onSearchInput() {
 function onFilterChange() { showView(S.currentView); }
 function getSearchVal() { return ((document.getElementById('global-search')||{}).value||'').toLowerCase().trim(); }
 function getMonthFilter() { var v=(document.getElementById('global-month')||{}).value; return v===''?null:parseInt(v); }
-function getYearFilter() { var v=(document.getElementById('global-year')||{}).value; return v===''?null:parseInt(v); }
+function getYearFilter()  { var v=(document.getElementById('global-year')||{}).value;  return v===''?null:parseInt(v); }
 function matchesDateFilter(dateVal) {
   var m=getMonthFilter(), y=getYearFilter();
   if (m===null && y===null) return true;
   var d=new Date(dateVal); if (isNaN(d.getTime())) return true;
   return (m===null||d.getMonth()===m)&&(y===null||d.getFullYear()===y);
+}
+
+// ─── EMPTY STATE HELPER ───
+function emptyState(msg, sub) {
+  sub = sub || 'No records match your current filters.';
+  return '<tr><td colspan="20"><div class="empty-state"><span class="empty-state-icon">📭</span><div class="empty-state-text">'+msg+'</div><div class="empty-state-sub">'+sub+'</div></div></td></tr>';
+}
+
+// ─── DUE DAYS HELPER ───
+function dueDaysBadge(dueDateStr, status) {
+  if (!dueDateStr || status === 'Closed') return '<span style="color:#94a3b8;font-size:11.5px;">—</span>';
+  var due = new Date(dueDateStr);
+  if (isNaN(due.getTime())) return '<span style="color:#94a3b8;font-size:11.5px;">—</span>';
+  var today = new Date();
+  today.setHours(0,0,0,0);
+  due.setHours(0,0,0,0);
+  var diff = Math.round((due - today) / 86400000);
+  if (diff < 0) {
+    var cls = diff < -30 ? 'very-overdue' : 'overdue';
+    return '<span class="due-days '+cls+'"><i class="fas fa-exclamation-triangle"></i> '+Math.abs(diff)+' days overdue</span>';
+  } else if (diff === 0) {
+    return '<span class="due-days today"><i class="fas fa-bell"></i> Due today</span>';
+  } else if (diff <= 7) {
+    return '<span class="due-days upcoming"><i class="fas fa-clock"></i> '+diff+' days left</span>';
+  } else {
+    return '<span style="font-size:11.5px;color:#6b7280;font-weight:600;">'+diff+' days left</span>';
+  }
 }
 
 // ─── DASHBOARD ───
@@ -794,29 +1052,51 @@ function updateDashStats(s) {
   se('s-totalMembersSavings', 'KES '+Number(s.totalMembersSavings||0).toLocaleString());
   se('s-totalWelfareFunds', 'KES '+Number(s.totalWelfareFunds||0).toLocaleString());
   se('s-totalMerryGoRound', 'KES '+Number(s.totalMerryGoRound||0).toLocaleString());
+  se('s-totalExpenses', 'KES '+Number(s.totalExpenses||0).toLocaleString());
+  var net = Number(s.netBalance||0);
+  var netEl = document.getElementById('s-netBalance');
+  if (netEl) { netEl.innerText = 'KES '+net.toLocaleString(); netEl.className = net >= 0 ? 'positive' : 'negative'; }
+  se('bs-savings', 'KES '+Number(s.totalMembersSavings||0).toLocaleString());
+  se('bs-welfare', 'KES '+Number(s.totalWelfareFunds||0).toLocaleString());
+  se('bs-mgr',     'KES '+Number(s.totalMerryGoRound||0).toLocaleString());
+  se('bs-interest','KES '+Number(s.totalInterests||0).toLocaleString());
+  se('bs-loans',  '- KES '+Number(s.outstandingBalance||0).toLocaleString());
+  se('bs-expenses','- KES '+Number(s.totalExpenses||0).toLocaleString());
+  var bsNet = document.getElementById('bs-net');
+  if (bsNet) { bsNet.innerText = 'KES '+net.toLocaleString(); bsNet.style.color = net >= 0 ? '#16a34a' : '#dc2626'; }
   var list=document.getElementById('recent-list'); if(!list) return;
   if (s.recentContributions&&s.recentContributions.length) {
     list.innerHTML=s.recentContributions.map(function(c){
       var d=new Date(c[3]),amt=Number(c[4]); if(isNaN(amt)) return '';
-      return '<div class="recent-item"><div class="ri-info"><strong>'+(c[2]||'')+'</strong><span>'+(isNaN(d.getTime())?'N/A':d.toLocaleDateString())+'</span></div><div class="ri-amount">+KES '+amt.toLocaleString()+'</div></div>';
+      return '<div class="recent-item"><div class="ri-info"><strong>'+(c[2]||'')+'</strong><span>'+(isNaN(d.getTime())?'N/A':d.toLocaleDateString())+' · '+(c[5]||'')+'</span></div><div class="ri-amount income">+KES '+amt.toLocaleString()+'</div></div>';
     }).join('');
   } else { list.innerHTML='<p class="empty-msg">No recent activity</p>'; }
+  var expList=document.getElementById('recent-expenses'); if(!expList) return;
+  if (s.recentExpenses&&s.recentExpenses.length) {
+    expList.innerHTML=s.recentExpenses.map(function(e){
+      var d=new Date(e[1]),amt=Number(e[4]);
+      return '<div class="recent-item"><div class="ri-info"><strong>'+(e[3]||e[2])+'</strong><span>'+(isNaN(d.getTime())?'':d.toLocaleDateString())+' · '+(e[2]||'')+'</span></div><div class="ri-amount expense">- KES '+amt.toLocaleString()+'</div></div>';
+    }).join('');
+  } else { expList.innerHTML='<p class="empty-msg">No expenses yet</p>'; }
 }
 
 // ─── MEMBERS TABLE ───
 function renderMembersTable() {
   var search=getSearchVal();
   var rows=S.members;
-  if (!rows||!rows.length) { skelTable('tb-members',7,6); return; }
-  if (search) {
-    rows=rows.filter(function(m){ return (String(m.Name||'')+String(m.ID||'')+String(m.Phone||'')).toLowerCase().indexOf(search)!==-1; });
+  if (!rows||!rows.length) {
+    var tbody=document.getElementById('tb-members');
+    if(tbody) tbody.innerHTML = emptyState('No Members Found', 'Register your first member to get started.');
+    return;
   }
+  if (search) rows=rows.filter(function(m){ return (String(m.Name||'')+String(m.ID||'')+String(m.Phone||'')).toLowerCase().indexOf(search)!==-1; });
   var tbody=document.getElementById('tb-members'); if(!tbody) return;
-  if (!rows.length) { tbody.innerHTML='<tr><td colspan="7" style="text-align:center;padding:28px;color:var(--text-muted);">No members found</td></tr>'; return; }
+  if (!rows.length) { tbody.innerHTML=emptyState('No Members Match Search'); return; }
   tbody.innerHTML=rows.map(function(m){
     var st=String(m.Status||'').toLowerCase();
     var bc=st==='active'?'badge-active':st==='inactive'?'badge-inactive':'badge-closed';
-    return '<tr><td><span style="font-size:11px;color:var(--text-muted);">'+m.ID+'</span></td><td><strong>'+m.Name+'</strong></td><td>'+m.Phone+'</td><td>KES '+Number(m.TotalSavings||0).toLocaleString()+'</td><td>KES '+Number(m.CurrentLoanBalance||0).toLocaleString()+'</td><td><span class="badge '+bc+'">'+m.Status+'</span></td><td><div class="actions-cell"><button class="btn-icon btn-view" onclick="viewMember(\''+m.ID+'\')"><i class="fas fa-eye"></i></button><button class="btn-icon btn-edit" onclick="editMember(\''+m.ID+'\')"><i class="fas fa-pencil-alt"></i></button></div></td></tr>';
+    var n1 = m.Nominee1_Name ? ('<span style="font-size:11.5px;">'+m.Nominee1_Name+'</span>') : '<span style="color:var(--text-muted);font-size:11px;">—</span>';
+    return '<tr><td><span style="font-size:11px;color:var(--text-muted);">'+m.ID+'</span></td><td><strong>'+m.Name+'</strong></td><td>'+m.Phone+'</td><td>KES '+Number(m.TotalSavings||0).toLocaleString()+'</td><td>KES '+Number(m.CurrentLoanBalance||0).toLocaleString()+'</td><td>'+n1+'</td><td><span class="badge '+bc+'">'+m.Status+'</span></td><td><div class="actions-cell"><button class="btn-icon btn-view" onclick="viewMember(\''+m.ID+'\')"><i class="fas fa-eye"></i></button><button class="btn-icon btn-edit" onclick="editMember(\''+m.ID+'\')"><i class="fas fa-pencil-alt"></i></button></div></td></tr>';
   }).join('');
 }
 
@@ -824,20 +1104,87 @@ function renderMembersTable() {
 function renderSheet(key, tbId, type) {
   var data=S[key];
   var tbody=document.getElementById(tbId); if(!tbody) return;
-  if (!data||data.length<=1) { skelTable(tbId,type==='repay'?7:type==='loan'?6:5,5); return; }
+  if (!data||data.length<=1) {
+    tbody.innerHTML = emptyState('No Records Yet', 'Records will appear here once you start adding data.');
+    return;
+  }
   var rows=data.slice(1).filter(function(r){return r[0];});
   var search=getSearchVal(),mf=getMonthFilter(),yf=getYearFilter();
   if (search) rows=rows.filter(function(r){return r.some(function(c){return String(c||'').toLowerCase().indexOf(search)!==-1;});});
   if (mf!==null||yf!==null) rows=rows.filter(function(r){var dv=r[3]||r[7]||r[8];return matchesDateFilter(dv);});
-  if (!rows.length) { tbody.innerHTML='<tr><td colspan="10" style="text-align:center;padding:28px;color:var(--text-muted);">No matching records</td></tr>'; return; }
+  if (!rows.length) { tbody.innerHTML=emptyState('No Matching Records'); return; }
   tbody.innerHTML=rows.map(function(r){
     if (type==='loan') {
       var st2=String(r[9]||'Active').toLowerCase();
       var lbc=st2==='active'?'badge-active':st2==='closed'?'badge-closed':'badge-inactive';
-      return '<tr><td>'+r[0]+'</td><td><strong>'+r[2]+'</strong></td><td>KES '+Number(r[4]||0).toLocaleString()+'</td><td>'+r[5]+' Mon</td><td>'+(r[8]?new Date(r[8]).toLocaleDateString():'N/A')+'</td><td><span class="badge '+lbc+'">'+r[9]+'</span></td></tr>';
+      var dueDays = dueDaysBadge(r[8], r[9]);
+      return '<tr><td>'+r[0]+'</td><td><strong>'+r[2]+'</strong></td><td>KES '+Number(r[4]||0).toLocaleString()+'</td><td>'+r[5]+' Mon</td><td>'+(r[8]?new Date(r[8]).toLocaleDateString():'N/A')+'</td><td>'+dueDays+'</td><td><span class="badge '+lbc+'">'+r[9]+'</span></td></tr>';
     }
     if (type==='repay') return '<tr><td>'+(r[3]?new Date(r[3]).toLocaleDateString():'N/A')+'</td><td><strong>'+r[2]+'</strong></td><td>'+r[1]+'</td><td>KES '+Number(r[4]||0).toLocaleString()+'</td><td>KES '+Number(r[5]||0).toLocaleString()+'</td><td>KES '+Number(r[6]||0).toLocaleString()+'</td><td>KES '+Number(r[7]||0).toLocaleString()+'</td></tr>';
     return '<tr><td>'+(r[3]?new Date(r[3]).toLocaleDateString():'N/A')+'</td><td><strong>'+r[2]+'</strong></td><td>KES '+Number(r[4]||0).toLocaleString()+'</td><td>'+r[5]+'</td><td>'+r[6]+'</td></tr>';
+  }).join('');
+}
+
+// ─── EXPENSES ───
+function renderExpenses() {
+  var s = S.dashboard;
+  if (s && s.expenseByCategory) {
+    function se(id,v){var el=document.getElementById(id);if(el)el.innerText=v;}
+    se('exp-s-total',    'KES '+Number(s.totalExpenses||0).toLocaleString());
+    se('exp-s-office',   'KES '+Number((s.expenseByCategory||{}).Office||0).toLocaleString());
+    se('exp-s-transport','KES '+Number((s.expenseByCategory||{}).Transport||0).toLocaleString());
+    se('exp-s-meeting',  'KES '+Number((s.expenseByCategory||{}).Meeting||0).toLocaleString());
+  }
+  var data = S.expenses;
+  var tbody = document.getElementById('tb-expenses'); if(!tbody) return;
+  if (!data||data.length<=1) { tbody.innerHTML=emptyState('No Expenses Recorded', 'Add your first expense entry to begin tracking.'); return; }
+  var rows = data.slice(1).filter(function(r){return r[0];});
+  var search=getSearchVal(),mf=getMonthFilter(),yf=getYearFilter();
+  if (search) rows=rows.filter(function(r){return r.some(function(c){return String(c||'').toLowerCase().indexOf(search)!==-1;});});
+  if (mf!==null||yf!==null) rows=rows.filter(function(r){return matchesDateFilter(r[1]);});
+  rows = rows.slice().reverse();
+  if (!rows.length) { tbody.innerHTML=emptyState('No Matching Expenses'); return; }
+  tbody.innerHTML=rows.map(function(r){
+    var d=r[1]?new Date(r[1]).toLocaleDateString():'';
+    var rid=String(r[0]).replace(/'/g,"\\'");
+    return '<tr><td>'+d+'</td><td><span class="badge" style="background:#fee2e2;color:#dc2626;">'+r[2]+'</span></td><td>'+r[3]+'</td><td style="font-weight:700;color:#dc2626;">KES '+Number(r[4]||0).toLocaleString()+'</td><td>'+(r[5]||'—')+'</td><td>'+(r[6]||'—')+'</td><td>'+(r[7]||'—')+'</td><td><button class="btn-icon btn-del" onclick="deleteExpense(\''+rid+'\')" title="Delete"><i class="fas fa-trash"></i></button></td></tr>';
+  }).join('');
+}
+
+function deleteExpense(id) {
+  if (!confirm('Delete this expense? This cannot be undone.')) return;
+  api.post('deleteExpense',{id:id}).then(function(){
+    toast('Expense deleted');
+    return loadAll(true);
+  }).then(function(){ renderExpenses(); }).catch(function(e){ toast('Error: '+e.message,'error'); });
+}
+
+// ─── AUDIT LOG ───
+function renderAuditTable() {
+  var data = S.auditlog;
+  var tbody = document.getElementById('tb-audit'); if(!tbody) return;
+  if (!data||data.length<=1) {
+    api.get('getSheet',{sheet:'AuditLog'}).then(function(d){ if(d){S.auditlog=d;renderAuditTable();} }).catch(function(){});
+    tbody.innerHTML = emptyState('No Audit Records', 'System changes will appear here.');
+    return;
+  }
+  var rows = data.slice(1).filter(function(r){return r[0];});
+  var tf = (document.getElementById('audit-filter-table')||{}).value||'';
+  var af = (document.getElementById('audit-filter-action')||{}).value||'';
+  var search = getSearchVal();
+  if (tf) rows=rows.filter(function(r){return String(r[2]||'')===tf;});
+  if (af) rows=rows.filter(function(r){return String(r[5]||'').indexOf(af)===0;});
+  if (search) rows=rows.filter(function(r){return r.some(function(c){return String(c||'').toLowerCase().indexOf(search)!==-1;});});
+  rows = rows.slice().reverse();
+  if (!rows.length) { tbody.innerHTML=emptyState('No Audit Records Match Filter'); return; }
+  tbody.innerHTML=rows.slice(0,200).map(function(r){
+    var ts=r[1]?new Date(r[1]).toLocaleString():'';
+    var act=String(r[5]||'');
+    var abc=act.indexOf('ADD')===0?'badge-add':act.indexOf('DELETE')===0?'badge-delete':'badge-edit';
+    var old=String(r[7]||'—'); var nw=String(r[8]||'—');
+    if(old.length>30) old=old.substring(0,30)+'…';
+    if(nw.length>30)  nw=nw.substring(0,30)+'…';
+    return '<tr><td style="font-size:11px;color:var(--text-muted);white-space:nowrap;">'+ts+'</td><td><span style="font-size:11.5px;font-weight:600;">'+r[2]+'</span></td><td><span style="font-size:12px;font-weight:600;">'+r[4]+'</span><br><span style="font-size:10.5px;color:var(--text-muted);">'+r[3]+'</span></td><td><span class="badge '+abc+'">'+act+'</span></td><td style="font-size:12px;">'+r[6]+'</td><td style="font-size:11.5px;color:#dc2626;">'+old+'</td><td style="font-size:11.5px;color:#16a34a;">'+nw+'</td><td style="font-size:11.5px;color:var(--text-muted);">'+r[9]+'</td></tr>';
   }).join('');
 }
 
@@ -847,35 +1194,63 @@ function renderMGR() { renderMGRTable(); }
 function renderMGRTable() {
   var data=S.mgr;
   var allRows=(data&&data.length>1)?data.slice(1).filter(function(r){return r[0];}):[];
-  var tot=allRows.length,done=0,totalDist=0;
-  allRows.forEach(function(r){if(String(r[11]||'').trim()==='Distributed')done++;totalDist+=Number(r[8]||0);});
+  var tot=allRows.length,done=0,pending=0,rejected=0,totalDist=0;
+  allRows.forEach(function(r){
+    var st=String(r[11]||'').trim();
+    if(st==='Distributed')done++;
+    else if(st==='Rejected')rejected++;
+    else pending++;
+    totalDist+=Number(r[8]||0);
+  });
   var latest=allRows.filter(function(r){return String(r[11]||'').trim()==='Distributed';}).sort(function(a,b){return Number(b[2])-Number(a[2])||Number(b[1])-Number(a[1]);})[0];
   function se(id,v){var el=document.getElementById(id);if(el)el.innerText=v;}
-  se('mgr-s-total',tot);se('mgr-s-done',done);se('mgr-s-pending',tot-done);
+  se('mgr-s-total',tot);se('mgr-s-done',done);se('mgr-s-pending',tot-done-rejected);se('mgr-s-rejected',rejected);
   se('mgr-s-distamt','KES '+totalDist.toLocaleString());
   se('mgr-s-latest','KES '+(latest?Number(latest[7]||0).toLocaleString():'0'));
   se('mgr-s-contrib','KES '+(S.dashboard?Number(S.dashboard.totalMerryGoRound||0).toLocaleString():'0'));
   var tbody=document.getElementById('tb-mgr'); if(!tbody) return;
-  if (!allRows.length) { tbody.innerHTML='<tr><td colspan="9" style="text-align:center;padding:36px;color:var(--text-muted);">No MGR schedules yet.</td></tr>'; return; }
+  if (!allRows.length) { tbody.innerHTML=emptyState('No MGR Schedules Yet', 'Create your first Merry Go Round schedule.'); return; }
   var stF=(document.getElementById('mgr-fs')||{}).value||'';
   var yrF=(document.getElementById('mgr-fy')||{}).value||'';
   var rows=allRows.slice();
   if (stF) rows=rows.filter(function(r){return String(r[11]||'').trim()===stF;});
   if (yrF) rows=rows.filter(function(r){return String(r[2])===yrF;});
   rows.sort(function(a,b){return(Number(b[2])-Number(a[2]))||Number(b[1])-Number(a[1]);});
-  if (!rows.length) { tbody.innerHTML='<tr><td colspan="9" style="text-align:center;padding:28px;color:var(--text-muted);">No records match filter.</td></tr>'; return; }
+  if (!rows.length) { tbody.innerHTML=emptyState('No Records Match Filter'); return; }
   tbody.innerHTML=rows.map(function(r){
     var st=String(r[11]||'Scheduled').trim();
-    var bc=st==='Distributed'?'badge-distributed':st==='Pending'?'badge-pending':'badge-scheduled';
+    var bc=st==='Distributed'?'badge-distributed':st==='Rejected'?'badge-rejected':st==='Pending'?'badge-pending':'badge-scheduled';
     var dd=r[10]?new Date(r[10]).toLocaleDateString():'—';
     var lbl=(MONTHS[Number(r[1])]||r[1])+' '+r[2];
     var rid=String(r[0]||'').replace(/'/g,"\\'");
     var lble=lbl.replace(/'/g,"\\'");
-    var ab=st!=='Distributed'?'<button class="btn-icon btn-view" title="Mark Distributed" onclick="openMarkDist(\''+rid+'\',\''+lble+'\')"><i class="fas fa-check"></i></button>':'<span style="color:var(--primary);font-size:16px;">✓</span>';
+
+    // Action buttons
+    var actionBtns = '<div class="actions-cell">';
+    // Edit button (always shown)
+    actionBtns += '<button class="btn-icon btn-edit" title="Edit Record" onclick="openEditMGR(\''+rid+'\')"><i class="fas fa-pencil-alt"></i></button>';
+    if (st !== 'Distributed' && st !== 'Rejected') {
+      // Mark distributed (green check)
+      actionBtns += '<button class="btn-icon btn-view" title="Mark Distributed" onclick="openMarkDist(\''+rid+'\',\''+lble+'\')"><i class="fas fa-check"></i></button>';
+      // Reject (red X)
+      actionBtns += '<button class="btn-icon btn-reject" title="Reject" onclick="openRejectMGR(\''+rid+'\',\''+lble+'\')"><i class="fas fa-times"></i></button>';
+    } else if (st === 'Distributed') {
+      actionBtns += '<span style="color:var(--primary);font-size:16px;padding:0 4px;">✓</span>';
+    } else {
+      actionBtns += '<span style="color:#be185d;font-size:13px;padding:0 4px;">Rejected</span>';
+    }
+    actionBtns += '</div>';
+
+    // Timestamp (r[0] is TimestampID used as ID, actual create timestamp is tracked server-side)
+    var timestamp = r[13] ? new Date(r[13]).toLocaleString() : (r[0] ? '<span style="font-size:10px;color:#9ca3af;">'+r[0]+'</span>' : '—');
+    var lastUpdated = r[14] ? new Date(r[14]).toLocaleString() : '—';
+    var updatedBy = r[15] || '—';
+
     var b2cell=r[3]===r[5]?'<span style="font-size:11px;background:#fef3c7;color:#92400e;padding:3px 7px;border-radius:6px;font-weight:700;">Single</span>':'<strong>'+(r[6]||'—')+'</strong><br><span style="font-size:10.5px;color:var(--text-muted);">'+(r[5]||'')+'</span>';
-    return '<tr><td><strong>'+lbl+'</strong></td><td><strong>'+(r[4]||'—')+'</strong><br><span style="font-size:10.5px;color:var(--text-muted);">'+(r[3]||'')+'</span></td><td>'+b2cell+'</td><td><strong>KES '+Number(r[7]||0).toLocaleString()+'</strong></td><td><strong style="color:var(--primary);">KES '+Number(r[8]||0).toLocaleString()+'</strong></td><td><span class="badge '+bc+'">'+st+'</span></td><td>'+dd+'</td><td style="max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11.5px;color:var(--text-muted);">'+(r[12]||'—')+'</td><td>'+ab+'</td></tr>';
+    return '<tr><td><strong>'+lbl+'</strong></td><td><strong>'+(r[4]||'—')+'</strong><br><span style="font-size:10.5px;color:var(--text-muted);">'+(r[3]||'')+'</span></td><td>'+b2cell+'</td><td><strong>KES '+Number(r[7]||0).toLocaleString()+'</strong></td><td><strong style="color:var(--primary);">KES '+Number(r[8]||0).toLocaleString()+'</strong></td><td><span class="badge '+bc+'">'+st+'</span></td><td>'+dd+'</td><td style="max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11.5px;color:var(--text-muted);">'+(r[12]||'—')+'</td><td style="font-size:11px;color:var(--text-muted);white-space:nowrap;">'+timestamp+'</td><td style="font-size:11px;color:var(--text-muted);white-space:nowrap;">'+lastUpdated+'</td><td style="font-size:11px;color:var(--text-muted);">'+updatedBy+'</td><td>'+actionBtns+'</td></tr>';
   }).join('');
 }
+
 function openMarkDist(id,label) {
   document.getElementById('mgrmark-id').value=id;
   document.getElementById('mgrmark-label').innerText=label;
@@ -888,9 +1263,10 @@ function confirmMarkDistributed() {
   var dt=document.getElementById('mgrmark-date').value;
   var nt=document.getElementById('mgrmark-notes').value;
   if(!id||!dt){toast('Please select a date','error');return;}
+  var now = new Date().toISOString();
   S.mgr=S.mgr.map(function(row,idx){
     if(idx===0) return row;
-    if(String(row[0])===String(id)){var r=row.slice();r[11]='Distributed';r[10]=dt;r[12]=nt||r[12];return r;}
+    if(String(row[0])===String(id)){var r=row.slice();r[11]='Distributed';r[10]=dt;r[12]=nt||r[12];r[14]=now;r[15]='Admin';return r;}
     return row;
   });
   renderMGRTable();
@@ -901,9 +1277,93 @@ function confirmMarkDistributed() {
   }).catch(function(e){toast('Server error: '+e.message,'error');loadAll(true);});
 }
 
+// ─── MGR REJECT ───
+function openRejectMGR(id, label) {
+  document.getElementById('mgrreject-id').value = id;
+  document.getElementById('mgrreject-label').innerText = label;
+  openModal('m-mgrreject');
+}
+function confirmRejectMGR() {
+  var id = document.getElementById('mgrreject-id').value;
+  if (!id) return;
+  var now = new Date().toISOString();
+  S.mgr = S.mgr.map(function(row, idx) {
+    if (idx === 0) return row;
+    if (String(row[0]) === String(id)) {
+      var r = row.slice();
+      r[11] = 'Rejected';
+      r[14] = now;
+      r[15] = 'Admin';
+      return r;
+    }
+    return row;
+  });
+  renderMGRTable();
+  closeModal('m-mgrreject');
+  toast('Schedule rejected.', 'warning');
+  api.post('rejectMGRSchedule', {id: id}).then(function() {
+    api.get('getSheet',{sheet:'MerryGoRound'}).then(function(d){if(d){S.mgr=d;renderMGRTable();}});
+  }).catch(function(e){ toast('Server error: '+e.message,'error'); loadAll(true); });
+}
+
+// ─── MGR EDIT ───
+function openEditMGR(id) {
+  var data = S.mgr;
+  var row = null;
+  for (var i=1; i<data.length; i++) {
+    if (String(data[i][0]) === String(id)) { row = data[i]; break; }
+  }
+  if (!row) { toast('Record not found','error'); return; }
+  document.getElementById('fi-mgredit-id').value = row[0];
+  document.getElementById('fi-mgredit-month').value = row[1];
+  document.getElementById('fi-mgredit-year').value = row[2];
+  document.getElementById('fi-mgredit-b1name').value = row[4] || '';
+  document.getElementById('fi-mgredit-b2name').value = row[6] || row[4] || '';
+  document.getElementById('fi-mgredit-each').value = row[7] || '';
+  document.getElementById('fi-mgredit-total').value = row[8] || '';
+  document.getElementById('fi-mgredit-status').value = row[11] || 'Scheduled';
+  document.getElementById('fi-mgredit-ddate').value = row[10] ? new Date(row[10]).toISOString().split('T')[0] : '';
+  document.getElementById('fi-mgredit-notes').value = row[12] || '';
+  openModal('m-mgreditmodal');
+}
+function submitEditMGR(e) {
+  e.preventDefault();
+  var id = document.getElementById('fi-mgredit-id').value;
+  var btn = document.getElementById('btn-mgr-edit-submit');
+  setBtnLoading(btn, true);
+  var each = parseFloat(document.getElementById('fi-mgredit-each').value) || 0;
+  var status = document.getElementById('fi-mgredit-status').value;
+  var ddate = document.getElementById('fi-mgredit-ddate').value;
+  var notes = document.getElementById('fi-mgredit-notes').value;
+  var month = document.getElementById('fi-mgredit-month').value;
+  var year = document.getElementById('fi-mgredit-year').value;
+  var now = new Date().toISOString();
+  // Optimistic update
+  S.mgr = S.mgr.map(function(row, idx) {
+    if (idx === 0) return row;
+    if (String(row[0]) === String(id)) {
+      var r = row.slice();
+      r[1] = Number(month); r[2] = Number(year);
+      r[7] = each; r[8] = each * 2;
+      r[11] = status; r[10] = ddate || r[10];
+      r[12] = notes;
+      r[14] = now; r[15] = 'Admin';
+      return r;
+    }
+    return row;
+  });
+  renderMGRTable();
+  closeModal('m-mgreditmodal');
+  toast('MGR record updated!');
+  setBtnLoading(btn, false);
+  api.post('editMGRSchedule', {id:id, month:month, year:year, amountEach:each, totalDistributed:each*2, status:status, distDate:ddate, notes:notes}).then(function() {
+    api.get('getSheet',{sheet:'MerryGoRound'}).then(function(d){if(d){S.mgr=d;renderMGRTable();}});
+  }).catch(function(e){ toast('Server error: '+e.message,'error'); loadAll(true); });
+}
+
 // ─── REPORTS ───
 function renderReports() {
-  var tbody=document.getElementById('tb-overdue'); if(tbody) tbody.innerHTML=skelRows(5,3);
+  var tbody=document.getElementById('tb-overdue'); if(tbody) tbody.innerHTML=emptyState('Loading...');
   var s=S.dashboard;
   if (s) {
     function se(id,v){var el=document.getElementById(id);if(el)el.innerText=v;}
@@ -913,14 +1373,14 @@ function renderReports() {
     if(tbody){
       if(s.overdueLoans&&s.overdueLoans.length){
         tbody.innerHTML=s.overdueLoans.map(function(l){return'<tr><td><span class="badge badge-inactive">'+l.id+'</span></td><td><strong>'+l.memberName+'</strong></td><td>'+new Date(l.dueDate).toLocaleDateString()+'</td><td style="color:var(--warning);font-weight:700;">'+l.daysLate+' days</td><td style="color:var(--danger);font-weight:700;">KES '+l.penaltyAmount.toLocaleString()+'</td></tr>';}).join('');
-      } else { tbody.innerHTML='<tr><td colspan="5" style="text-align:center;padding:28px;color:var(--text-muted);">No overdue installments</td></tr>'; }
+      } else { tbody.innerHTML=emptyState('No Overdue Installments', 'All loans are on track.'); }
     }
   }
   api.get('getDashboardStats').then(function(d){S.dashboard=d;renderReports();}).catch(function(){});
 }
 
-// ─── AUTOCOMPLETE ───
-function setupAC(inputId,listId,hiddenId,hiddenNameId,acType) {
+// ─── AUTOCOMPLETE (updated to capture email) ───
+function setupAC(inputId,listId,hiddenId,hiddenNameId,hiddenEmailId,acType) {
   var inp=document.getElementById(inputId); if(!inp) return;
   var lst=document.getElementById(listId); if(!lst) return;
   var ni=inp.cloneNode(true); inp.parentNode.replaceChild(ni,inp); inp=ni;
@@ -946,6 +1406,7 @@ function setupAC(inputId,listId,hiddenId,hiddenNameId,acType) {
           inp.value=m.Name;
           if(hiddenId) document.getElementById(hiddenId).value=m.ID;
           if(hiddenNameId) document.getElementById(hiddenNameId).value=m.Name;
+          if(hiddenEmailId) { var eEl=document.getElementById(hiddenEmailId); if(eEl) eEl.value=m.Email||''; }
           if(inputId==='fi-lmember'){var bt=document.getElementById('fi-lbtype');if(bt)bt.value=m.Type||'Member';}
           lst.innerHTML='';
         };
@@ -960,8 +1421,10 @@ function setupAC(inputId,listId,hiddenId,hiddenNameId,acType) {
         d.onclick=function(){
           inp.value=l[2]+' — '+l[0];
           if(hiddenId) document.getElementById(hiddenId).value=l[0];
-          var rmid=document.getElementById('fi-rmid'),rmname=document.getElementById('fi-rmname'),rbtype=document.getElementById('fi-rbtype');
+          var rmid=document.getElementById('fi-rmid'),rmname=document.getElementById('fi-rmname'),rbtype=document.getElementById('fi-rbtype'),rmemail=document.getElementById('fi-rmemail');
           if(rmid)rmid.value=l[1];if(rmname)rmname.value=l[2];if(rbtype)rbtype.value=l[3]||'Member';
+          // Find member email for repayment
+          if(rmemail){var mem=S.members.find(function(m){return m.ID===l[1];});if(mem)rmemail.value=mem.Email||'';}
           toast('Loan: '+l[2]+' loaded');
           lst.innerHTML='';
         };
@@ -983,9 +1446,25 @@ function fillProfile(m) {
   function se(id,v){var el=document.getElementById(id);if(el)el.innerText=v||'—';}
   var initials=(m.Name||'?').split(' ').map(function(w){return w[0];}).join('').substring(0,2).toUpperCase();
   var pi=document.getElementById('pa-initials');if(pi)pi.innerText=initials;
-  se('pa-name',m.Name);se('pa-id',m.ID);se('pa-phone',m.Phone);se('pa-email',m.Email);se('pa-idno',m.ID_Number);se('pa-status',m.Status);se('pa-type',m.Type);se('pa-address',m.Address);
+  se('pa-name',m.Name);se('pa-id',m.ID);se('pa-phone',m.Phone);se('pa-email',m.Email);
+  se('pa-idno',m.ID_Number);se('pa-status',m.Status);se('pa-type',m.Type);se('pa-address',m.Address);
+  var upd = m.LastUpdated ? new Date(m.LastUpdated).toLocaleDateString() : '—';
+  se('pa-updated', upd + (m.UpdatedBy ? ' by '+m.UpdatedBy : ''));
   var ps=document.getElementById('pa-savings'),pl=document.getElementById('pa-loan');
-  if(ps)ps.innerText='KES '+Number(m.TotalSavings||0).toLocaleString();if(pl)pl.innerText='KES '+Number(m.CurrentLoanBalance||0).toLocaleString();
+  if(ps)ps.innerText='KES '+Number(m.TotalSavings||0).toLocaleString();
+  if(pl)pl.innerText='KES '+Number(m.CurrentLoanBalance||0).toLocaleString();
+  var n1el=document.getElementById('pa-n1');
+  if(n1el) n1el.innerHTML = m.Nominee1_Name
+    ? m.Nominee1_Name+' ('+m.Nominee1_Relationship+') — '+m.Nominee1_Phone+(m.Nominee1_Address?' — '+m.Nominee1_Address:'')
+    : '<span style="color:var(--text-muted);">Not set</span>';
+  var n2box=document.getElementById('pa-n2-box');
+  var n2el=document.getElementById('pa-n2');
+  if(n2box && n2el){
+    if(m.Nominee2_Name){
+      n2box.style.display='block';
+      n2el.innerHTML = m.Nominee2_Name+' ('+m.Nominee2_Relationship+') — '+m.Nominee2_Phone+(m.Nominee2_Address?' — '+m.Nominee2_Address:'');
+    } else { n2box.style.display='none'; }
+  }
 }
 function editMember(id) {
   var m=S.members.find(function(x){return x.ID===id;});
@@ -994,21 +1473,48 @@ function editMember(id) {
 }
 function fillEditForm(m) {
   function sv(id,v){var el=document.getElementById(id);if(el)el.value=v||'';}
-  sv('fi-eid',m.ID);sv('fi-ename',m.Name);sv('fi-ephone',m.Phone);sv('fi-eemail',m.Email);sv('fi-eidno',m.ID_Number);sv('fi-eaddress',m.Address);
+  sv('fi-eid',m.ID);sv('fi-ename',m.Name);sv('fi-ephone',m.Phone);sv('fi-eemail',m.Email);
+  sv('fi-eidno',m.ID_Number);sv('fi-eaddress',m.Address);
   var et=document.getElementById('fi-etype'),es=document.getElementById('fi-estatus');
   if(et)et.value=m.Type||'Member';if(es)es.value=m.Status||'Active';
+  sv('fi-en1name',m.Nominee1_Name);sv('fi-en1phone',m.Nominee1_Phone);sv('fi-en1address',m.Nominee1_Address);
+  sv('fi-en2name',m.Nominee2_Name);sv('fi-en2phone',m.Nominee2_Phone);sv('fi-en2address',m.Nominee2_Address);
+  var r1=document.getElementById('fi-en1rel'),r2=document.getElementById('fi-en2rel');
+  if(r1)r1.value=m.Nominee1_Relationship||'';if(r2)r2.value=m.Nominee2_Relationship||'';
 }
 
 // ─── FORM SUBMISSIONS ───
 function submitMember(e) {
   e.preventDefault();
   var phone=(document.getElementById('fi-mphone')||{}).value.trim();
-  if(phone.length!==10||isNaN(phone)){toast('Enter valid 10-digit phone','error');return;}
+  if(phone.length<8||isNaN(phone.replace(/[+\-\s]/g,''))){toast('Enter valid phone number','error');return;}
   var btn=document.getElementById('btn-member-submit');
   setBtnLoading(btn,true);
-  var payload={name:(document.getElementById('fi-mname')||{}).value,phone:phone,email:(document.getElementById('fi-memail')||{}).value||'',idNumber:(document.getElementById('fi-midno')||{}).value,type:(document.getElementById('fi-mtype')||{}).value,address:(document.getElementById('fi-maddress')||{}).value||''};
+  var payload={
+    name:(document.getElementById('fi-mname')||{}).value,
+    phone:phone,
+    email:(document.getElementById('fi-memail')||{}).value||'',
+    idNumber:(document.getElementById('fi-midno')||{}).value,
+    type:(document.getElementById('fi-mtype')||{}).value,
+    address:(document.getElementById('fi-maddress')||{}).value||'',
+    nominee1_name:(document.getElementById('fi-n1name')||{}).value||'',
+    nominee1_relationship:(document.getElementById('fi-n1rel')||{}).value||'',
+    nominee1_phone:(document.getElementById('fi-n1phone')||{}).value||'',
+    nominee1_address:(document.getElementById('fi-n1address')||{}).value||'',
+    nominee1_id_number:(document.getElementById('fi-n1idno')||{}).value||'',
+    nominee2_name:(document.getElementById('fi-n2name')||{}).value||'',
+    nominee2_relationship:(document.getElementById('fi-n2rel')||{}).value||'',
+    nominee2_phone:(document.getElementById('fi-n2phone')||{}).value||'',
+    nominee2_address:(document.getElementById('fi-n2address')||{}).value||'',
+    nominee2_id_number:(document.getElementById('fi-n2idno')||{}).value||''
+  };
   var tempId='M'+Math.random().toString(36).substr(2,6).toUpperCase();
-  var newMember={ID:tempId,Name:payload.name,Phone:payload.phone,Email:payload.email,ID_Number:payload.idNumber,Type:payload.type,Address:payload.address,Status:'Active',TotalSavings:0,CurrentLoanBalance:0};
+  var newMember=Object.assign({ID:tempId,Status:'Active',TotalSavings:0,CurrentLoanBalance:0,
+    Nominee1_Name:payload.nominee1_name,Nominee1_Relationship:payload.nominee1_relationship,
+    Nominee1_Phone:payload.nominee1_phone,Nominee1_Address:payload.nominee1_address,
+    Nominee2_Name:payload.nominee2_name,Nominee2_Relationship:payload.nominee2_relationship,
+    Nominee2_Phone:payload.nominee2_phone,Name:payload.name,Phone:payload.phone,
+    Email:payload.email,ID_Number:payload.idNumber,Type:payload.type,Address:payload.address},{});
   S.members.unshift(newMember);
   renderMembersTable();
   toast('Member registered!');
@@ -1030,8 +1536,9 @@ function submitContribution(e) {
   var ref='WEB-'+Date.now();
   var amt=parseFloat((document.getElementById('fi-camount')||{}).value)||0;
   var mname=(document.getElementById('fi-cmname')||{}).value;
+  var memail=(document.getElementById('fi-cmemail')||{}).value||'';
   var ctype=(document.getElementById('fi-ctype')||{}).value;
-  var payload={memberId:mid,memberName:mname,amount:amt,type:ctype,reference:ref};
+  var payload={memberId:mid,memberName:mname,memberEmail:memail,amount:amt,type:ctype,reference:ref};
   var nowIso=new Date().toISOString();
   var newRow=['C'+Date.now(),mid,mname,nowIso,amt,ctype,ref];
   if(!S.contributions||!S.contributions.length) S.contributions=[['ID','MemberID','MemberName','Date','Amount','Type','Reference']];
@@ -1048,7 +1555,7 @@ function submitContribution(e) {
   toast('Contribution recorded!');
   closeModal('m-contribution');
   document.getElementById('f-contribution').reset();
-  document.getElementById('fi-cmid').value='';document.getElementById('fi-cmname').value='';
+  document.getElementById('fi-cmid').value='';document.getElementById('fi-cmname').value='';document.getElementById('fi-cmemail').value='';
   setBtnLoading(btn,false);
   api.post('addContribution',payload).then(function(){
     api.get('getSheet',{sheet:'Contributions'}).then(function(d){if(d)S.contributions=d;});
@@ -1066,7 +1573,8 @@ function submitLoan(e) {
   var term=(document.getElementById('fi-lterm')||{}).value;
   var btype=(document.getElementById('fi-lbtype')||{}).value||'Member';
   var mname=(document.getElementById('fi-lmname')||{}).value;
-  var payload={memberId:mid,memberName:mname,amount:amt,borrowerType:btype,term:term};
+  var memail=(document.getElementById('fi-lmemail')||{}).value||'';
+  var payload={memberId:mid,memberName:mname,memberEmail:memail,amount:amt,borrowerType:btype,term:term};
   var ir=btype.toLowerCase()==='member'?0.10:0.20;
   var sd=new Date();var dd=new Date();dd.setMonth(dd.getMonth()+parseInt(term));
   var tempId='L'+Math.random().toString(36).substr(2,6).toUpperCase();
@@ -1080,7 +1588,7 @@ function submitLoan(e) {
   toast('Loan disbursed!');
   closeModal('m-loan');
   document.getElementById('f-loan').reset();
-  document.getElementById('fi-lmid').value='';document.getElementById('fi-lmname').value='';
+  document.getElementById('fi-lmid').value='';document.getElementById('fi-lmname').value='';document.getElementById('fi-lmemail').value='';
   setBtnLoading(btn,false);
   api.post('disburseLoan',payload).then(function(){
     api.get('getSheet',{sheet:'Loans'}).then(function(d){if(d)S.loans=d;if(S.currentView==='loans')renderSheet('loans','tb-loans','loan');});
@@ -1102,7 +1610,8 @@ function submitRepayment(e) {
   var pen=parseFloat((document.getElementById('fi-rpenalty')||{}).value)||0;
   var total=principal+interest+pen;
   var mname=(document.getElementById('fi-rmname')||{}).value;
-  var payload={loanId:lid,memberId:mbid,memberName:mname,amount:total,penalty:pen,principal:principal,interest:interest};
+  var memail=(document.getElementById('fi-rmemail')||{}).value||'';
+  var payload={loanId:lid,memberId:mbid,memberName:mname,memberEmail:memail,amount:total,penalty:pen,principal:principal,interest:interest};
   var nowIso=new Date().toISOString();
   var newRow=['R'+Date.now(),lid,mname,nowIso,total,principal,interest,pen,'Completed'];
   if(!S.repayments||!S.repayments.length) S.repayments=[['ID','LoanID','MemberName','Date','Amount','PrincipalPortion','InterestPortion','PenaltyPaid','Status']];
@@ -1115,7 +1624,7 @@ function submitRepayment(e) {
   toast('Repayment recorded!');
   closeModal('m-repayment');
   document.getElementById('f-repayment').reset();
-  ['fi-rlid','fi-rmid','fi-rmname','fi-rbtype'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
+  ['fi-rlid','fi-rmid','fi-rmname','fi-rbtype','fi-rmemail'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
   setBtnLoading(btn,false);
   api.post('addRepayment',payload).then(function(){
     api.get('getSheet',{sheet:'Repayments'}).then(function(d){if(d)S.repayments=d;});
@@ -1125,21 +1634,78 @@ function submitRepayment(e) {
   }).catch(function(err){toast('Server error: '+err.message,'error');loadAll(true);});
 }
 
+function submitExpense(e) {
+  e.preventDefault();
+  var btn=document.getElementById('btn-expense-submit');
+  setBtnLoading(btn,true);
+  var payload={
+    category:(document.getElementById('fi-ecat')||{}).value,
+    description:(document.getElementById('fi-edesc')||{}).value,
+    amount:parseFloat((document.getElementById('fi-eamt')||{}).value)||0,
+    paidBy:(document.getElementById('fi-epaidby')||{}).value||'',
+    approvedBy:(document.getElementById('fi-eapprby')||{}).value||'',
+    reference:(document.getElementById('fi-eref')||{}).value||'',
+    notes:(document.getElementById('fi-enotes')||{}).value||''
+  };
+  if(!payload.category){toast('Select a category','error');setBtnLoading(btn,false);return;}
+  if(!payload.amount||payload.amount<=0){toast('Enter valid amount','error');setBtnLoading(btn,false);return;}
+  var nowIso=new Date().toISOString();
+  var tempId='EXP'+Date.now();
+  var newRow=[tempId,nowIso,payload.category,payload.description,payload.amount,payload.paidBy,payload.approvedBy,payload.reference,payload.notes];
+  if(!S.expenses||!S.expenses.length) S.expenses=[['ID','Date','Category','Description','Amount','PaidBy','ApprovedBy','Reference','Notes']];
+  S.expenses.push(newRow);
+  if(S.dashboard){
+    S.dashboard.totalExpenses=(Number(S.dashboard.totalExpenses)||0)+payload.amount;
+    S.dashboard.netBalance=(Number(S.dashboard.netBalance)||0)-payload.amount;
+    if(S.currentView==='dashboard') updateDashStats(S.dashboard);
+  }
+  renderExpenses();
+  toast('Expense saved!');
+  closeModal('m-expense');
+  document.getElementById('f-expense').reset();
+  setBtnLoading(btn,false);
+  api.post('addExpense',payload).then(function(){
+    api.get('getSheet',{sheet:'Expenses'}).then(function(d){if(d)S.expenses=d;renderExpenses();});
+    api.get('getDashboardStats').then(function(d){S.dashboard=d;if(S.currentView==='dashboard')updateDashStats(d);});
+  }).catch(function(err){toast('Server error: '+err.message,'error');loadAll(true);});
+}
+
 function submitEditMember(e) {
   e.preventDefault();
   var id=(document.getElementById('fi-eid')||{}).value;
   var btn=document.getElementById('btn-edit-submit');
   setBtnLoading(btn,true);
-  var payload={name:(document.getElementById('fi-ename')||{}).value,phone:(document.getElementById('fi-ephone')||{}).value,email:(document.getElementById('fi-eemail')||{}).value,idNumber:(document.getElementById('fi-eidno')||{}).value,status:(document.getElementById('fi-estatus')||{}).value,type:(document.getElementById('fi-etype')||{}).value,address:(document.getElementById('fi-eaddress')||{}).value};
+  var payload={
+    name:(document.getElementById('fi-ename')||{}).value,
+    phone:(document.getElementById('fi-ephone')||{}).value,
+    email:(document.getElementById('fi-eemail')||{}).value,
+    idNumber:(document.getElementById('fi-eidno')||{}).value,
+    status:(document.getElementById('fi-estatus')||{}).value,
+    type:(document.getElementById('fi-etype')||{}).value,
+    address:(document.getElementById('fi-eaddress')||{}).value,
+    nominee1_name:(document.getElementById('fi-en1name')||{}).value||'',
+    nominee1_relationship:(document.getElementById('fi-en1rel')||{}).value||'',
+    nominee1_phone:(document.getElementById('fi-en1phone')||{}).value||'',
+    nominee1_address:(document.getElementById('fi-en1address')||{}).value||'',
+    nominee2_name:(document.getElementById('fi-en2name')||{}).value||'',
+    nominee2_relationship:(document.getElementById('fi-en2rel')||{}).value||'',
+    nominee2_phone:(document.getElementById('fi-en2phone')||{}).value||'',
+    nominee2_address:(document.getElementById('fi-en2address')||{}).value||''
+  };
   var mi=S.members.findIndex(function(m){return m.ID===id;});
-  if(mi>=0){S.members[mi].Name=payload.name;S.members[mi].Phone=payload.phone;S.members[mi].Email=payload.email;S.members[mi].Status=payload.status;S.members[mi].Type=payload.type;S.members[mi].Address=payload.address;}
+  if(mi>=0){
+    S.members[mi].Name=payload.name;S.members[mi].Phone=payload.phone;S.members[mi].Email=payload.email;
+    S.members[mi].Status=payload.status;S.members[mi].Type=payload.type;S.members[mi].Address=payload.address;
+    S.members[mi].Nominee1_Name=payload.nominee1_name;S.members[mi].Nominee1_Relationship=payload.nominee1_relationship;
+    S.members[mi].Nominee1_Phone=payload.nominee1_phone;S.members[mi].Nominee1_Address=payload.nominee1_address;
+    S.members[mi].Nominee2_Name=payload.nominee2_name;S.members[mi].Nominee2_Relationship=payload.nominee2_relationship;
+    S.members[mi].Nominee2_Phone=payload.nominee2_phone;S.members[mi].Nominee2_Address=payload.nominee2_address;
+  }
   renderMembersTable();
   toast('Member updated!');
   closeModal('m-edit');
   setBtnLoading(btn,false);
-  // Pass id both in payload and as param for updateMember
-  var payloadWithId = Object.assign({}, payload, {id: id});
-  api.post('updateMember', payloadWithId, {id: id}).then(function(){
+  api.post('updateMember',Object.assign({},payload,{id:id}),{id:id}).then(function(){
     api.get('getMembers',{limit:2000,offset:0}).then(function(d){if(d&&d.length){S.members=d;if(S.currentView==='members')renderMembersTable();}});
   }).catch(function(err){toast('Server error: '+err.message,'error');loadAll(true);});
 }
@@ -1156,8 +1722,9 @@ function submitMGR(e) {
   setBtnLoading(btn,true);
   var payload={month:(document.getElementById('fi-mgrmonth')||{}).value,year:(document.getElementById('fi-mgryear')||{}).value,b1Id:b1,b1Name:(document.getElementById('fi-mgrb1name')||{}).value,b2Id:b2,b2Name:(document.getElementById('fi-mgrb2name')||{}).value,amountEach:ae,totalDistributed:ae*2,status:(document.getElementById('fi-mgrstatus')||{}).value||'Scheduled',distDate:(document.getElementById('fi-mgrddate')||{}).value||'',notes:(document.getElementById('fi-mgrnotes')||{}).value||''};
   var tempId='MGR'+Math.random().toString(36).substr(2,6).toUpperCase();
-  var newRow=[tempId,Number(payload.month),Number(payload.year),b1,payload.b1Name,b2,payload.b2Name,ae,ae*2,ae*2,payload.distDate||'',payload.status,payload.notes];
-  if(!S.mgr||!S.mgr.length) S.mgr=[['TimestampID','Month','Year','Beneficiary1_ID','Beneficiary1_Name','Beneficiary2_ID','Beneficiary2_Name','AmountEach','TotalDistributed','TotalPoolAmount','DistributedDate','Status','Notes']];
+  var nowIso=new Date().toISOString();
+  var newRow=[tempId,Number(payload.month),Number(payload.year),b1,payload.b1Name,b2,payload.b2Name,ae,ae*2,ae*2,payload.distDate||'',payload.status,payload.notes,nowIso,nowIso,'System'];
+  if(!S.mgr||!S.mgr.length) S.mgr=[['TimestampID','Month','Year','Beneficiary1_ID','Beneficiary1_Name','Beneficiary2_ID','Beneficiary2_Name','AmountEach','TotalDistributed','TotalPoolAmount','DistributedDate','Status','Notes','CreatedAt','LastUpdated','UpdatedBy']];
   S.mgr.push(newRow);
   renderMGRTable();
   toast('MGR Schedule saved!');
@@ -1178,7 +1745,9 @@ function exportCSV(type) {
     Contributions:function(){return S.contributions;},
     Loans:function(){return S.loans;},
     Repayments:function(){return S.repayments;},
-    MerryGoRound:function(){return S.mgr;}
+    Expenses:function(){return S.expenses;},
+    MerryGoRound:function(){return S.mgr;},
+    AuditLog:function(){return S.auditlog;}
   };
   var data=(getData[type]||function(){return[];})();
   if(!data||data.length<=1){toast('No data to export','warning');return;}
@@ -1192,13 +1761,6 @@ function downloadFullWorkbook() {
 }
 
 // ─── UTILITIES ───
-function skelTable(tbId,cols,rows) {
-  var tbody=document.getElementById(tbId);if(!tbody)return;
-  var cell='';for(var c=0;c<cols;c++)cell+='<td><span class="skel" style="height:13px;width:80%;display:block;"></span></td>';
-  var out='';for(var r=0;r<rows;r++)out+='<tr>'+cell+'</tr>';
-  tbody.innerHTML=out;
-}
-function skelRows(cols,n){var cell='';for(var c=0;c<cols;c++)cell+='<td><span class="skel" style="height:13px;width:80%;display:block;"></span></td>';var out='';for(var r=0;r<n;r++)out+='<tr>'+cell+'</tr>';return out;}
 function setBtnLoading(btn,loading){if(!btn)return;if(loading){btn.disabled=true;btn._orig=btn.innerHTML;btn.innerHTML='<i class="fas fa-spinner spinning"></i> Saving...';}else{btn.disabled=false;if(btn._orig)btn.innerHTML=btn._orig;}}
 
 // ─── SETUP ───
@@ -1210,7 +1772,6 @@ function saveSetupUrl() {
   if(!url||url.indexOf('script.google.com')===-1){err.style.display='block';err.textContent='❌ Please enter a valid Apps Script URL.';return;}
   err.style.display='none';
   btn.innerHTML='<i class="fas fa-spinner spinning"></i> Connecting...'; btn.disabled=true;
-  // Test connection with ping action
   fetch(url+'?action=ping')
     .then(function(r){return r.json();})
     .then(function(r){
