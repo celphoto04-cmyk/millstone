@@ -273,6 +273,22 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
 @media(max-width:1024px){.sidebar{width:64px;padding:16px 6px;}.logo-text,.nav-item span,.sidebar-brand,.btn-sync span{display:none;}.content{margin-left:64px;padding:16px;}.nav-item{justify-content:center;padding:11px;}.two-col{grid-template-columns:1fr;}}
 @media(max-width:768px){.stats-grid{grid-template-columns:1fr 1fr;}.dl-grid{grid-template-columns:1fr 1fr;}.header-filters{max-width:100%;}}
 @media(max-width:480px){.stats-grid{grid-template-columns:1fr;}.dl-grid{grid-template-columns:1fr;}.content{padding:10px;}.two-col{grid-template-columns:1fr;}}
+/* ─── PAGINATION ─── */
+.pagination-bar{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#f0fdf4;border-top:1.5px solid var(--border);flex-wrap:wrap;gap:8px;}
+.pagination-info{font-size:12px;font-weight:600;color:var(--text-muted);}
+.pagination-btns{display:flex;gap:6px;align-items:center;}
+.pagination-btns button{padding:6px 12px;border-radius:8px;border:1.5px solid var(--border);background:white;font-size:12px;font-weight:600;cursor:pointer;color:var(--text);transition:all .15s;font-family:inherit;}
+.pagination-btns button:hover{background:var(--primary-xlight);border-color:var(--primary);color:var(--primary);}
+.pagination-btns button.active{background:var(--primary);color:white;border-color:var(--primary);}
+.pagination-btns button:disabled{opacity:.4;cursor:not-allowed;}
+.pagination-btns .page-num{padding:6px 10px;font-size:12px;font-weight:700;color:var(--text-muted);}
+
+/* ─── STICKY TABLE ─── */
+.table-scroll-wrap{overflow:auto;max-height:calc(100vh - 280px);}
+.table-scroll-wrap table{width:100%;border-spacing:0;}
+.table-scroll-wrap thead th{position:sticky;top:0;z-index:10;background:#f0fdf4 !important;}
+.table-scroll-wrap.no-maxheight{max-height:none;overflow:visible;}
+
 </style>
 </head>
 <body>
@@ -392,8 +408,11 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
     <div id="v-members" class="view" style="display:none">
       <div class="view-action-bar"><button class="btn-primary" onclick="openModal('m-member')"><i class="fas fa-user-plus"></i> Add Member</button></div>
       <div class="table-wrap">
-        <table><thead><tr><th>ID</th><th>Name</th><th>Phone</th><th>Savings</th><th>Loan Bal</th><th>Nominee 1</th><th>Status</th><th>Actions</th></tr></thead>
-        <tbody id="tb-members"></tbody></table>
+        <div class="table-scroll-wrap">
+          <table><thead><tr><th>ID</th><th>Name</th><th>Phone</th><th>Savings</th><th>Loan Bal</th><th>Nominee 1</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="tb-members"></tbody></table>
+        </div>
+        <div id="pg-members" class="pagination-bar" style="display:none;"></div>
       </div>
     </div>
 
@@ -401,17 +420,23 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
     <div id="v-contributions" class="view" style="display:none">
       <div class="view-action-bar"><button class="btn-primary" onclick="openModal('m-contribution')"><i class="fas fa-plus"></i> Log Contribution</button></div>
       <div class="table-wrap">
-        <table><thead><tr><th>Date</th><th>Member</th><th>Amount</th><th>Type</th><th>Reference</th></tr></thead>
-        <tbody id="tb-contributions"></tbody></table>
+        <div class="table-scroll-wrap">
+          <table><thead><tr><th>Date</th><th>Member</th><th>Amount</th><th>Type</th><th>Reference</th></tr></thead>
+          <tbody id="tb-contributions"></tbody></table>
+        </div>
+        <div id="pg-contributions" class="pagination-bar" style="display:none;"></div>
       </div>
     </div>
 
-    <!-- LOANS VIEW — added Due Days column -->
+    <!-- LOANS VIEW -->
     <div id="v-loans" class="view" style="display:none">
       <div class="view-action-bar"><button class="btn-primary" onclick="openModal('m-loan')"><i class="fas fa-plus"></i> Issue Loan</button></div>
       <div class="table-wrap">
-        <table><thead><tr><th>ID</th><th>Borrower</th><th>Amount</th><th>Term</th><th>Due Date</th><th>Due Days</th><th>Status</th></tr></thead>
-        <tbody id="tb-loans"></tbody></table>
+        <div class="table-scroll-wrap">
+          <table><thead><tr><th>ID</th><th>Borrower</th><th>Amount</th><th>Term</th><th>Due Date</th><th>Due Days</th><th>Nominee</th><th>Status</th></tr></thead>
+          <tbody id="tb-loans"></tbody></table>
+        </div>
+        <div id="pg-loans" class="pagination-bar" style="display:none;"></div>
       </div>
     </div>
 
@@ -419,8 +444,11 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
     <div id="v-repayments" class="view" style="display:none">
       <div class="view-action-bar"><button class="btn-primary" onclick="openModal('m-repayment')"><i class="fas fa-plus"></i> Register Repayment</button></div>
       <div class="table-wrap">
-        <table><thead><tr><th>Date</th><th>Member</th><th>Loan ID</th><th>Total Paid</th><th>Principal</th><th>Interest</th><th>Penalty</th></tr></thead>
-        <tbody id="tb-repayments"></tbody></table>
+        <div class="table-scroll-wrap">
+          <table><thead><tr><th>Date</th><th>Member</th><th>Loan ID</th><th>Total Paid</th><th>Principal</th><th>Interest</th><th>Penalty</th></tr></thead>
+          <tbody id="tb-repayments"></tbody></table>
+        </div>
+        <div id="pg-repayments" class="pagination-bar" style="display:none;"></div>
       </div>
     </div>
 
@@ -442,11 +470,13 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
         </div>
         <button class="btn-primary" onclick="openModal('m-mgr')"><i class="fas fa-plus"></i> Schedule Distribution</button>
       </div>
-      <div class="table-wrap" style="overflow-x:auto;">
-        <table><thead><tr><th>Month/Year</th><th>Beneficiary 1</th><th>Beneficiary 2</th><th>Each</th><th>Total</th><th>Status</th><th>Dist. Date</th><th>Notes</th><th>Timestamp</th><th>Last Updated</th><th>Updated By</th><th>Actions</th></tr></thead>
-        <tbody id="tb-mgr"></tbody></table>
+        <div class="table-wrap">
+        <div class="table-scroll-wrap" style="overflow-x:auto;">
+          <table style="min-width:1200px;"><thead><tr><th>Month/Year</th><th>Beneficiary 1</th><th>Beneficiary 2</th><th>Each</th><th>Total</th><th>Status</th><th>Dist. Date</th><th>Notes</th><th>Timestamp</th><th>Last Updated</th><th>Updated By</th><th>Actions</th></tr></thead>
+          <tbody id="tb-mgr"></tbody></table>
+        </div>
+        <div id="pg-mgr" class="pagination-bar" style="display:none;"></div>
       </div>
-    </div>
 
     <!-- EXPENSES VIEW -->
     <div id="v-expenses" class="view" style="display:none">
@@ -458,10 +488,12 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
       </div>
       <div class="view-action-bar"><button class="btn-primary" onclick="openModal('m-expense')"><i class="fas fa-plus"></i> Add Expense</button></div>
       <div class="table-wrap">
-        <table><thead><tr><th>Date</th><th>Category</th><th>Description</th><th>Amount</th><th>Paid By</th><th>Approved By</th><th>Reference</th><th>Action</th></tr></thead>
-        <tbody id="tb-expenses"></tbody></table>
+        <div class="table-scroll-wrap">
+          <table><thead><tr><th>Date</th><th>Category</th><th>Description</th><th>Amount</th><th>Paid By</th><th>Approved By</th><th>Reference</th><th>Action</th></tr></thead>
+          <tbody id="tb-expenses"></tbody></table>
+        </div>
+        <div id="pg-expenses" class="pagination-bar" style="display:none;"></div>
       </div>
-    </div>
 
     <!-- REPORTS VIEW -->
     <div id="v-reports" class="view" style="display:none">
@@ -500,10 +532,12 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
         </div>
       </div>
       <div class="table-wrap">
-        <table><thead><tr><th>Time</th><th>Table</th><th>Record</th><th>Action</th><th>Field</th><th>Old Value</th><th>New Value</th><th>By</th></tr></thead>
-        <tbody id="tb-audit"></tbody></table>
+        <div class="table-scroll-wrap">
+          <table><thead><tr><th>Time</th><th>Table</th><th>Record</th><th>Action</th><th>Field</th><th>Old Value</th><th>New Value</th><th>By</th></tr></thead>
+          <tbody id="tb-audit"></tbody></table>
+        </div>
+        <div id="pg-auditlog" class="pagination-bar" style="display:none;"></div>
       </div>
-    </div>
 
     <!-- DOWNLOADS VIEW -->
     <div id="v-downloads" class="view" style="display:none">
@@ -875,8 +909,10 @@ var S = {
   auditlog: [],
   mgr: [],
   dashboard: null,
-  currentView: 'dashboard'
+  currentView: 'dashboard',
+  pages: { members:1, contributions:1, loans:1, repayments:1, expenses:1, auditlog:1 }
 };
+var PAGE_SIZE = 50;
 
 // ═══════════════════════════════════════════════════
 //  API LAYER
@@ -996,9 +1032,15 @@ function forceSync() {
 var searchTimer = null;
 function onSearchInput() {
   clearTimeout(searchTimer);
-  searchTimer = setTimeout(function(){ showView(S.currentView); }, 120);
+  searchTimer = setTimeout(function(){
+    S.pages = { members:1, contributions:1, loans:1, repayments:1, expenses:1, auditlog:1, mgr:1 };
+    showView(S.currentView);
+  }, 120);
 }
-function onFilterChange() { showView(S.currentView); }
+function onFilterChange() {
+  S.pages = { members:1, contributions:1, loans:1, repayments:1, expenses:1, auditlog:1, mgr:1 };
+  showView(S.currentView);
+}
 function getSearchVal() { return ((document.getElementById('global-search')||{}).value||'').toLowerCase().trim(); }
 function getMonthFilter() { var v=(document.getElementById('global-month')||{}).value; return v===''?null:parseInt(v); }
 function getYearFilter()  { var v=(document.getElementById('global-year')||{}).value;  return v===''?null:parseInt(v); }
@@ -1023,7 +1065,7 @@ function dueDaysBadge(dueDateStr, status) {
   var today = new Date();
   today.setHours(0,0,0,0);
   due.setHours(0,0,0,0);
-  var diff = Math.round((due - today) / 86400000);
+  var diff = Math.ceil((due - today) / 86400000);
   if (diff < 0) {
     var cls = diff < -30 ? 'very-overdue' : 'overdue';
     return '<span class="due-days '+cls+'"><i class="fas fa-exclamation-triangle"></i> '+Math.abs(diff)+' days overdue</span>';
@@ -1091,7 +1133,11 @@ function renderMembersTable() {
   }
   if (search) rows=rows.filter(function(m){ return (String(m.Name||'')+String(m.ID||'')+String(m.Phone||'')).toLowerCase().indexOf(search)!==-1; });
   var tbody=document.getElementById('tb-members'); if(!tbody) return;
-  if (!rows.length) { tbody.innerHTML=emptyState('No Members Match Search'); return; }
+  if (!rows.length) { tbody.innerHTML=emptyState('No Members Match Search'); renderPagination('pg-members',1,0,'goPageMembers'); return; }
+  var totalRows = rows.length;
+  var page = S.pages.members || 1;
+  rows = rows.slice((page-1)*PAGE_SIZE, page*PAGE_SIZE);
+  renderPagination('pg-members', page, totalRows, 'goPageMembers');
   tbody.innerHTML=rows.map(function(m){
     var st=String(m.Status||'').toLowerCase();
     var bc=st==='active'?'badge-active':st==='inactive'?'badge-inactive':'badge-closed';
@@ -1112,13 +1158,29 @@ function renderSheet(key, tbId, type) {
   var search=getSearchVal(),mf=getMonthFilter(),yf=getYearFilter();
   if (search) rows=rows.filter(function(r){return r.some(function(c){return String(c||'').toLowerCase().indexOf(search)!==-1;});});
   if (mf!==null||yf!==null) rows=rows.filter(function(r){var dv=r[3]||r[7]||r[8];return matchesDateFilter(dv);});
-  if (!rows.length) { tbody.innerHTML=emptyState('No Matching Records'); return; }
+  if (!rows.length) {
+    tbody.innerHTML=emptyState('No Matching Records');
+    var pgKey2 = type==='loan'?'pg-loans':type==='repay'?'pg-repayments':'pg-contributions';
+    renderPagination(pgKey2,1,0,'goPage'+( type==='loan'?'Loans':type==='repay'?'Repayments':'Contributions'));
+    return;
+  }
+  var totalRows2 = rows.length;
+  var pgKey = type==='loan'?'loans':type==='repay'?'repayments':'contributions';
+  var page2 = S.pages[pgKey] || 1;
+  rows = rows.slice((page2-1)*PAGE_SIZE, page2*PAGE_SIZE);
+  var pgElKey = type==='loan'?'pg-loans':type==='repay'?'pg-repayments':'pg-contributions';
+  var pgFnKey = type==='loan'?'goPageLoans':type==='repay'?'goPageRepayments':'goPageContributions';
+  renderPagination(pgElKey, page2, totalRows2, pgFnKey);
   tbody.innerHTML=rows.map(function(r){
     if (type==='loan') {
       var st2=String(r[9]||'Active').toLowerCase();
       var lbc=st2==='active'?'badge-active':st2==='closed'?'badge-closed':'badge-inactive';
       var dueDays = dueDaysBadge(r[8], r[9]);
-      return '<tr><td>'+r[0]+'</td><td><strong>'+r[2]+'</strong></td><td>KES '+Number(r[4]||0).toLocaleString()+'</td><td>'+r[5]+' Mon</td><td>'+(r[8]?new Date(r[8]).toLocaleDateString():'N/A')+'</td><td>'+dueDays+'</td><td><span class="badge '+lbc+'">'+r[9]+'</span></td></tr>';
+      var loanMember = S.members.find(function(m){ return m.ID === r[1]; });
+      var nomineeInfo = loanMember && loanMember.Nominee1_Name
+        ? '<span style="font-size:11px;font-weight:600;">'+loanMember.Nominee1_Name+'</span><br><span style="font-size:10px;color:var(--text-muted);">'+( loanMember.Nominee1_Relationship||'')+'</span>'
+        : '<span style="color:var(--text-muted);font-size:11px;">—</span>';
+      return '<tr><td>'+r[0]+'</td><td><strong>'+r[2]+'</strong></td><td>KES '+Number(r[4]||0).toLocaleString()+'</td><td>'+r[5]+' Mon</td><td>'+(r[8]?new Date(r[8]).toLocaleDateString():'N/A')+'</td><td>'+dueDays+'</td><td>'+nomineeInfo+'</td><td><span class="badge '+lbc+'">'+r[9]+'</span></td></tr>';
     }
     if (type==='repay') return '<tr><td>'+(r[3]?new Date(r[3]).toLocaleDateString():'N/A')+'</td><td><strong>'+r[2]+'</strong></td><td>'+r[1]+'</td><td>KES '+Number(r[4]||0).toLocaleString()+'</td><td>KES '+Number(r[5]||0).toLocaleString()+'</td><td>KES '+Number(r[6]||0).toLocaleString()+'</td><td>KES '+Number(r[7]||0).toLocaleString()+'</td></tr>';
     return '<tr><td>'+(r[3]?new Date(r[3]).toLocaleDateString():'N/A')+'</td><td><strong>'+r[2]+'</strong></td><td>KES '+Number(r[4]||0).toLocaleString()+'</td><td>'+r[5]+'</td><td>'+r[6]+'</td></tr>';
@@ -1143,7 +1205,11 @@ function renderExpenses() {
   if (search) rows=rows.filter(function(r){return r.some(function(c){return String(c||'').toLowerCase().indexOf(search)!==-1;});});
   if (mf!==null||yf!==null) rows=rows.filter(function(r){return matchesDateFilter(r[1]);});
   rows = rows.slice().reverse();
-  if (!rows.length) { tbody.innerHTML=emptyState('No Matching Expenses'); return; }
+  if (!rows.length) { tbody.innerHTML=emptyState('No Matching Expenses'); renderPagination('pg-expenses',1,0,'goPageExpenses'); return; }
+  var totalRowsExp = rows.length;
+  var pageExp = S.pages.expenses || 1;
+  rows = rows.slice((pageExp-1)*PAGE_SIZE, pageExp*PAGE_SIZE);
+  renderPagination('pg-expenses', pageExp, totalRowsExp, 'goPageExpenses');
   tbody.innerHTML=rows.map(function(r){
     var d=r[1]?new Date(r[1]).toLocaleDateString():'';
     var rid=String(r[0]).replace(/'/g,"\\'");
@@ -1176,8 +1242,12 @@ function renderAuditTable() {
   if (af) rows=rows.filter(function(r){return String(r[5]||'').indexOf(af)===0;});
   if (search) rows=rows.filter(function(r){return r.some(function(c){return String(c||'').toLowerCase().indexOf(search)!==-1;});});
   rows = rows.slice().reverse();
-  if (!rows.length) { tbody.innerHTML=emptyState('No Audit Records Match Filter'); return; }
-  tbody.innerHTML=rows.slice(0,200).map(function(r){
+  if (!rows.length) { tbody.innerHTML=emptyState('No Audit Records Match Filter'); renderPagination('pg-auditlog',1,0,'goPageAuditlog'); return; }
+  var totalRowsAudit = rows.length;
+  var pageAudit = S.pages.auditlog || 1;
+  rows = rows.slice((pageAudit-1)*PAGE_SIZE, pageAudit*PAGE_SIZE);
+  renderPagination('pg-auditlog', pageAudit, totalRowsAudit, 'goPageAuditlog');
+  tbody.innerHTML=rows.map(function(r){
     var ts=r[1]?new Date(r[1]).toLocaleString():'';
     var act=String(r[5]||'');
     var abc=act.indexOf('ADD')===0?'badge-add':act.indexOf('DELETE')===0?'badge-delete':'badge-edit';
@@ -1216,7 +1286,11 @@ function renderMGRTable() {
   if (stF) rows=rows.filter(function(r){return String(r[11]||'').trim()===stF;});
   if (yrF) rows=rows.filter(function(r){return String(r[2])===yrF;});
   rows.sort(function(a,b){return(Number(b[2])-Number(a[2]))||Number(b[1])-Number(a[1]);});
-  if (!rows.length) { tbody.innerHTML=emptyState('No Records Match Filter'); return; }
+  if (!rows.length) { tbody.innerHTML=emptyState('No Records Match Filter'); renderPagination('pg-mgr',1,0,'goPageMgr'); return; }
+  var totalRowsMgr = rows.length;
+  var pageMgr = S.pages.mgr || 1;
+  rows = rows.slice((pageMgr-1)*PAGE_SIZE, pageMgr*PAGE_SIZE);
+  renderPagination('pg-mgr', pageMgr, totalRowsMgr, 'goPageMgr');
   tbody.innerHTML=rows.map(function(r){
     var st=String(r[11]||'Scheduled').trim();
     var bc=st==='Distributed'?'badge-distributed':st==='Rejected'?'badge-rejected':st==='Pending'?'badge-pending':'badge-scheduled';
@@ -1227,8 +1301,10 @@ function renderMGRTable() {
 
     // Action buttons
     var actionBtns = '<div class="actions-cell">';
-    // Edit button (always shown)
-    actionBtns += '<button class="btn-icon btn-edit" title="Edit Record" onclick="openEditMGR(\''+rid+'\')"><i class="fas fa-pencil-alt"></i></button>';
+    // Edit button only for non-final statuses
+    if (st !== 'Distributed' && st !== 'Rejected') {
+      actionBtns += '<button class="btn-icon btn-edit" title="Edit Record" onclick="openEditMGR(\''+rid+'\')"><i class="fas fa-pencil-alt"></i></button>';
+    }
     if (st !== 'Distributed' && st !== 'Rejected') {
       // Mark distributed (green check)
       actionBtns += '<button class="btn-icon btn-view" title="Mark Distributed" onclick="openMarkDist(\''+rid+'\',\''+lble+'\')"><i class="fas fa-check"></i></button>';
@@ -1760,9 +1836,42 @@ function downloadFullWorkbook() {
   api.get('getExportUrl').then(function(url){var a=document.createElement('a');a.href=url;a.target='_blank';document.body.appendChild(a);a.click();document.body.removeChild(a);toast('Download started!');}).catch(function(){toast('Download failed','error');});
 }
 
-// ─── UTILITIES ───
-function setBtnLoading(btn,loading){if(!btn)return;if(loading){btn.disabled=true;btn._orig=btn.innerHTML;btn.innerHTML='<i class="fas fa-spinner spinning"></i> Saving...';}else{btn.disabled=false;if(btn._orig)btn.innerHTML=btn._orig;}}
+// ─── PAGINATION HELPER ───
+function renderPagination(pgId, currentPage, totalRows, onPageChange) {
+  var pgEl = document.getElementById(pgId);
+  if (!pgEl) return;
+  var totalPages = Math.max(1, Math.ceil(totalRows / PAGE_SIZE));
+  if (totalPages <= 1) { pgEl.style.display = 'none'; return; }
+  pgEl.style.display = 'flex';
+  var start = (currentPage - 1) * PAGE_SIZE + 1;
+  var end = Math.min(currentPage * PAGE_SIZE, totalRows);
+  var html = '<span class="pagination-info">Showing '+start+'–'+end+' of '+totalRows+'</span>';
+  html += '<div class="pagination-btns">';
+  html += '<button onclick="'+onPageChange+'(1)" '+(currentPage===1?'disabled':'')+'>«</button>';
+  html += '<button onclick="'+onPageChange+'('+(currentPage-1)+')" '+(currentPage===1?'disabled':'')+'>‹ Prev</button>';
+  // page numbers — show window of 5
+  var startPage = Math.max(1, currentPage - 2);
+  var endPage = Math.min(totalPages, startPage + 4);
+  if (endPage - startPage < 4) startPage = Math.max(1, endPage - 4);
+  for (var p = startPage; p <= endPage; p++) {
+    html += '<button class="'+(p===currentPage?'active':'')+'" onclick="'+onPageChange+'('+p+')">'+p+'</button>';
+  }
+  html += '<button onclick="'+onPageChange+'('+(currentPage+1)+')" '+(currentPage===totalPages?'disabled':'')+'>Next ›</button>';
+  html += '<button onclick="'+onPageChange+'('+totalPages+')" '+(currentPage===totalPages?'disabled':'')+'>»</button>';
+  html += '</div>';
+  pgEl.innerHTML = html;
+}
+function goPageMembers(p){ S.pages.members=p; renderMembersTable(); }
+function goPageContributions(p){ S.pages.contributions=p; renderSheet('contributions','tb-contributions','contrib'); }
+function goPageLoans(p){ S.pages.loans=p; renderSheet('loans','tb-loans','loan'); }
+function goPageRepayments(p){ S.pages.repayments=p; renderSheet('repayments','tb-repayments','repay'); }
+function goPageExpenses(p){ S.pages.expenses=p; renderExpenses(); }
+function goPageAuditlog(p){ S.pages.auditlog=p; renderAuditTable(); }
+function goPageMgr(p){ S.pages.mgr=p; renderMGRTable(); }
 
+// ─── UTILITIES ───
+function setBtnLoading(btn,loading){
+  
 // ─── SETUP ───
 function saveSetupUrl() {
   var inp=document.getElementById('setup-url');
