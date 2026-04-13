@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SACCOSync — Millennial Group S&L</title>
+<title>SACCOSync</title>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
@@ -343,7 +343,7 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
       </svg>
       <div class="logo-text">
         <span class="logo-name">SACCO<b>Sync</b></span>
-        <span class="logo-ver">v3.2.1</span>
+        <span class="logo-ver">v5.5.5</span>
       </div>
     </a>
     <nav id="main-nav">
@@ -362,7 +362,7 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
       <button class="btn-sync" onclick="forceSync()">
         <i class="fas fa-sync" id="sync-icon"></i><span>Sync System</span>
       </button>
-      <span class="sidebar-brand">Millennial Group S&L</span>
+      <!-- <span class="sidebar-brand"> </span> -->
     </div>
   </aside>
 
@@ -903,7 +903,7 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
         <div class="form-group"><label>Address</label><input type="text" id="fi-eaddress"></div>
       </div>
       <div class="nominee-box required">
-        <p><i class="fas fa-user-shield"></i> Guarantors</p>
+        <p><i class="fas fa-user-shield"></i> Guarantor</p>
         <div class="form-row">
           <div class="form-group" style="margin-bottom:10px;"><label>Full Name</label><input type="text" id="fi-en1name"></div>
           <div class="form-group" style="margin-bottom:10px;"><label>Relationship</label><select id="fi-en1rel"><option value="">Select</option><option>Spouse</option><option>Child</option><option>Parent</option><option>Sibling</option><option>Other</option></select></div>
@@ -914,7 +914,7 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
         </div>
       </div>
       <div class="nominee-box">
-        <p><i class="fas fa-user-friends"></i> Nominee <span style="font-size:10px;color:#9ca3af;">(Optional)</span></p>
+        <p><i class="fas fa-user-friends"></i> Nominee<span style="font-size:10px;color:#9ca3af;">(Optional)</span></p>
         <div class="form-row">
           <div class="form-group" style="margin-bottom:10px;"><label>Full Name</label><input type="text" id="fi-en2name"></div>
           <div class="form-group" style="margin-bottom:10px;"><label>Relationship</label><select id="fi-en2rel"><option value="">Select</option><option>Spouse</option><option>Child</option><option>Parent</option><option>Sibling</option><option>Other</option></select></div>
@@ -930,7 +930,7 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
 </div>
 
 <!-- SETUP OVERLAY -->
-<div id="setup-overlay">
+<div id="setup-overlay" style="display:none!important;">
   <div class="setup-box">
     <svg class="setup-logo" viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg">
       <circle cx="36" cy="36" r="36" fill="#16a34a"/>
@@ -941,10 +941,10 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
       <rect x="46" y="25" width="10" height="17" rx="3.5" fill="#f97316" transform="rotate(10 51 33)"/>
     </svg>
     <div class="setup-title">SACCO<b>Sync</b></div>
-    <p class="setup-sub">Millennial Group S&L Management System<br>Enter your Apps Script API URL to connect.</p>
+    <p class="setup-sub">Management System<br>Enter your API URL to connect.</p>
     <div class="setup-field">
-      <label>Apps Script API URL</label>
-      <input type="url" id="setup-url" placeholder="https://script.google.com/macros/s/.../exec">
+      <label>API URL</label>
+      <input type="url" id="setup-url" placeholder="Paste Here">
       <p id="setup-error">❌ Invalid or unreachable URL. Please check and try again.</p>
     </div>
     <button class="setup-cta" onclick="saveSetupUrl()" id="setup-btn">
@@ -961,7 +961,7 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
 //  CORE STATE
 // ═══════════════════════════════════════════════════
 var S = {
-  apiUrl: localStorage.getItem('sacco_api_url') || '',
+  apiUrl: 'https://script.google.com/macros/s/AKfycbz0MdvHQfnDPDeRzy1K4X8mX2VC3fT1ukJry1tQpFt4fYP-vQrd8R_lz562M1OoG7od/exec',
   members: [],
   contributions: [],
   loans: [],
@@ -1998,6 +1998,10 @@ function saveSetupUrl() {
 }
 
 function initApp() {
+    // Force hide setup overlay
+  var ov = document.getElementById('setup-overlay');
+  if (ov) ov.style.display = 'none';
+  
   var de=document.getElementById('current-date');
   if(de) de.innerText=new Date().toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'});
   showView('dashboard');
@@ -2016,11 +2020,7 @@ window.addEventListener('DOMContentLoaded',function(){
   });
 });
 window.onload=function(){
-  if(!S.apiUrl){
-    document.getElementById('setup-overlay').style.display='flex';
-  } else {
-    initApp();
-  }
+  initApp();
 };
 </script>
 </body>
