@@ -47,9 +47,8 @@ nav{display:flex;flex-direction:column;gap:2px;}
 .sidebar-footer{margin-top:auto;padding:12px 4px 0;flex-shrink:0;}
 .btn-sync{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px;background:var(--primary-xlight);border:1.5px solid var(--border);border-radius:11px;color:var(--primary);font-weight:700;font-size:12.5px;cursor:pointer;transition:all .2s;font-family:inherit;}
 .btn-sync:hover{background:var(--primary-light);box-shadow:var(--shadow);}
-.sidebar-brand{display:block;text-align:center;font-size:12px;font-weight:700;margin-top:6px;color:var(--primary);opacity:.7;}
 
-/* ─── CONTENT — page scrolls naturally ─── */
+/* ─── CONTENT ─── */
 .content{flex:1;margin-left:var(--sidebar-width);padding:24px;background:var(--background);min-height:100vh;width:calc(100% - var(--sidebar-width));overflow-x:hidden;}
 header{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;gap:14px;padding:12px 18px;flex-wrap:wrap;background:var(--glass);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1.5px solid rgba(255,255,255,.7);box-shadow:var(--shadow-lg);border-radius:var(--radius);}
 .header-left{display:flex;align-items:center;gap:14px;}
@@ -70,6 +69,7 @@ header{display:flex;justify-content:space-between;align-items:center;margin-bott
 .stat-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg);}
 .stat-card.highlight-green{border:2px solid #86efac;background:rgba(220,252,231,0.6);}
 .stat-card.highlight-red{border:2px solid #fca5a5;background:rgba(254,226,226,0.5);}
+.stat-card.highlight-amber{border:2px solid #fcd34d;background:rgba(254,243,199,0.5);}
 .stat-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:12px;}
 .stat-info p{font-size:10.5px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px;}
 .stat-info h2{font-size:20px;font-weight:800;color:var(--text);}
@@ -85,10 +85,7 @@ header{display:flex;justify-content:space-between;align-items:center;margin-bott
 .si-red{background:#fee2e2;color:#dc2626;}
 .si-amber{background:#fef3c7;color:#d97706;}
 
-/* ─── SECTION LABEL ─── */
-.section-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--text-muted);margin-bottom:10px;padding-left:2px;}
-
-/* ─── TABLES — NO max-height, page scrolls ─── */
+/* ─── TABLES ─── */
 .table-wrap{background:var(--glass);backdrop-filter:blur(12px);border:1.5px solid rgba(255,255,255,.7);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;}
 table{width:100%;border-spacing:0;}
 th{background:#f0fdf4;padding:11px 16px;text-align:left;font-size:10.5px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.4px;border-bottom:1.5px solid var(--border);}
@@ -96,32 +93,15 @@ td{padding:12px 16px;border-bottom:1px solid #f0fdf4;font-size:12.5px;font-weigh
 tr:last-child td{border-bottom:none;}
 tbody tr{transition:background .1s;}
 tbody tr:hover td{background:rgba(22,163,74,0.035);}
+tbody tr.clickable-row{cursor:pointer;}
 
-/* ─── TABLE SCROLL WRAP — horizontal only, page handles vertical ─── */
-.table-scroll-wrap{
-  overflow-x: auto;
-  overflow-y: visible;
-  -webkit-overflow-scrolling: touch;
-}
-/* Scrollbar for horizontal scroll */
-.table-scroll-wrap::-webkit-scrollbar{ height:7px; width:4px; }
-.table-scroll-wrap::-webkit-scrollbar-track{ background:#f0fdf4; border-radius:4px; }
-.table-scroll-wrap::-webkit-scrollbar-thumb{ background:#86efac; border-radius:4px; }
-.table-scroll-wrap::-webkit-scrollbar-thumb:hover{ background:#16a34a; }
+.table-scroll-wrap{overflow-x:auto;overflow-y:visible;-webkit-overflow-scrolling:touch;}
+.table-scroll-wrap::-webkit-scrollbar{height:7px;width:4px;}
+.table-scroll-wrap::-webkit-scrollbar-track{background:#f0fdf4;border-radius:4px;}
+.table-scroll-wrap::-webkit-scrollbar-thumb{background:#86efac;border-radius:4px;}
+.table-scroll-wrap::-webkit-scrollbar-thumb:hover{background:#16a34a;}
 
-/* MGR scroll — horizontal scroll with indicator */
-.table-scroll-wrap.mgr-scroll{
-  overflow-x: auto;
-  overflow-y: visible;
-  -webkit-overflow-scrolling: touch;
-  position: relative;
-}
-/* Horizontal scroll hint for MGR */
-.mgr-scroll-hint{
-  display:flex;align-items:center;gap:6px;
-  font-size:11px;font-weight:600;color:var(--text-muted);
-  padding:6px 16px 0;opacity:.7;
-}
+.mgr-scroll-hint{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:var(--text-muted);padding:6px 16px 0;opacity:.7;}
 .mgr-scroll-hint i{color:var(--primary);}
 
 /* ─── PAGINATION ─── */
@@ -142,7 +122,6 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
 /* ─── BUTTONS ─── */
 .btn-primary{background:var(--primary);color:white;border:none;padding:9px 18px;border-radius:10px;font-weight:700;font-size:12.5px;cursor:pointer;transition:all .15s;box-shadow:0 2px 8px rgba(22,163,74,0.25);display:inline-flex;align-items:center;gap:6px;font-family:inherit;}
 .btn-primary:hover{background:var(--primary-dark);transform:translateY(-1px);box-shadow:0 6px 16px rgba(22,163,74,0.35);}
-.btn-primary:active{transform:translateY(0);}
 .btn-secondary{background:white;color:var(--text);border:1.5px solid var(--border);padding:9px 18px;border-radius:10px;font-weight:600;font-size:12.5px;cursor:pointer;transition:all .15s;font-family:inherit;}
 .btn-secondary:hover{background:var(--primary-xlight);border-color:var(--primary);color:var(--primary);}
 .btn-submit{background:var(--primary);color:white;border:none;padding:13px;width:100%;border-radius:11px;font-weight:700;font-size:14px;cursor:pointer;box-shadow:0 4px 14px rgba(22,163,74,0.25);transition:all .15s;margin-top:4px;font-family:inherit;}
@@ -150,14 +129,19 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
 .btn-submit:disabled{opacity:.55;cursor:not-allowed;transform:none;}
 .btn-icon{width:32px;height:32px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;border:none;cursor:pointer;transition:all .15s;font-size:12px;font-family:inherit;}
 .btn-view{background:#f0fdf4;color:#16a34a;}
-.btn-view:hover{background:var(--primary-light);color:var(--primary-dark);}
+.btn-view:hover{background:var(--primary-light);}
 .btn-edit{background:#fff7ed;color:#ea580c;}
-.btn-edit:hover{background:#ffedd5;color:#c2410c;}
+.btn-edit:hover{background:#ffedd5;}
 .btn-del{background:#fee2e2;color:#dc2626;}
-.btn-del:hover{background:#fca5a5;color:#991b1b;}
+.btn-del:hover{background:#fca5a5;}
 .btn-reject{background:#fef3c7;color:#92400e;}
-.btn-reject:hover{background:#fde68a;color:#78350f;}
-.actions-cell{display:flex;gap:5px;}
+.btn-reject:hover{background:#fde68a;}
+.btn-pdf{background:#ede9fe;color:#7c3aed;}
+.btn-pdf:hover{background:#ddd6fe;}
+.actions-cell{display:flex;gap:5px;align-items:center;}
+
+/* ─── SECTION LABEL ─── */
+.section-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--text-muted);margin-bottom:10px;padding-left:2px;}
 
 /* ─── MODALS ─── */
 .modal{display:none;position:fixed!important;z-index:10000;left:0;top:0;width:100vw;height:100vh;background:rgba(5,46,22,.35);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);align-items:center;justify-content:center;}
@@ -176,10 +160,26 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
 .form-group input:focus,.form-group select:focus,.form-group textarea:focus{background:white;border-color:var(--primary);box-shadow:0 0 0 3px rgba(22,163,74,0.1);}
 .form-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;}
 .nominee-box{background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:12px;padding:16px;margin-bottom:15px;}
-.nominee-box.required{border-color:#bbf7d0;background:#f0fdf4;}
-.nominee-box p{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px;display:flex;align-items:center;gap:6px;}
-.nominee-box.required p{color:#15803d;}
-.nominee-box p{color:#64748b;}
+.nominee-box.optional-box{border-color:#e2e8f0;background:#fafafa;}
+.nominee-box p{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px;display:flex;align-items:center;gap:6px;color:#64748b;}
+
+/* File Upload */
+.file-upload-area{border:2px dashed #d1d5db;border-radius:10px;padding:18px;text-align:center;cursor:pointer;transition:all .2s;background:#fafafa;}
+.file-upload-area:hover{border-color:var(--primary);background:var(--primary-xlight);}
+.file-upload-area.has-file{border-color:var(--primary);background:var(--primary-xlight);}
+.file-upload-area i{font-size:24px;color:#9ca3af;display:block;margin-bottom:8px;}
+.file-upload-area.has-file i{color:var(--primary);}
+.file-upload-area p{font-size:12.5px;color:var(--text-muted);font-weight:600;}
+.file-upload-area .file-name{font-size:12px;color:var(--primary);font-weight:700;margin-top:4px;}
+
+/* Guarantor toggle box */
+.guarantor-toggle-box{background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:12px;padding:14px;margin-bottom:14px;}
+.guarantor-toggle-box .toggle-row{display:flex;gap:8px;margin-bottom:12px;}
+.toggle-btn{flex:1;padding:9px;border-radius:9px;border:1.5px solid var(--border);background:white;font-size:12.5px;font-weight:700;cursor:pointer;transition:all .15s;font-family:inherit;color:var(--text-muted);}
+.toggle-btn.active{background:var(--primary);color:white;border-color:var(--primary);box-shadow:0 2px 8px rgba(22,163,74,0.2);}
+.guarantor-info-box{background:white;border-radius:9px;padding:12px;border:1.5px solid var(--border);}
+.guarantor-info-box p{font-size:12.5px;font-weight:600;color:var(--text);}
+.guarantor-info-box span{font-size:11.5px;color:var(--text-muted);}
 
 /* ─── AUTOCOMPLETE ─── */
 .ac-list{position:absolute;border:1.5px solid var(--border);border-top:none;z-index:9999;top:100%;left:0;right:0;background:white;border-radius:0 0 10px 10px;box-shadow:var(--shadow-lg);max-height:200px;overflow-y:auto;}
@@ -200,6 +200,9 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
 .badge-edit{background:#dbeafe;color:#2563eb;}
 .badge-delete{background:#fee2e2;color:#dc2626;}
 .badge-overdue{background:#fef3c7;color:#92400e;}
+.badge-defaulted{background:#fee2e2;color:#dc2626;}
+.badge-paid{background:#dcfce7;color:#16a34a;}
+.badge-yettopay{background:#dbeafe;color:#2563eb;}
 
 /* ─── TOAST ─── */
 .toast-cont{position:fixed;bottom:22px;right:22px;z-index:99999;display:flex;flex-direction:column;gap:8px;}
@@ -211,9 +214,10 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
 @keyframes tslide{from{transform:translateX(110%);opacity:0;}to{transform:translateX(0);opacity:1;}}
 @keyframes tfade{to{opacity:0;transform:translateX(110%);}}
 
-/* ─── SKELETON ─── */
-@keyframes shimmer{0%{background-position:-400px 0;}100%{background-position:400px 0;}}
-.skel{background:linear-gradient(90deg,#f0fdf4 25%,#dcfce7 50%,#f0fdf4 75%);background-size:800px 100%;animation:shimmer 1.3s infinite linear;border-radius:7px;display:block;}
+/* ─── SPINNING ─── */
+.spinning{animation:spin 1s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.view-action-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px;}
 
 /* ─── MGR ─── */
 .mgr-filter-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:8px;}
@@ -264,35 +268,30 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
 .empty-msg{text-align:center;color:var(--text-muted);padding:30px;font-size:13px;}
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
 
-/* ─── DUE DAYS BADGE ─── */
+/* ─── DUE DAYS ─── */
 .due-days{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:6px;font-size:10.5px;font-weight:700;}
 .due-days.overdue{background:#fef3c7;color:#92400e;}
 .due-days.very-overdue{background:#fee2e2;color:#991b1b;}
 .due-days.upcoming{background:#dbeafe;color:#1d4ed8;}
 .due-days.today{background:#f3e8ff;color:#7c3aed;}
 
-/* ─── SETUP OVERLAY ─── */
-#setup-overlay{display:none;position:fixed;inset:0;z-index:99999;background:linear-gradient(135deg,#052e16 0%,#14532d 100%);align-items:center;justify-content:center;}
-.setup-box{background:white;border-radius:22px;padding:44px 40px;max-width:460px;width:95%;box-shadow:0 40px 80px rgba(0,0,0,0.4);text-align:center;}
-.setup-logo{width:72px;height:72px;margin:0 auto 22px;display:block;}
-.setup-title{font-size:26px;font-weight:900;color:var(--text);margin-bottom:6px;}
-.setup-title b{color:var(--primary);}
-.setup-sub{color:var(--text-muted);font-size:13.5px;margin-bottom:28px;line-height:1.6;}
-.setup-field{background:#f9fafb;border:1.5px solid #e5e7eb;border-radius:13px;padding:18px;margin-bottom:20px;text-align:left;}
-.setup-field label{display:block;font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;}
-.setup-field input{width:100%;padding:11px 13px;border:1.5px solid #e5e7eb;border-radius:9px;font-size:13px;outline:none;color:var(--text);font-family:inherit;transition:border-color .15s;}
-.setup-field input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(22,163,74,0.1);}
-#setup-error{color:var(--danger);font-size:12px;margin-top:8px;display:none;}
-.setup-cta{width:100%;padding:14px;background:var(--primary);color:white;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px;font-family:inherit;}
-.setup-cta:hover{background:var(--primary-dark);}
-.setup-note{margin-top:14px;font-size:11px;color:#9ca3af;}
+/* ─── LOAN DETAIL MODAL ─── */
+.loan-detail-section{background:#f8fafc;border-radius:12px;padding:16px;margin-bottom:14px;}
+.loan-detail-section h4{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-muted);margin-bottom:12px;}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.detail-item{background:white;border-radius:9px;padding:10px 12px;border:1.5px solid var(--border);}
+.detail-item p{font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;margin-bottom:2px;}
+.detail-item h5{font-size:13.5px;font-weight:800;color:var(--text);}
+.detail-item h5.positive{color:#16a34a;}
+.detail-item h5.negative{color:#dc2626;}
+.repayment-history{display:flex;flex-direction:column;gap:7px;max-height:200px;overflow-y:auto;}
+.rh-item{display:flex;justify-content:space-between;align-items:center;padding:9px 12px;background:white;border-radius:9px;border:1.5px solid var(--border);}
+.rh-item .rh-date{font-size:11.5px;color:var(--text-muted);}
+.rh-item .rh-amounts{text-align:right;}
+.rh-item .rh-amounts span{display:block;font-size:11px;color:var(--text-muted);}
+.rh-item .rh-amounts strong{font-size:13px;font-weight:700;color:var(--primary);}
 
-/* ─── SPINNING ─── */
-.spinning{animation:spin 1s linear infinite;}
-@keyframes spin{to{transform:rotate(360deg);}}
-.view-action-bar{display:flex;justify-content:flex-end;margin-bottom:16px;}
-
-/* ─── PROFILE MODAL ─── */
+/* ─── MEMBER PROFILE ─── */
 .profile-header{display:flex;gap:16px;align-items:center;margin-bottom:18px;padding:18px;background:var(--primary-xlight);border-radius:12px;border:1.5px solid var(--primary-light);}
 .profile-avatar{width:64px;height:64px;border-radius:16px;background:var(--primary-light);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;color:var(--primary);flex-shrink:0;}
 .profile-meta h3{font-size:18px;font-weight:800;margin-bottom:2px;}
@@ -305,11 +304,21 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
 .profile-details span{font-weight:600;color:var(--text-muted);}
 .profile-nominee{background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:10px;padding:12px;margin-top:12px;}
 .profile-nominee h4{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#64748b;margin-bottom:8px;}
+.member-activity-section{margin-top:16px;}
+.member-activity-section h4{font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+.activity-mini-list{display:flex;flex-direction:column;gap:6px;max-height:150px;overflow-y:auto;}
+.activity-mini-item{display:flex;justify-content:space-between;align-items:center;padding:8px 11px;background:#f9fafb;border-radius:9px;border:1px solid #e5e7eb;}
+.activity-mini-item span{font-size:11.5px;color:var(--text-muted);}
+.activity-mini-item strong{font-size:12.5px;font-weight:700;color:var(--primary);}
+
+/* ─── LOAN FILTER BAR ─── */
+.loan-filter-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.loan-filter-bar select{padding:7px 12px;border-radius:9px;border:1.5px solid var(--border);background:white;font-size:12.5px;font-weight:600;color:var(--text);outline:none;cursor:pointer;font-family:inherit;}
 
 /* ─── RESPONSIVE ─── */
 @media(max-width:1024px){
   .sidebar{width:64px;padding:16px 6px;}
-  .logo-text,.nav-item span,.sidebar-brand,.btn-sync span{display:none;}
+  .logo-text,.nav-item span,.btn-sync span{display:none;}
   .content{margin-left:64px;padding:16px;width:calc(100% - 64px);}
   .nav-item{justify-content:center;padding:11px;}
   .two-col{grid-template-columns:1fr;}
@@ -318,12 +327,12 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
   .stats-grid{grid-template-columns:1fr 1fr;}
   .dl-grid{grid-template-columns:1fr 1fr;}
   .header-filters{max-width:100%;}
+  .detail-grid{grid-template-columns:1fr;}
 }
 @media(max-width:480px){
   .stats-grid{grid-template-columns:1fr;}
   .dl-grid{grid-template-columns:1fr;}
   .content{padding:10px;}
-  .two-col{grid-template-columns:1fr;}
 }
 </style>
 </head>
@@ -343,7 +352,7 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
       </svg>
       <div class="logo-text">
         <span class="logo-name">SACCO<b>Sync</b></span>
-        <span class="logo-ver">v5.5.5</span>
+        <span class="logo-ver">v5.6.0</span>
       </div>
     </a>
     <nav id="main-nav">
@@ -362,7 +371,6 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
       <button class="btn-sync" onclick="forceSync()">
         <i class="fas fa-sync" id="sync-icon"></i><span>Sync System</span>
       </button>
-      <!-- <span class="sidebar-brand"> </span> -->
     </div>
   </aside>
 
@@ -399,7 +407,7 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
       </div>
     </header>
 
-    <!-- DASHBOARD VIEW -->
+    <!-- ═══ DASHBOARD VIEW ═══ -->
     <div id="v-dashboard" class="view">
       <div class="stats-grid">
         <div class="stat-card"><div class="stat-icon si-purple"><i class="fas fa-users"></i></div><div class="stat-info"><p>Total Members</p><h2 id="s-totalMembers">—</h2></div></div>
@@ -410,6 +418,8 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
         <div class="stat-card"><div class="stat-icon si-orange"><i class="fas fa-clock"></i></div><div class="stat-info"><p>Loans Disbursed</p><h2 id="s-outstandingBalance">KES —</h2></div></div>
         <div class="stat-card"><div class="stat-icon si-teal"><i class="fas fa-wallet"></i></div><div class="stat-info"><p>Members Savings</p><h2 id="s-totalMembersSavings">KES —</h2></div></div>
         <div class="stat-card"><div class="stat-icon si-pink"><i class="fas fa-hand-holding-medical"></i></div><div class="stat-info"><p>Welfare Funds</p><h2 id="s-totalWelfareFunds">KES —</h2></div></div>
+        <!-- NEW: Total Penalties Collected -->
+        <div class="stat-card highlight-amber"><div class="stat-icon si-amber"><i class="fas fa-gavel"></i></div><div class="stat-info"><p>Penalties Collected</p><h2 id="s-totalPenaltiesCollected" style="color:#d97706;">KES —</h2></div></div>
         <div class="stat-card highlight-red"><div class="stat-icon si-red"><i class="fas fa-receipt"></i></div><div class="stat-info"><p>Total Expenses</p><h2 id="s-totalExpenses" class="negative">KES —</h2></div></div>
         <div class="stat-card highlight-green"><div class="stat-icon si-green"><i class="fas fa-balance-scale"></i></div><div class="stat-info"><p>Net Balance</p><h2 id="s-netBalance">KES —</h2></div></div>
       </div>
@@ -422,6 +432,7 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
         <div class="balance-row income"><span class="label">Welfare Funds</span><span class="amount" id="bs-welfare">KES —</span></div>
         <div class="balance-row income"><span class="label">Merry Go Round Contributions</span><span class="amount" id="bs-mgr">KES —</span></div>
         <div class="balance-row income"><span class="label">Interest Collected</span><span class="amount" id="bs-interest">KES —</span></div>
+        <div class="balance-row income"><span class="label">Penalties Collected</span><span class="amount" id="bs-penalties" style="color:#d97706;">KES —</span></div>
         <div class="balance-divider"></div>
         <div class="balance-row expense"><span class="label">Loans Disbursed (Outstanding)</span><span class="amount" id="bs-loans">KES —</span></div>
         <div class="balance-row expense"><span class="label">Total Expenses</span><span class="amount" id="bs-expenses">KES —</span></div>
@@ -440,7 +451,7 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
       </div>
     </div>
 
-    <!-- MEMBERS VIEW -->
+    <!-- ═══ MEMBERS VIEW ═══ -->
     <div id="v-members" class="view" style="display:none">
       <div class="view-action-bar"><button class="btn-primary" onclick="openModal('m-member')"><i class="fas fa-user-plus"></i> Add Member</button></div>
       <div class="table-wrap">
@@ -454,7 +465,7 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
       </div>
     </div>
 
-    <!-- CONTRIBUTIONS VIEW -->
+    <!-- ═══ CONTRIBUTIONS VIEW ═══ -->
     <div id="v-contributions" class="view" style="display:none">
       <div class="view-action-bar"><button class="btn-primary" onclick="openModal('m-contribution')"><i class="fas fa-plus"></i> Log Contribution</button></div>
       <div class="table-wrap">
@@ -468,13 +479,23 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
       </div>
     </div>
 
-    <!-- LOANS VIEW -->
+    <!-- ═══ LOANS VIEW ═══ -->
     <div id="v-loans" class="view" style="display:none">
-      <div class="view-action-bar"><button class="btn-primary" onclick="openModal('m-loan')"><i class="fas fa-plus"></i> Issue Loan</button></div>
+      <div class="view-action-bar">
+        <div class="loan-filter-bar">
+          <select id="loan-status-filter" onchange="renderLoansTable()">
+            <option value="">All Loans</option>
+            <option value="active">Yet to be Paid</option>
+            <option value="defaulted">Defaulted</option>
+            <option value="closed">Fully Paid</option>
+          </select>
+        </div>
+        <button class="btn-primary" onclick="openModal('m-loan')"><i class="fas fa-plus"></i> Issue Loan</button>
+      </div>
       <div class="table-wrap">
         <div class="table-scroll-wrap">
-          <table>
-            <thead><tr><th>ID</th><th>Borrower</th><th>Amount</th><th>Term</th><th>Due Date</th><th>Due Days</th><th>Guarantor</th><th>Status</th></tr></thead>
+          <table style="min-width:900px;">
+            <thead><tr><th>ID</th><th>Borrower</th><th>Original Amt</th><th>Remaining</th><th>Term</th><th>Due Date</th><th>Due Days</th><th>Guarantor</th><th>Status</th><th>Actions</th></tr></thead>
             <tbody id="tb-loans"></tbody>
           </table>
         </div>
@@ -482,13 +503,13 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
       </div>
     </div>
 
-    <!-- REPAYMENTS VIEW -->
+    <!-- ═══ REPAYMENTS VIEW ═══ -->
     <div id="v-repayments" class="view" style="display:none">
       <div class="view-action-bar"><button class="btn-primary" onclick="openModal('m-repayment')"><i class="fas fa-plus"></i> Register Repayment</button></div>
       <div class="table-wrap">
         <div class="table-scroll-wrap">
           <table>
-            <thead><tr><th>Date</th><th>Member</th><th>Loan ID</th><th>Total Paid</th><th>Principal</th><th>Interest</th><th>Penalty</th></tr></thead>
+            <thead><tr><th>Date</th><th>Member</th><th>Loan ID</th><th>Total Paid</th><th>Principal</th><th>Interest</th><th>Penalty</th><th>Actions</th></tr></thead>
             <tbody id="tb-repayments"></tbody>
           </table>
         </div>
@@ -496,7 +517,7 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
       </div>
     </div>
 
-    <!-- MGR VIEW -->
+    <!-- ═══ MGR VIEW ═══ -->
     <div id="v-mgr" class="view" style="display:none">
       <div class="stats-grid" style="margin-bottom:20px;">
         <div class="stat-card"><div class="stat-icon si-green"><i class="fas fa-calendar-check"></i></div><div class="stat-info"><p>Total Schedules</p><h2 id="mgr-s-total">—</h2></div></div>
@@ -514,12 +535,11 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
         </div>
         <button class="btn-primary" onclick="openModal('m-mgr')"><i class="fas fa-plus"></i> Schedule Distribution</button>
       </div>
-      <!-- Scroll hint for MGR table -->
       <div class="mgr-scroll-hint" id="mgr-scroll-hint" style="display:none;">
         <i class="fas fa-arrows-alt-h"></i> Scroll horizontally to see all columns
       </div>
       <div class="table-wrap">
-        <div class="table-scroll-wrap mgr-scroll">
+        <div class="table-scroll-wrap">
           <table style="min-width:1300px;">
             <thead><tr><th>Month/Year</th><th>Beneficiary 1</th><th>Beneficiary 2</th><th>Each</th><th>Total</th><th>Status</th><th>Dist. Date</th><th>Notes</th><th>MGRID</th><th>Last Updated</th><th>Updated By</th><th>Actions</th></tr></thead>
             <tbody id="tb-mgr"></tbody>
@@ -529,7 +549,7 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
       </div>
     </div>
 
-    <!-- EXPENSES VIEW -->
+    <!-- ═══ EXPENSES VIEW ═══ -->
     <div id="v-expenses" class="view" style="display:none">
       <div class="stats-grid" style="margin-bottom:20px;">
         <div class="stat-card"><div class="stat-icon si-red"><i class="fas fa-receipt"></i></div><div class="stat-info"><p>Total Expenses</p><h2 id="exp-s-total">KES —</h2></div></div>
@@ -549,25 +569,26 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
       </div>
     </div>
 
-    <!-- REPORTS VIEW -->
+    <!-- ═══ REPORTS VIEW ═══ -->
     <div id="v-reports" class="view" style="display:none">
       <div class="stats-grid" style="margin-bottom:20px;">
-        <div class="stat-card"><div class="stat-info"><p>Total Penalties</p><h2 id="r-penalties">KES —</h2></div></div>
-        <div class="stat-card"><div class="stat-info"><p>Active Borrowers</p><h2 id="r-borrowers">—</h2></div></div>
-        <div class="stat-card"><div class="stat-info"><p>Total Interests</p><h2 id="r-interests">KES —</h2></div></div>
+        <div class="stat-card highlight-amber"><div class="stat-icon si-amber"><i class="fas fa-gavel"></i></div><div class="stat-info"><p>Overdue Penalties (Accrued)</p><h2 id="r-penalties" style="color:#d97706;">KES —</h2></div></div>
+        <div class="stat-card"><div class="stat-icon si-blue"><i class="fas fa-hand-holding-usd"></i></div><div class="stat-info"><p>Active Borrowers</p><h2 id="r-borrowers">—</h2></div></div>
+        <div class="stat-card"><div class="stat-icon si-green"><i class="fas fa-percentage"></i></div><div class="stat-info"><p>Total Interests Collected</p><h2 id="r-interests">KES —</h2></div></div>
+        <div class="stat-card highlight-green"><div class="stat-icon si-green"><i class="fas fa-coins"></i></div><div class="stat-info"><p>Penalties Collected (Paid)</p><h2 id="r-penalties-collected" style="color:#16a34a;">KES —</h2></div></div>
       </div>
       <div class="table-wrap">
-        <div style="padding:18px 20px 10px;"><h3 style="font-size:15px;font-weight:700;">Overdue Installments</h3></div>
+        <div style="padding:18px 20px 10px;"><h3 style="font-size:15px;font-weight:700;">Overdue Installments — Penalty @ KES 30/day</h3></div>
         <div class="table-scroll-wrap">
           <table>
-            <thead><tr><th>Loan ID</th><th>Member</th><th>Due Date</th><th>Days Late</th><th>Penalty</th></tr></thead>
+            <thead><tr><th>Loan ID</th><th>Member</th><th>Due Date</th><th>Days Late</th><th>Accrued Penalty</th></tr></thead>
             <tbody id="tb-overdue"></tbody>
           </table>
         </div>
       </div>
     </div>
 
-    <!-- AUDIT LOG VIEW -->
+    <!-- ═══ AUDIT LOG VIEW ═══ -->
     <div id="v-auditlog" class="view" style="display:none">
       <div style="margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
         <div>
@@ -600,7 +621,7 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
       </div>
     </div>
 
-    <!-- DOWNLOADS VIEW -->
+    <!-- ═══ DOWNLOADS VIEW ═══ -->
     <div id="v-downloads" class="view" style="display:none">
       <div style="margin-bottom:24px;">
         <h2 style="font-size:24px;font-weight:900;letter-spacing:-0.5px;">System Repository</h2>
@@ -625,9 +646,9 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
   </main>
 </div>
 
-<!-- ═══════════════════ MODALS ═══════════════════ -->
+<!-- ══════════════════════════ MODALS ══════════════════════════ -->
 
-<!-- ADD MEMBER -->
+<!-- ADD MEMBER — Guarantor & Nominee both optional -->
 <div id="m-member" class="modal">
   <div class="modal-content" style="max-width:620px;">
     <button class="modal-close" onclick="closeModal('m-member')">&times;</button>
@@ -639,26 +660,30 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
         <div class="form-group"><label>ID Number</label><input type="text" id="fi-midno" required></div>
       </div>
       <div class="form-row">
-        <div class="form-group"><label>Email Address</label><input type="email" id="fi-memail"></div>
+        <div class="form-group"><label>Email Address <span class="optional">(optional)</span></label><input type="email" id="fi-memail"></div>
         <div class="form-group"><label>Member Type</label><select id="fi-mtype" required><option value="">Select</option><option value="Member">Member</option><option value="External">External</option></select></div>
       </div>
-      <div class="form-group"><label>Address</label><textarea id="fi-maddress" style="min-height:45px;"></textarea></div>
-      <div class="nominee-box required">
-        <p><i class="fas fa-user-shield"></i> Guarantor <span style="color:#dc2626;font-size:10px;">(Required)</span></p>
+      <div class="form-group"><label>Address <span class="optional">(optional)</span></label><textarea id="fi-maddress" style="min-height:45px;"></textarea></div>
+
+      <!-- Guarantor — Optional -->
+      <div class="nominee-box optional-box">
+        <p><i class="fas fa-user-shield" style="color:#16a34a;"></i> Guarantor <span style="font-size:10px;color:#9ca3af;font-weight:400;">(Optional)</span></p>
         <div class="form-row">
-          <div class="form-group" style="margin-bottom:10px;"><label>Full Name</label><input type="text" id="fi-n1name" required></div>
-          <div class="form-group" style="margin-bottom:10px;"><label>Relationship</label><select id="fi-n1rel" required><option value="">Select</option><option>Spouse</option><option>Child</option><option>Parent</option><option>Sibling</option><option>Other</option></select></div>
+          <div class="form-group" style="margin-bottom:10px;"><label>Full Name</label><input type="text" id="fi-n1name"></div>
+          <div class="form-group" style="margin-bottom:10px;"><label>Relationship</label><select id="fi-n1rel"><option value="">Select</option><option>Spouse</option><option>Child</option><option>Parent</option><option>Sibling</option><option>Other</option></select></div>
         </div>
         <div class="form-row">
-          <div class="form-group" style="margin-bottom:0;"><label>Phone</label><input type="tel" id="fi-n1phone" required></div>
+          <div class="form-group" style="margin-bottom:0;"><label>Phone</label><input type="tel" id="fi-n1phone"></div>
           <div class="form-group" style="margin-bottom:0;"><label>ID Number <span class="optional">(auto if blank)</span></label><input type="text" id="fi-n1idno" placeholder="Auto-generated if blank"></div>
         </div>
         <div class="form-group" style="margin-top:10px;margin-bottom:0;"><label>Address <span class="optional">(optional)</span></label><input type="text" id="fi-n1address"></div>
       </div>
-      <div class="nominee-box">
-        <p><i class="fas fa-user-friends"></i> Nominee <span style="font-size:10px;color:#9ca3af;">(Optional)</span></p>
+
+      <!-- Nominee — Optional -->
+      <div class="nominee-box optional-box">
+        <p><i class="fas fa-user-friends" style="color:#2563eb;"></i> Nominee <span style="font-size:10px;color:#9ca3af;font-weight:400;">(Optional)</span></p>
         <div class="form-row">
-          <div class="form-group" style="margin-bottom:10px;"><label>Full Name <span class="optional">(optional)</span></label><input type="text" id="fi-n2name"></div>
+          <div class="form-group" style="margin-bottom:10px;"><label>Full Name</label><input type="text" id="fi-n2name"></div>
           <div class="form-group" style="margin-bottom:10px;"><label>Relationship</label><select id="fi-n2rel"><option value="">Select</option><option>Spouse</option><option>Child</option><option>Parent</option><option>Sibling</option><option>Other</option></select></div>
         </div>
         <div class="form-row">
@@ -693,9 +718,9 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
   </div>
 </div>
 
-<!-- LOAN -->
+<!-- LOAN — with Guarantor toggle + PDF attachment -->
 <div id="m-loan" class="modal">
-  <div class="modal-content">
+  <div class="modal-content" style="max-width:620px;">
     <button class="modal-close" onclick="closeModal('m-loan')">&times;</button>
     <h2><i class="fas fa-file-invoice-dollar" style="color:var(--primary)"></i> Issue New Loan</h2>
     <form id="f-loan" onsubmit="submitLoan(event)">
@@ -712,6 +737,44 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
         <div class="form-group"><label>Amount (KES)</label><input type="number" id="fi-lamount" required min="1"></div>
         <div class="form-group"><label>Term (Months)</label><input type="number" id="fi-lterm" min="1" max="36" value="1" required></div>
       </div>
+
+      <!-- Guarantor Toggle -->
+      <div class="guarantor-toggle-box">
+        <p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#15803d;margin-bottom:10px;"><i class="fas fa-user-shield"></i> Loan Guarantor</p>
+        <div class="toggle-row">
+          <button type="button" class="toggle-btn active" id="gtor-use-member-btn" onclick="setGuarantorMode('member')">
+            <i class="fas fa-users"></i> Use Member's Guarantor
+          </button>
+          <button type="button" class="toggle-btn" id="gtor-custom-btn" onclick="setGuarantorMode('custom')">
+            <i class="fas fa-user-plus"></i> Add Custom Guarantor
+          </button>
+        </div>
+        <!-- Member guarantor info box -->
+        <div id="gtor-member-info" class="guarantor-info-box">
+          <p id="gtor-member-name" style="color:var(--text-muted);">Select a borrower first to see their guarantor</p>
+          <span id="gtor-member-details"></span>
+        </div>
+        <!-- Custom guarantor fields -->
+        <div id="gtor-custom-fields" style="display:none;">
+          <div class="form-row" style="margin-top:10px;">
+            <div class="form-group" style="margin-bottom:8px;"><label>Guarantor Name</label><input type="text" id="fi-gtor-name" placeholder="Full name"></div>
+            <div class="form-group" style="margin-bottom:8px;"><label>Guarantor Phone</label><input type="tel" id="fi-gtor-phone" placeholder="Phone number"></div>
+          </div>
+          <div class="form-group" style="margin-bottom:0;"><label>Guarantor ID No.</label><input type="text" id="fi-gtor-id" placeholder="ID number"></div>
+        </div>
+      </div>
+
+      <!-- Loan Document Attachment -->
+      <div class="form-group">
+        <label>Loan Form / Agreement <span class="optional">(PDF, JPG, JPEG — max 3MB)</span></label>
+        <div class="file-upload-area" id="loan-file-area" onclick="document.getElementById('fi-lfile').click()">
+          <i class="fas fa-cloud-upload-alt"></i>
+          <p>Click to upload loan document</p>
+          <div class="file-name" id="loan-file-name" style="display:none;"></div>
+        </div>
+        <input type="file" id="fi-lfile" accept=".pdf,.jpg,.jpeg" style="display:none;" onchange="handleLoanFileChange(this)">
+      </div>
+
       <button type="submit" class="btn-submit" id="btn-loan-submit">Issue Loan</button>
     </form>
   </div>
@@ -729,12 +792,41 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
         <input type="hidden" id="fi-rlid"><input type="hidden" id="fi-rmid"><input type="hidden" id="fi-rmname"><input type="hidden" id="fi-rbtype"><input type="hidden" id="fi-rmemail">
         <div id="ac-rloan" class="ac-list"></div>
       </div>
+      <div id="loan-remaining-info" style="display:none;background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:10px;padding:12px;margin-bottom:14px;">
+        <p style="font-size:11px;font-weight:700;color:#15803d;margin-bottom:4px;text-transform:uppercase;">Loan Summary</p>
+        <div style="display:flex;gap:16px;flex-wrap:wrap;">
+          <span style="font-size:12.5px;"><b>Original:</b> <span id="lr-original">—</span></span>
+          <span style="font-size:12.5px;"><b>Paid:</b> <span id="lr-paid">—</span></span>
+          <span style="font-size:12.5px;font-weight:700;color:#16a34a;"><b>Remaining:</b> <span id="lr-remaining">—</span></span>
+        </div>
+      </div>
       <div class="form-row">
         <div class="form-group"><label>Principal Amount (KES)</label><input type="number" id="fi-ramount" required min="1" placeholder="0.00"></div>
         <div class="form-group"><label>Interest (blank = auto)</label><input type="number" id="fi-rinterest" placeholder="Auto-calculated"></div>
       </div>
       <div class="form-group"><label>Penalty (KES)</label><input type="number" id="fi-rpenalty" value="0" min="0"></div>
       <button type="submit" class="btn-submit" id="btn-repay-submit">Register Payment</button>
+    </form>
+  </div>
+</div>
+
+<!-- REPAYMENT EDIT -->
+<div id="m-repayment-edit" class="modal">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeModal('m-repayment-edit')">&times;</button>
+    <h2><i class="fas fa-pencil-alt" style="color:#ea580c"></i> Edit Repayment</h2>
+    <form id="f-repayment-edit" onsubmit="submitEditRepayment(event)">
+      <input type="hidden" id="fi-redit-rowindex">
+      <div class="form-group"><label>Member Name</label><input type="text" id="fi-redit-mname" readonly style="opacity:.65;background:#f9fafb;cursor:not-allowed;"></div>
+      <div class="form-row">
+        <div class="form-group"><label>Total Amount (KES)</label><input type="number" id="fi-redit-amount" required min="1"></div>
+        <div class="form-group"><label>Principal (KES)</label><input type="number" id="fi-redit-principal" required min="0"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Interest (KES)</label><input type="number" id="fi-redit-interest" min="0"></div>
+        <div class="form-group"><label>Penalty (KES)</label><input type="number" id="fi-redit-penalty" min="0"></div>
+      </div>
+      <button type="submit" class="btn-submit" id="btn-redit-submit">Save Changes</button>
     </form>
   </div>
 </div>
@@ -846,38 +938,50 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
   </div>
 </div>
 
-<!-- MEMBER PROFILE -->
+<!-- MEMBER PROFILE — Full Report Card -->
 <div id="m-profile" class="modal">
-  <div class="modal-content" style="max-width:560px;">
+  <div class="modal-content" style="max-width:600px;">
     <button class="modal-close" onclick="closeModal('m-profile')">&times;</button>
-    <h2>Member Profile</h2>
+    <h2>Member Report Card</h2>
     <div class="profile-header">
       <div class="profile-avatar" id="pa-initials">?</div>
       <div class="profile-meta">
         <h3 id="pa-name">—</h3>
         <p id="pa-id">—</p>
+        <p id="pa-status-badge" style="margin-top:4px;">—</p>
       </div>
     </div>
     <div class="profile-stats">
-      <div class="profile-stat"><p>Total Savings</p><h4 id="pa-savings">KES 0</h4></div>
-      <div class="profile-stat"><p>Loan Balance</p><h4 id="pa-loan">KES 0</h4></div>
+      <div class="profile-stat"><p>Total Savings</p><h4 id="pa-savings" style="color:#16a34a;">KES 0</h4></div>
+      <div class="profile-stat"><p>Loan Balance</p><h4 id="pa-loan" style="color:#dc2626;">KES 0</h4></div>
+      <div class="profile-stat"><p>Total Contributions</p><h4 id="pa-contrib-count" style="color:#2563eb;">0</h4></div>
+      <div class="profile-stat"><p>Active Loans</p><h4 id="pa-loan-count" style="color:#ea580c;">0</h4></div>
     </div>
     <div class="profile-details">
       <div><span>Phone: </span><span id="pa-phone">—</span></div>
       <div><span>Email: </span><span id="pa-email">—</span></div>
       <div><span>ID Number: </span><span id="pa-idno">—</span></div>
-      <div><span>Status: </span><span id="pa-status">—</span></div>
       <div><span>Type: </span><span id="pa-type">—</span></div>
       <div><span>Address: </span><span id="pa-address">—</span></div>
       <div><span>Last Updated: </span><span id="pa-updated">—</span></div>
     </div>
-    <div class="profile-nominee">
+    <div class="profile-nominee" id="pa-n1-box">
       <h4><i class="fas fa-user-shield" style="margin-right:5px;"></i>Guarantor</h4>
       <div id="pa-n1" style="font-size:13px;color:var(--text);">—</div>
     </div>
     <div class="profile-nominee" id="pa-n2-box" style="display:none;">
       <h4><i class="fas fa-user-friends" style="margin-right:5px;"></i>Nominee</h4>
       <div id="pa-n2" style="font-size:13px;color:var(--text);">—</div>
+    </div>
+    <!-- Contribution history -->
+    <div class="member-activity-section">
+      <h4><i class="fas fa-hand-holding-usd" style="color:#16a34a;"></i> Contribution History</h4>
+      <div id="pa-contrib-list" class="activity-mini-list"><p style="font-size:12px;color:var(--text-muted);padding:8px;">No contributions found</p></div>
+    </div>
+    <!-- Loan history -->
+    <div class="member-activity-section">
+      <h4><i class="fas fa-file-invoice-dollar" style="color:#ea580c;"></i> Loan History</h4>
+      <div id="pa-loan-list" class="activity-mini-list"><p style="font-size:12px;color:var(--text-muted);padding:8px;">No loans found</p></div>
     </div>
   </div>
 </div>
@@ -902,8 +1006,8 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
         <div class="form-group"><label>Status</label><select id="fi-estatus"><option value="Active">Active</option><option value="Inactive">Inactive</option></select></div>
         <div class="form-group"><label>Address</label><input type="text" id="fi-eaddress"></div>
       </div>
-      <div class="nominee-box required">
-        <p><i class="fas fa-user-shield"></i> Guarantor</p>
+      <div class="nominee-box optional-box">
+        <p><i class="fas fa-user-shield" style="color:#16a34a;"></i> Guarantor <span style="font-size:10px;color:#9ca3af;font-weight:400;">(Optional)</span></p>
         <div class="form-row">
           <div class="form-group" style="margin-bottom:10px;"><label>Full Name</label><input type="text" id="fi-en1name"></div>
           <div class="form-group" style="margin-bottom:10px;"><label>Relationship</label><select id="fi-en1rel"><option value="">Select</option><option>Spouse</option><option>Child</option><option>Parent</option><option>Sibling</option><option>Other</option></select></div>
@@ -913,8 +1017,8 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
           <div class="form-group" style="margin-bottom:0;"><label>Address</label><input type="text" id="fi-en1address"></div>
         </div>
       </div>
-      <div class="nominee-box">
-        <p><i class="fas fa-user-friends"></i> Nominee<span style="font-size:10px;color:#9ca3af;">(Optional)</span></p>
+      <div class="nominee-box optional-box">
+        <p><i class="fas fa-user-friends" style="color:#2563eb;"></i> Nominee <span style="font-size:10px;color:#9ca3af;font-weight:400;">(Optional)</span></p>
         <div class="form-row">
           <div class="form-group" style="margin-bottom:10px;"><label>Full Name</label><input type="text" id="fi-en2name"></div>
           <div class="form-group" style="margin-bottom:10px;"><label>Relationship</label><select id="fi-en2rel"><option value="">Select</option><option>Spouse</option><option>Child</option><option>Parent</option><option>Sibling</option><option>Other</option></select></div>
@@ -929,37 +1033,44 @@ tbody tr:hover td{background:rgba(22,163,74,0.035);}
   </div>
 </div>
 
-<!-- SETUP OVERLAY -->
-<div id="setup-overlay" style="display:none!important;">
-  <div class="setup-box">
-    <svg class="setup-logo" viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="36" cy="36" r="36" fill="#16a34a"/>
-      <ellipse cx="28" cy="37" rx="11" ry="14" fill="#a16207" transform="rotate(-18 28 37)"/>
-      <ellipse cx="28" cy="37" rx="6" ry="8.5" fill="#854d0e" transform="rotate(-18 28 37)"/>
-      <path d="M25 44 Q31 47 40 44 Q47 41 49 35 Q40 34 33 36 Q28 38 25 44Z" fill="#fbbf24"/>
-      <path d="M40 44 Q47 41 49 35 L50 33 Q51 31 49 30 Q47 29 45 32 Q43 35 40 36 Q37 37 33 36 L25 44Z" fill="#fde68a"/>
-      <rect x="46" y="25" width="10" height="17" rx="3.5" fill="#f97316" transform="rotate(10 51 33)"/>
-    </svg>
-    <div class="setup-title">SACCO<b>Sync</b></div>
-    <p class="setup-sub">Management System<br>Enter your API URL to connect.</p>
-    <div class="setup-field">
-      <label>API URL</label>
-      <input type="url" id="setup-url" placeholder="Paste Here">
-      <p id="setup-error">❌ Invalid or unreachable URL. Please check and try again.</p>
-    </div>
-    <button class="setup-cta" onclick="saveSetupUrl()" id="setup-btn">
-      <i class="fas fa-plug"></i> Connect & Launch
-    </button>
-    <p class="setup-note">Saved on this device only. Other devices will be asked once.</p>
+<!-- LOAN DETAIL MODAL -->
+<div id="m-loan-detail" class="modal">
+  <div class="modal-content" style="max-width:640px;">
+    <button class="modal-close" onclick="closeModal('m-loan-detail')">&times;</button>
+    <h2><i class="fas fa-file-invoice-dollar" style="color:var(--primary)"></i> Loan Details</h2>
+    <div id="loan-detail-body"></div>
+  </div>
+</div>
+
+<!-- LOAN EDIT MODAL -->
+<div id="m-loan-edit" class="modal">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeModal('m-loan-edit')">&times;</button>
+    <h2><i class="fas fa-pencil-alt" style="color:#ea580c"></i> Edit Loan</h2>
+    <form id="f-loan-edit" onsubmit="submitEditLoan(event)">
+      <input type="hidden" id="fi-ledit-id">
+      <div class="form-group"><label>Borrower (read-only)</label><input type="text" id="fi-ledit-mname" readonly style="opacity:.65;background:#f9fafb;cursor:not-allowed;"></div>
+      <div class="form-row">
+        <div class="form-group"><label>Amount (KES)</label><input type="number" id="fi-ledit-amount" required min="1"></div>
+        <div class="form-group"><label>Term (Months)</label><input type="number" id="fi-ledit-term" min="1" max="36" required></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Due Date</label><input type="date" id="fi-ledit-duedate"></div>
+        <div class="form-group"><label>Status</label><select id="fi-ledit-status"><option value="Active">Active</option><option value="Closed">Closed</option></select></div>
+      </div>
+      <div class="form-group"><label>Guarantor Name</label><input type="text" id="fi-ledit-gtor"></div>
+      <button type="submit" class="btn-submit" id="btn-ledit-submit">Save Changes</button>
+    </form>
   </div>
 </div>
 
 <div id="toast-container" class="toast-cont"></div>
 
+<!-- ══════════════════════════ JAVASCRIPT ══════════════════════════ -->
 <script>
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════
 //  CORE STATE
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════
 var S = {
   apiUrl: 'https://script.google.com/macros/s/AKfycbz0MdvHQfnDPDeRzy1K4X8mX2VC3fT1ukJry1tQpFt4fYP-vQrd8R_lz562M1OoG7od/exec',
   members: [],
@@ -971,13 +1082,16 @@ var S = {
   mgr: [],
   dashboard: null,
   currentView: 'dashboard',
-  pages: { members:1, contributions:1, loans:1, repayments:1, expenses:1, auditlog:1, mgr:1 }
+  pages: { members:1, contributions:1, loans:1, repayments:1, expenses:1, auditlog:1, mgr:1 },
+  // Store loan attachments locally (base64) keyed by loan ID
+  loanFiles: {}
 };
 var PAGE_SIZE = 50;
+var GOOGLE_DRIVE_FOLDER = '10_x65vD-GAtZBkrL2SXGAdh2KHPlM6d5';
 
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════
 //  API LAYER
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════
 var api = {
   get: function(action, params) {
     var u = new URL(S.apiUrl);
@@ -1051,14 +1165,13 @@ function showView(v) {
   var target = document.getElementById('v-'+v); if (target) target.style.display = 'block';
   document.querySelectorAll('.nav-item').forEach(function(n){ n.classList.toggle('active', n.dataset.view === v); });
   var titleEl = document.getElementById('view-title'); if (titleEl) titleEl.innerText = viewTitles[v]||'SACCOSync';
-  // Show MGR scroll hint
   var mgrHint = document.getElementById('mgr-scroll-hint');
   if (mgrHint) mgrHint.style.display = v === 'mgr' ? 'flex' : 'none';
   var renders = {
     dashboard: renderDashboard,
     members: renderMembersTable,
     contributions: function(){ renderSheet('contributions','tb-contributions','contrib'); },
-    loans: function(){ renderSheet('loans','tb-loans','loan'); },
+    loans: renderLoansTable,
     repayments: function(){ renderSheet('repayments','tb-repayments','repay'); },
     mgr: renderMGR,
     expenses: renderExpenses,
@@ -1067,7 +1180,6 @@ function showView(v) {
     downloads: function(){}
   };
   if (renders[v]) renders[v]();
-  // Scroll to top on view change
   window.scrollTo(0, 0);
 }
 
@@ -1119,8 +1231,7 @@ function matchesDateFilter(dateVal) {
 
 // ─── PAGINATION HELPER ───
 function renderPagination(pgId, currentPage, totalRows, onPageChangeFn) {
-  var pgEl = document.getElementById(pgId);
-  if (!pgEl) return;
+  var pgEl = document.getElementById(pgId); if (!pgEl) return;
   var totalPages = Math.max(1, Math.ceil(totalRows / PAGE_SIZE));
   if (totalPages <= 1 && totalRows <= PAGE_SIZE) { pgEl.style.display = 'none'; return; }
   pgEl.style.display = 'flex';
@@ -1128,43 +1239,37 @@ function renderPagination(pgId, currentPage, totalRows, onPageChangeFn) {
   var end   = Math.min(currentPage * PAGE_SIZE, totalRows);
   var html  = '<span class="pagination-info">Showing ' + start + '–' + end + ' of ' + totalRows + ' records</span>';
   html += '<div class="pagination-btns">';
-  html += '<button onclick="'+onPageChangeFn+'(1)" '+(currentPage===1?'disabled':'')+' title="First">«</button>';
-  html += '<button onclick="'+onPageChangeFn+'('+(currentPage-1)+')" '+(currentPage===1?'disabled':'')+' title="Previous">‹ Prev</button>';
-  var startP = Math.max(1, currentPage - 2);
-  var endP   = Math.min(totalPages, startP + 4);
+  html += '<button onclick="'+onPageChangeFn+'(1)" '+(currentPage===1?'disabled':'')+'>«</button>';
+  html += '<button onclick="'+onPageChangeFn+'('+(currentPage-1)+')" '+(currentPage===1?'disabled':'')+'>‹ Prev</button>';
+  var startP = Math.max(1, currentPage - 2), endP = Math.min(totalPages, startP + 4);
   if (endP - startP < 4) startP = Math.max(1, endP - 4);
-  for (var p = startP; p <= endP; p++) {
-    html += '<button class="'+(p===currentPage?'pg-active':'')+'" onclick="'+onPageChangeFn+'('+p+')">'+p+'</button>';
-  }
-  html += '<button onclick="'+onPageChangeFn+'('+(currentPage+1)+')" '+(currentPage===totalPages?'disabled':'')+' title="Next">Next ›</button>';
-  html += '<button onclick="'+onPageChangeFn+'('+totalPages+')" '+(currentPage===totalPages?'disabled':'')+' title="Last">»</button>';
+  for (var p = startP; p <= endP; p++) html += '<button class="'+(p===currentPage?'pg-active':'')+'" onclick="'+onPageChangeFn+'('+p+')">'+p+'</button>';
+  html += '<button onclick="'+onPageChangeFn+'('+(currentPage+1)+')" '+(currentPage===totalPages?'disabled':'')+'>Next ›</button>';
+  html += '<button onclick="'+onPageChangeFn+'('+totalPages+')" '+(currentPage===totalPages?'disabled':'')+'>»</button>';
   html += '</div>';
   pgEl.innerHTML = html;
 }
 
 function goPageMembers(p)      { S.pages.members=p;      renderMembersTable(); window.scrollTo(0,0); }
 function goPageContributions(p){ S.pages.contributions=p; renderSheet('contributions','tb-contributions','contrib'); window.scrollTo(0,0); }
-function goPageLoans(p)        { S.pages.loans=p;         renderSheet('loans','tb-loans','loan'); window.scrollTo(0,0); }
+function goPageLoans(p)        { S.pages.loans=p;         renderLoansTable(); window.scrollTo(0,0); }
 function goPageRepayments(p)   { S.pages.repayments=p;    renderSheet('repayments','tb-repayments','repay'); window.scrollTo(0,0); }
 function goPageExpenses(p)     { S.pages.expenses=p;      renderExpenses(); window.scrollTo(0,0); }
 function goPageAuditlog(p)     { S.pages.auditlog=p;      renderAuditTable(); window.scrollTo(0,0); }
 function goPageMgr(p)          { S.pages.mgr=p;           renderMGRTable(); window.scrollTo(0,0); }
 
-// ─── EMPTY STATE HELPER ───
 function emptyState(msg, sub) {
   sub = sub || 'No records match your current filters.';
   return '<tr><td colspan="20"><div class="empty-state"><span class="empty-state-icon">📭</span><div class="empty-state-text">'+msg+'</div><div class="empty-state-sub">'+sub+'</div></div></td></tr>';
 }
 
-// ─── DUE DAYS HELPER ───
+// ─── DUE DAYS BADGE ───
 function dueDaysBadge(dueDateStr, status) {
   if (!dueDateStr || status === 'Closed') return '<span style="color:#94a3b8;font-size:11.5px;">—</span>';
-  var raw = new Date(dueDateStr);
-  if (isNaN(raw.getTime())) return '<span style="color:#94a3b8;font-size:11.5px;">—</span>';
-  var due   = new Date(raw.getFullYear(), raw.getMonth(), raw.getDate());
-  var t     = new Date();
-  var today = new Date(t.getFullYear(), t.getMonth(), t.getDate());
-  var diff  = Math.round((due.getTime() - today.getTime()) / 86400000);
+  var raw = new Date(dueDateStr); if (isNaN(raw.getTime())) return '—';
+  var due = new Date(raw.getFullYear(), raw.getMonth(), raw.getDate());
+  var t = new Date(), today = new Date(t.getFullYear(), t.getMonth(), t.getDate());
+  var diff = Math.round((due.getTime() - today.getTime()) / 86400000);
   if (diff < 0) {
     var cls = diff < -30 ? 'very-overdue' : 'overdue';
     return '<span class="due-days '+cls+'"><i class="fas fa-exclamation-triangle"></i> '+Math.abs(diff)+' day'+(Math.abs(diff)===1?'':'s')+' overdue</span>';
@@ -1172,9 +1277,40 @@ function dueDaysBadge(dueDateStr, status) {
     return '<span class="due-days today"><i class="fas fa-bell"></i> Due today</span>';
   } else if (diff <= 7) {
     return '<span class="due-days upcoming"><i class="fas fa-clock"></i> '+diff+' day'+(diff===1?'':'s')+' left</span>';
-  } else {
-    return '<span style="font-size:11.5px;color:#6b7280;font-weight:600;">'+diff+' days left</span>';
   }
+  return '<span style="font-size:11.5px;color:#6b7280;font-weight:600;">'+diff+' days left</span>';
+}
+
+// ─── CALCULATE REMAINING LOAN BALANCE ───
+function getLoanRemainingBalance(loanId, originalAmount) {
+  var repays = (S.repayments && S.repayments.length > 1) ? S.repayments.slice(1) : [];
+  var totalPrincipalPaid = 0;
+  repays.forEach(function(r) {
+    if (String(r[1]) === String(loanId)) {
+      totalPrincipalPaid += Number(r[5] || 0);
+    }
+  });
+  return Math.max(0, Number(originalAmount || 0) - totalPrincipalPaid);
+}
+
+// ─── CALCULATE PENALTIES COLLECTED (from repayments) ───
+function getTotalPenaltiesCollected() {
+  var repays = (S.repayments && S.repayments.length > 1) ? S.repayments.slice(1) : [];
+  var total = 0;
+  repays.forEach(function(r) { total += Number(r[7] || 0); });
+  return total;
+}
+
+// ─── CALCULATE OVERDUE PENALTY (accrued, correct logic) ───
+// Penalty = days overdue × KES 30, calculated from exact due date to today
+function calcOverduePenalty(dueDateStr) {
+  if (!dueDateStr) return 0;
+  var raw = new Date(dueDateStr); if (isNaN(raw.getTime())) return 0;
+  var due = new Date(raw.getFullYear(), raw.getMonth(), raw.getDate());
+  var t = new Date(), today = new Date(t.getFullYear(), t.getMonth(), t.getDate());
+  if (today <= due) return 0;
+  var daysLate = Math.ceil((today.getTime() - due.getTime()) / 86400000);
+  return daysLate * 30;
 }
 
 // ─── DASHBOARD ───
@@ -1194,9 +1330,16 @@ function updateDashStats(s) {
   se('s-totalWelfareFunds', 'KES '+Number(s.totalWelfareFunds||0).toLocaleString());
   se('s-totalMerryGoRound', 'KES '+Number(s.totalMerryGoRound||0).toLocaleString());
   se('s-totalExpenses', 'KES '+Number(s.totalExpenses||0).toLocaleString());
+
+  // Penalties collected (from actual repayments)
+  var penCollected = getTotalPenaltiesCollected();
+  se('s-totalPenaltiesCollected', 'KES '+penCollected.toLocaleString());
+  se('bs-penalties', 'KES '+penCollected.toLocaleString());
+
   var net = Number(s.netBalance||0);
   var netEl = document.getElementById('s-netBalance');
   if (netEl) { netEl.innerText = 'KES '+net.toLocaleString(); netEl.className = net >= 0 ? 'positive' : 'negative'; }
+
   se('bs-savings', 'KES '+Number(s.totalMembersSavings||0).toLocaleString());
   se('bs-welfare', 'KES '+Number(s.totalWelfareFunds||0).toLocaleString());
   se('bs-mgr',     'KES '+Number(s.totalMerryGoRound||0).toLocaleString());
@@ -1205,6 +1348,7 @@ function updateDashStats(s) {
   se('bs-expenses','- KES '+Number(s.totalExpenses||0).toLocaleString());
   var bsNet = document.getElementById('bs-net');
   if (bsNet) { bsNet.innerText = 'KES '+net.toLocaleString(); bsNet.style.color = net >= 0 ? '#16a34a' : '#dc2626'; }
+
   var list=document.getElementById('recent-list'); if(!list) return;
   if (s.recentContributions&&s.recentContributions.length) {
     list.innerHTML=s.recentContributions.map(function(c){
@@ -1212,6 +1356,7 @@ function updateDashStats(s) {
       return '<div class="recent-item"><div class="ri-info"><strong>'+(c[2]||'')+'</strong><span>'+(isNaN(d.getTime())?'N/A':d.toLocaleDateString())+' · '+(c[5]||'')+'</span></div><div class="ri-amount income">+KES '+amt.toLocaleString()+'</div></div>';
     }).join('');
   } else { list.innerHTML='<p class="empty-msg">No recent activity</p>'; }
+
   var expList=document.getElementById('recent-expenses'); if(!expList) return;
   if (s.recentExpenses&&s.recentExpenses.length) {
     expList.innerHTML=s.recentExpenses.map(function(e){
@@ -1223,44 +1368,233 @@ function updateDashStats(s) {
 
 // ─── MEMBERS TABLE ───
 function renderMembersTable() {
-  var search=getSearchVal();
-  var rows=S.members;
-  if (!rows||!rows.length) {
-    var tbody=document.getElementById('tb-members');
-    if(tbody) tbody.innerHTML = emptyState('No Members Found', 'Register your first member to get started.');
+  var search = getSearchVal();
+  var rows = S.members;
+  if (!rows || !rows.length) {
+    var tbody = document.getElementById('tb-members');
+    if(tbody) tbody.innerHTML = emptyState('No Members Found', 'Register your first member.');
     renderPagination('pg-members',1,0,'goPageMembers');
     return;
   }
   if (search) rows=rows.filter(function(m){ return (String(m.Name||'')+String(m.ID||'')+String(m.Phone||'')).toLowerCase().indexOf(search)!==-1; });
   var tbody=document.getElementById('tb-members'); if(!tbody) return;
-  if (!rows.length) {
-    tbody.innerHTML=emptyState('No Members Match Search');
-    renderPagination('pg-members',1,0,'goPageMembers');
-    return;
-  }
-  var totalRows = rows.length;
-  var page = S.pages.members || 1;
-  rows = rows.slice((page-1)*PAGE_SIZE, page*PAGE_SIZE);
+  if (!rows.length) { tbody.innerHTML=emptyState('No Members Match Search'); renderPagination('pg-members',1,0,'goPageMembers'); return; }
+  var totalRows=rows.length, page=S.pages.members||1;
+  rows=rows.slice((page-1)*PAGE_SIZE, page*PAGE_SIZE);
   renderPagination('pg-members', page, totalRows, 'goPageMembers');
-
   tbody.innerHTML=rows.map(function(m){
     var st=String(m.Status||'').toLowerCase();
     var bc=st==='active'?'badge-active':st==='inactive'?'badge-inactive':'badge-closed';
-    var n1 = m.Nominee1_Name ? ('<span style="font-size:11.5px;">'+m.Nominee1_Name+'</span>') : '<span style="color:var(--text-muted);font-size:11px;">—</span>';
-    return '<tr><td><span style="font-size:11px;color:var(--text-muted);">'+m.ID+'</span></td><td><strong>'+m.Name+'</strong></td><td>'+m.Phone+'</td><td>KES '+Number(m.TotalSavings||0).toLocaleString()+'</td><td>KES '+Number(m.CurrentLoanBalance||0).toLocaleString()+'</td><td>'+n1+'</td><td><span class="badge '+bc+'">'+m.Status+'</span></td><td><div class="actions-cell"><button class="btn-icon btn-view" onclick="viewMember(\''+m.ID+'\')"><i class="fas fa-eye"></i></button><button class="btn-icon btn-edit" onclick="editMember(\''+m.ID+'\')"><i class="fas fa-pencil-alt"></i></button></div></td></tr>';
+    var n1 = m.Nominee1_Name ? '<span style="font-size:11.5px;">'+m.Nominee1_Name+'</span>' : '<span style="color:var(--text-muted);font-size:11px;">None</span>';
+    return '<tr><td><span style="font-size:11px;color:var(--text-muted);">'+m.ID+'</span></td><td><strong style="cursor:pointer;color:var(--primary);" onclick="viewMember(\''+m.ID+'\')">'+m.Name+'</strong></td><td>'+m.Phone+'</td><td>KES '+Number(m.TotalSavings||0).toLocaleString()+'</td><td>KES '+Number(m.CurrentLoanBalance||0).toLocaleString()+'</td><td>'+n1+'</td><td><span class="badge '+bc+'">'+m.Status+'</span></td><td><div class="actions-cell"><button class="btn-icon btn-view" onclick="viewMember(\''+m.ID+'\')" title="View Profile"><i class="fas fa-eye"></i></button><button class="btn-icon btn-edit" onclick="editMember(\''+m.ID+'\')" title="Edit"><i class="fas fa-pencil-alt"></i></button></div></td></tr>';
   }).join('');
+}
+
+// ─── LOANS TABLE (with remaining balance, filter, PDF icon, edit) ───
+function renderLoansTable() {
+  var data = S.loans;
+  var tbody = document.getElementById('tb-loans'); if(!tbody) return;
+  if (!data||data.length<=1) {
+    tbody.innerHTML=emptyState('No Loans Yet', 'Issue your first loan.');
+    renderPagination('pg-loans',1,0,'goPageLoans');
+    return;
+  }
+  var rows = data.slice(1).filter(function(r){return r[0];});
+  var search = getSearchVal(), mf=getMonthFilter(), yf=getYearFilter();
+  var statusFilter = (document.getElementById('loan-status-filter')||{}).value||'';
+
+  if (search) rows=rows.filter(function(r){return r.some(function(c){return String(c||'').toLowerCase().indexOf(search)!==-1;});});
+  if (mf!==null||yf!==null) rows=rows.filter(function(r){return matchesDateFilter(r[7]||r[8]);});
+
+  // Status filter
+  if (statusFilter === 'active') {
+    rows = rows.filter(function(r){ return String(r[9]||'').toLowerCase() === 'active'; });
+  } else if (statusFilter === 'defaulted') {
+    rows = rows.filter(function(r){
+      if (String(r[9]||'').toLowerCase() !== 'active') return false;
+      var due = new Date(r[8]); var today = new Date();
+      return !isNaN(due.getTime()) && due < today;
+    });
+  } else if (statusFilter === 'closed') {
+    rows = rows.filter(function(r){ return String(r[9]||'').toLowerCase() === 'closed'; });
+  }
+
+  if (!rows.length) { tbody.innerHTML=emptyState('No Matching Loans'); renderPagination('pg-loans',1,0,'goPageLoans'); return; }
+  var totalRows=rows.length, page=S.pages.loans||1;
+  rows=rows.slice((page-1)*PAGE_SIZE, page*PAGE_SIZE);
+  renderPagination('pg-loans', page, totalRows, 'goPageLoans');
+
+  tbody.innerHTML=rows.map(function(r){
+    var st=String(r[9]||'Active').toLowerCase();
+    var lbc=st==='active'?'badge-active':st==='closed'?'badge-closed':'badge-inactive';
+    var dueDays = dueDaysBadge(r[8], r[9]);
+
+    // Check if defaulted
+    var isDefaulted = st === 'active' && r[8] && new Date(r[8]) < new Date();
+    var statusDisplay = isDefaulted
+      ? '<span class="badge badge-defaulted">Defaulted</span>'
+      : '<span class="badge '+lbc+'">'+r[9]+'</span>';
+
+    // Remaining balance
+    var remaining = getLoanRemainingBalance(r[0], r[4]);
+    var remainingDisplay = st === 'closed'
+      ? '<span style="color:#16a34a;font-weight:700;">Fully Paid</span>'
+      : '<span style="font-weight:700;color:'+(remaining>0?'#dc2626':'#16a34a')+';">KES '+remaining.toLocaleString()+'</span>';
+
+    // Guarantor from member sheet
+    var loanMember = S.members.find(function(m){ return m.ID === r[1]; });
+    var guarantorName = (r[10] && r[10] !== r[2]) ? r[10] :
+      (loanMember && loanMember.Nominee1_Name ? loanMember.Nominee1_Name : '—');
+    var nomineeInfo = guarantorName !== '—'
+      ? '<span style="font-size:11.5px;font-weight:600;">'+guarantorName+'</span>'
+      : '<span style="color:var(--text-muted);font-size:11px;">None</span>';
+
+    var rid = String(r[0]).replace(/'/g,"\\'");
+    var hasPdf = !!S.loanFiles[r[0]];
+
+    var actions = '<div class="actions-cell">';
+    actions += '<button class="btn-icon btn-view" onclick="viewLoanDetail(\''+rid+'\')" title="View Full Detail"><i class="fas fa-eye"></i></button>';
+    actions += '<button class="btn-icon btn-edit" onclick="editLoan(\''+rid+'\')" title="Edit Loan"><i class="fas fa-pencil-alt"></i></button>';
+    if (hasPdf) {
+      actions += '<button class="btn-icon btn-pdf" onclick="viewLoanPdf(\''+rid+'\')" title="View Document"><i class="fas fa-file-pdf"></i></button>';
+    }
+    actions += '</div>';
+
+    return '<tr><td><span style="font-size:11px;color:var(--text-muted);">'+r[0]+'</span></td><td><strong style="cursor:pointer;color:var(--primary);" onclick="viewLoanDetail(\''+rid+'\')">'+r[2]+'</strong></td><td>KES '+Number(r[4]||0).toLocaleString()+'</td><td>'+remainingDisplay+'</td><td>'+r[5]+' Mo</td><td>'+(r[8]?new Date(r[8]).toLocaleDateString():'N/A')+'</td><td>'+dueDays+'</td><td>'+nomineeInfo+'</td><td>'+statusDisplay+'</td><td>'+actions+'</td></tr>';
+  }).join('');
+}
+
+// ─── LOAN DETAIL MODAL ───
+function viewLoanDetail(loanId) {
+  var data = S.loans;
+  var row = null;
+  for (var i=1; i<data.length; i++) {
+    if (String(data[i][0]) === String(loanId)) { row = data[i]; break; }
+  }
+  if (!row) { toast('Loan not found','error'); return; }
+
+  var member = S.members.find(function(m){ return m.ID === row[1]; });
+  var remaining = getLoanRemainingBalance(loanId, row[4]);
+  var repayHistory = (S.repayments && S.repayments.length > 1)
+    ? S.repayments.slice(1).filter(function(r){ return String(r[1]) === String(loanId); })
+    : [];
+
+  var totalPaid = 0, totalInterest = 0, totalPenalty = 0;
+  repayHistory.forEach(function(r){
+    totalPaid += Number(r[5]||0);
+    totalInterest += Number(r[6]||0);
+    totalPenalty += Number(r[7]||0);
+  });
+
+  var isDefaulted = String(row[9]||'').toLowerCase() === 'active' && row[8] && new Date(row[8]) < new Date();
+  var statusLabel = isDefaulted ? '<span class="badge badge-defaulted">Defaulted</span>'
+    : (String(row[9]||'').toLowerCase()==='closed' ? '<span class="badge badge-closed">Fully Paid</span>' : '<span class="badge badge-active">Active</span>');
+
+  var guarantorName = row[10] || (member && member.Nominee1_Name ? member.Nominee1_Name : 'None');
+  var guarantorPhone = member && member.Nominee1_Phone ? member.Nominee1_Phone : '';
+
+  var hasPdf = !!S.loanFiles[loanId];
+  var pdfBtn = hasPdf ? '<button class="btn-primary" style="margin-top:10px;" onclick="viewLoanPdf(\''+loanId+'\')"><i class="fas fa-file-pdf"></i> View Loan Document</button>' : '';
+
+  var repayRows = repayHistory.length
+    ? repayHistory.sort(function(a,b){return new Date(b[3])-new Date(a[3]);}).map(function(r){
+        return '<div class="rh-item"><div><strong style="font-size:12.5px;">#'+r[0]+'</strong><div class="rh-date">'+(r[3]?new Date(r[3]).toLocaleDateString():'—')+'</div></div><div class="rh-amounts"><span>Principal: KES '+Number(r[5]||0).toLocaleString()+'</span><span>Interest: KES '+Number(r[6]||0).toLocaleString()+' | Penalty: KES '+Number(r[7]||0).toLocaleString()+'</span><strong>Total: KES '+Number(r[4]||0).toLocaleString()+'</strong></div></div>';
+      }).join('')
+    : '<p style="color:var(--text-muted);font-size:12.5px;padding:10px;">No repayments yet</p>';
+
+  document.getElementById('loan-detail-body').innerHTML = `
+    <div style="display:flex;gap:10px;align-items:center;margin-bottom:16px;">
+      <div style="flex:1;"><strong style="font-size:16px;">${row[2]}</strong><br><span style="font-size:12px;color:var(--text-muted);">${row[1]}</span></div>
+      ${statusLabel}
+    </div>
+    <div class="loan-detail-section">
+      <h4>Loan Summary</h4>
+      <div class="detail-grid">
+        <div class="detail-item"><p>Original Amount</p><h5>KES ${Number(row[4]||0).toLocaleString()}</h5></div>
+        <div class="detail-item"><p>Remaining Balance</p><h5 class="${remaining>0?'negative':'positive'}">KES ${remaining.toLocaleString()}</h5></div>
+        <div class="detail-item"><p>Principal Paid</p><h5 class="positive">KES ${totalPaid.toLocaleString()}</h5></div>
+        <div class="detail-item"><p>Interest Collected</p><h5>KES ${totalInterest.toLocaleString()}</h5></div>
+        <div class="detail-item"><p>Penalties Paid</p><h5 style="color:#d97706;">KES ${totalPenalty.toLocaleString()}</h5></div>
+        <div class="detail-item"><p>Total Repayments</p><h5>${repayHistory.length}</h5></div>
+        <div class="detail-item"><p>Term</p><h5>${row[5]} Months</h5></div>
+        <div class="detail-item"><p>Interest Rate</p><h5>${(Number(row[6]||0)*100).toFixed(0)}%</h5></div>
+        <div class="detail-item"><p>Start Date</p><h5>${row[7]?new Date(row[7]).toLocaleDateString():'—'}</h5></div>
+        <div class="detail-item"><p>Due Date</p><h5>${row[8]?new Date(row[8]).toLocaleDateString():'—'}</h5></div>
+      </div>
+    </div>
+    <div class="loan-detail-section">
+      <h4>Guarantor</h4>
+      <p style="font-size:13.5px;font-weight:600;">${guarantorName}</p>
+      ${guarantorPhone?'<span style="font-size:12px;color:var(--text-muted);">📞 '+guarantorPhone+'</span>':''}
+    </div>
+    <div class="loan-detail-section">
+      <h4>Repayment History (${repayHistory.length} payments)</h4>
+      <div class="repayment-history">${repayRows}</div>
+    </div>
+    ${pdfBtn}
+  `;
+  openModal('m-loan-detail');
+}
+
+// ─── VIEW PDF ───
+function viewLoanPdf(loanId) {
+  var fileData = S.loanFiles[loanId];
+  if (!fileData) { toast('No document attached','warning'); return; }
+  // Open in new tab
+  var win = window.open();
+  if (fileData.type === 'application/pdf') {
+    win.document.write('<iframe src="'+fileData.dataUrl+'" style="width:100%;height:100%;border:0;"></iframe>');
+  } else {
+    win.document.write('<img src="'+fileData.dataUrl+'" style="max-width:100%;display:block;margin:auto;">');
+  }
+}
+
+// ─── EDIT LOAN ───
+function editLoan(loanId) {
+  var data = S.loans; var row = null;
+  for (var i=1;i<data.length;i++) { if(String(data[i][0])===String(loanId)){row=data[i];break;} }
+  if(!row){toast('Loan not found','error');return;}
+  document.getElementById('fi-ledit-id').value = row[0];
+  document.getElementById('fi-ledit-mname').value = row[2]||'';
+  document.getElementById('fi-ledit-amount').value = row[4]||'';
+  document.getElementById('fi-ledit-term').value = row[5]||'';
+  document.getElementById('fi-ledit-duedate').value = row[8] ? new Date(row[8]).toISOString().split('T')[0] : '';
+  document.getElementById('fi-ledit-status').value = row[9]||'Active';
+  var member = S.members.find(function(m){return m.ID===row[1];});
+  document.getElementById('fi-ledit-gtor').value = row[10] || (member && member.Nominee1_Name ? member.Nominee1_Name : '');
+  openModal('m-loan-edit');
+}
+function submitEditLoan(e) {
+  e.preventDefault();
+  var id = document.getElementById('fi-ledit-id').value;
+  var btn = document.getElementById('btn-ledit-submit');
+  setBtnLoading(btn, true);
+  // Optimistic update
+  for (var i=1;i<S.loans.length;i++) {
+    if (String(S.loans[i][0])===String(id)) {
+      S.loans[i][4] = parseFloat(document.getElementById('fi-ledit-amount').value)||S.loans[i][4];
+      S.loans[i][5] = document.getElementById('fi-ledit-term').value||S.loans[i][5];
+      S.loans[i][8] = document.getElementById('fi-ledit-duedate').value||S.loans[i][8];
+      S.loans[i][9] = document.getElementById('fi-ledit-status').value||S.loans[i][9];
+      S.loans[i][10] = document.getElementById('fi-ledit-gtor').value||'';
+      break;
+    }
+  }
+  renderLoansTable();
+  closeModal('m-loan-edit');
+  toast('Loan updated!');
+  setBtnLoading(btn, false);
 }
 
 // ─── GENERIC SHEET TABLE ───
 function renderSheet(key, tbId, type) {
   var data=S[key];
   var tbody=document.getElementById(tbId); if(!tbody) return;
-  var pgKey  = type==='loan'?'loans':type==='repay'?'repayments':'contributions';
-  var pgElId = type==='loan'?'pg-loans':type==='repay'?'pg-repayments':'pg-contributions';
-  var pgFn   = type==='loan'?'goPageLoans':type==='repay'?'goPageRepayments':'goPageContributions';
-
+  var pgKey  = type==='repay'?'repayments':'contributions';
+  var pgElId = type==='repay'?'pg-repayments':'pg-contributions';
+  var pgFn   = type==='repay'?'goPageRepayments':'goPageContributions';
   if (!data||data.length<=1) {
-    tbody.innerHTML = emptyState('No Records Yet', 'Records will appear here once you start adding data.');
+    tbody.innerHTML=emptyState('No Records Yet','Records will appear here once you start adding data.');
     renderPagination(pgElId,1,0,pgFn);
     return;
   }
@@ -1268,30 +1602,48 @@ function renderSheet(key, tbId, type) {
   var search=getSearchVal(),mf=getMonthFilter(),yf=getYearFilter();
   if (search) rows=rows.filter(function(r){return r.some(function(c){return String(c||'').toLowerCase().indexOf(search)!==-1;});});
   if (mf!==null||yf!==null) rows=rows.filter(function(r){var dv=r[3]||r[7]||r[8];return matchesDateFilter(dv);});
-  if (!rows.length) {
-    tbody.innerHTML=emptyState('No Matching Records');
-    renderPagination(pgElId,1,0,pgFn);
-    return;
-  }
-  var totalRows = rows.length;
-  var page = S.pages[pgKey] || 1;
-  rows = rows.slice((page-1)*PAGE_SIZE, page*PAGE_SIZE);
+  if (!rows.length) { tbody.innerHTML=emptyState('No Matching Records'); renderPagination(pgElId,1,0,pgFn); return; }
+  var totalRows=rows.length, page=S.pages[pgKey]||1;
+  rows=rows.slice((page-1)*PAGE_SIZE, page*PAGE_SIZE);
   renderPagination(pgElId, page, totalRows, pgFn);
-
-  tbody.innerHTML=rows.map(function(r){
-    if (type==='loan') {
-      var st2=String(r[9]||'Active').toLowerCase();
-      var lbc=st2==='active'?'badge-active':st2==='closed'?'badge-closed':'badge-inactive';
-      var dueDays = dueDaysBadge(r[8], r[9]);
-      var loanMember = S.members.find(function(m){ return m.ID === r[1]; });
-      var nomineeInfo = loanMember && loanMember.Nominee1_Name
-        ? '<span style="font-size:11px;font-weight:600;">'+loanMember.Nominee1_Name+'</span><br><span style="font-size:10px;color:var(--text-muted);">'+(loanMember.Nominee1_Relationship||'')+'</span>'
-        : '<span style="color:var(--text-muted);font-size:11px;">—</span>';
-      return '<tr><td>'+r[0]+'</td><td><strong>'+r[2]+'</strong></td><td>KES '+Number(r[4]||0).toLocaleString()+'</td><td>'+r[5]+' Mon</td><td>'+(r[8]?new Date(r[8]).toLocaleDateString():'N/A')+'</td><td>'+dueDays+'</td><td>'+nomineeInfo+'</td><td><span class="badge '+lbc+'">'+r[9]+'</span></td></tr>';
+  tbody.innerHTML=rows.map(function(r,idx){
+    if (type==='repay') {
+      var realIdx = (S.repayments && S.repayments.length > 1)
+        ? S.repayments.slice(1).findIndex(function(rr){return String(rr[0])===String(r[0]);}) + 1
+        : -1;
+      return '<tr><td>'+(r[3]?new Date(r[3]).toLocaleDateString():'N/A')+'</td><td><strong>'+r[2]+'</strong></td><td>'+r[1]+'</td><td>KES '+Number(r[4]||0).toLocaleString()+'</td><td>KES '+Number(r[5]||0).toLocaleString()+'</td><td>KES '+Number(r[6]||0).toLocaleString()+'</td><td>KES '+Number(r[7]||0).toLocaleString()+'</td><td><div class="actions-cell"><button class="btn-icon btn-edit" onclick="editRepayment('+realIdx+')" title="Edit"><i class="fas fa-pencil-alt"></i></button></div></td></tr>';
     }
-    if (type==='repay') return '<tr><td>'+(r[3]?new Date(r[3]).toLocaleDateString():'N/A')+'</td><td><strong>'+r[2]+'</strong></td><td>'+r[1]+'</td><td>KES '+Number(r[4]||0).toLocaleString()+'</td><td>KES '+Number(r[5]||0).toLocaleString()+'</td><td>KES '+Number(r[6]||0).toLocaleString()+'</td><td>KES '+Number(r[7]||0).toLocaleString()+'</td></tr>';
     return '<tr><td>'+(r[3]?new Date(r[3]).toLocaleDateString():'N/A')+'</td><td><strong>'+r[2]+'</strong></td><td>KES '+Number(r[4]||0).toLocaleString()+'</td><td>'+r[5]+'</td><td>'+r[6]+'</td></tr>';
   }).join('');
+}
+
+// ─── EDIT REPAYMENT ───
+function editRepayment(rowIdx) {
+  if (!S.repayments || rowIdx < 1 || rowIdx >= S.repayments.length) { toast('Repayment not found','error'); return; }
+  var r = S.repayments[rowIdx];
+  document.getElementById('fi-redit-rowindex').value = rowIdx;
+  document.getElementById('fi-redit-mname').value = r[2]||'';
+  document.getElementById('fi-redit-amount').value = r[4]||'';
+  document.getElementById('fi-redit-principal').value = r[5]||'';
+  document.getElementById('fi-redit-interest').value = r[6]||'';
+  document.getElementById('fi-redit-penalty').value = r[7]||'';
+  openModal('m-repayment-edit');
+}
+function submitEditRepayment(e) {
+  e.preventDefault();
+  var idx = parseInt(document.getElementById('fi-redit-rowindex').value);
+  var btn = document.getElementById('btn-redit-submit');
+  setBtnLoading(btn, true);
+  if (S.repayments && S.repayments[idx]) {
+    S.repayments[idx][4] = parseFloat(document.getElementById('fi-redit-amount').value)||0;
+    S.repayments[idx][5] = parseFloat(document.getElementById('fi-redit-principal').value)||0;
+    S.repayments[idx][6] = parseFloat(document.getElementById('fi-redit-interest').value)||0;
+    S.repayments[idx][7] = parseFloat(document.getElementById('fi-redit-penalty').value)||0;
+  }
+  renderSheet('repayments','tb-repayments','repay');
+  closeModal('m-repayment-edit');
+  toast('Repayment updated locally. Sync to save.');
+  setBtnLoading(btn, false);
 }
 
 // ─── EXPENSES ───
@@ -1304,28 +1656,17 @@ function renderExpenses() {
     se('exp-s-transport','KES '+Number((s.expenseByCategory||{}).Transport||0).toLocaleString());
     se('exp-s-meeting',  'KES '+Number((s.expenseByCategory||{}).Meeting||0).toLocaleString());
   }
-  var data = S.expenses;
-  var tbody = document.getElementById('tb-expenses'); if(!tbody) return;
-  if (!data||data.length<=1) {
-    tbody.innerHTML=emptyState('No Expenses Recorded', 'Add your first expense entry to begin tracking.');
-    renderPagination('pg-expenses',1,0,'goPageExpenses');
-    return;
-  }
+  var data = S.expenses, tbody = document.getElementById('tb-expenses'); if(!tbody) return;
+  if (!data||data.length<=1) { tbody.innerHTML=emptyState('No Expenses Recorded'); renderPagination('pg-expenses',1,0,'goPageExpenses'); return; }
   var rows = data.slice(1).filter(function(r){return r[0];});
   var search=getSearchVal(),mf=getMonthFilter(),yf=getYearFilter();
   if (search) rows=rows.filter(function(r){return r.some(function(c){return String(c||'').toLowerCase().indexOf(search)!==-1;});});
   if (mf!==null||yf!==null) rows=rows.filter(function(r){return matchesDateFilter(r[1]);});
   rows = rows.slice().reverse();
-  if (!rows.length) {
-    tbody.innerHTML=emptyState('No Matching Expenses');
-    renderPagination('pg-expenses',1,0,'goPageExpenses');
-    return;
-  }
-  var totalRowsExp = rows.length;
-  var pageExp = S.pages.expenses || 1;
-  rows = rows.slice((pageExp-1)*PAGE_SIZE, pageExp*PAGE_SIZE);
+  if (!rows.length) { tbody.innerHTML=emptyState('No Matching Expenses'); renderPagination('pg-expenses',1,0,'goPageExpenses'); return; }
+  var totalRowsExp=rows.length, pageExp=S.pages.expenses||1;
+  rows=rows.slice((pageExp-1)*PAGE_SIZE, pageExp*PAGE_SIZE);
   renderPagination('pg-expenses', pageExp, totalRowsExp, 'goPageExpenses');
-
   tbody.innerHTML=rows.map(function(r){
     var d=r[1]?new Date(r[1]).toLocaleDateString():'';
     var rid=String(r[0]).replace(/'/g,"\\'");
@@ -1334,7 +1675,7 @@ function renderExpenses() {
 }
 
 function deleteExpense(id) {
-  if (!confirm('Delete this expense? This cannot be undone.')) return;
+  if (!confirm('Delete this expense?')) return;
   api.post('deleteExpense',{id:id}).then(function(){
     toast('Expense deleted');
     return loadAll(true);
@@ -1343,32 +1684,25 @@ function deleteExpense(id) {
 
 // ─── AUDIT LOG ───
 function renderAuditTable() {
-  var data = S.auditlog;
-  var tbody = document.getElementById('tb-audit'); if(!tbody) return;
+  var data = S.auditlog, tbody = document.getElementById('tb-audit'); if(!tbody) return;
   if (!data||data.length<=1) {
     api.get('getSheet',{sheet:'AuditLog'}).then(function(d){ if(d){S.auditlog=d;renderAuditTable();} }).catch(function(){});
-    tbody.innerHTML = emptyState('No Audit Records', 'System changes will appear here.');
+    tbody.innerHTML=emptyState('No Audit Records');
     renderPagination('pg-auditlog',1,0,'goPageAuditlog');
     return;
   }
-  var rows = data.slice(1).filter(function(r){return r[0];});
-  var tf = (document.getElementById('audit-filter-table')||{}).value||'';
-  var af = (document.getElementById('audit-filter-action')||{}).value||'';
-  var search = getSearchVal();
+  var rows=data.slice(1).filter(function(r){return r[0];});
+  var tf=(document.getElementById('audit-filter-table')||{}).value||'';
+  var af=(document.getElementById('audit-filter-action')||{}).value||'';
+  var search=getSearchVal();
   if (tf) rows=rows.filter(function(r){return String(r[2]||'')===tf;});
   if (af) rows=rows.filter(function(r){return String(r[5]||'').indexOf(af)===0;});
   if (search) rows=rows.filter(function(r){return r.some(function(c){return String(c||'').toLowerCase().indexOf(search)!==-1;});});
-  rows = rows.slice().reverse();
-  if (!rows.length) {
-    tbody.innerHTML=emptyState('No Audit Records Match Filter');
-    renderPagination('pg-auditlog',1,0,'goPageAuditlog');
-    return;
-  }
-  var totalRowsAudit = rows.length;
-  var pageAudit = S.pages.auditlog || 1;
-  rows = rows.slice((pageAudit-1)*PAGE_SIZE, pageAudit*PAGE_SIZE);
+  rows=rows.slice().reverse();
+  if (!rows.length) { tbody.innerHTML=emptyState('No Audit Records Match Filter'); renderPagination('pg-auditlog',1,0,'goPageAuditlog'); return; }
+  var totalRowsAudit=rows.length, pageAudit=S.pages.auditlog||1;
+  rows=rows.slice((pageAudit-1)*PAGE_SIZE, pageAudit*PAGE_SIZE);
   renderPagination('pg-auditlog', pageAudit, totalRowsAudit, 'goPageAuditlog');
-
   tbody.innerHTML=rows.map(function(r){
     var ts=r[1]?new Date(r[1]).toLocaleString():'';
     var act=String(r[5]||'');
@@ -1401,25 +1735,16 @@ function renderMGRTable() {
   se('mgr-s-latest','KES '+(latest?Number(latest[7]||0).toLocaleString():'0'));
   se('mgr-s-contrib','KES '+(S.dashboard?Number(S.dashboard.totalMerryGoRound||0).toLocaleString():'0'));
   var tbody=document.getElementById('tb-mgr'); if(!tbody) return;
-  if (!allRows.length) {
-    tbody.innerHTML=emptyState('No MGR Schedules Yet', 'Create your first Merry Go Round schedule.');
-    renderPagination('pg-mgr',1,0,'goPageMgr');
-    return;
-  }
+  if (!allRows.length) { tbody.innerHTML=emptyState('No MGR Schedules Yet'); renderPagination('pg-mgr',1,0,'goPageMgr'); return; }
   var stF=(document.getElementById('mgr-fs')||{}).value||'';
   var yrF=(document.getElementById('mgr-fy')||{}).value||'';
   var rows=allRows.slice();
   if (stF) rows=rows.filter(function(r){return String(r[11]||'').trim()===stF;});
   if (yrF) rows=rows.filter(function(r){return String(r[2])===yrF;});
   rows.sort(function(a,b){return(Number(b[2])-Number(a[2]))||Number(b[1])-Number(a[1]);});
-  if (!rows.length) {
-    tbody.innerHTML=emptyState('No Records Match Filter');
-    renderPagination('pg-mgr',1,0,'goPageMgr');
-    return;
-  }
-  var totalRowsMgr = rows.length;
-  var pageMgr = S.pages.mgr || 1;
-  rows = rows.slice((pageMgr-1)*PAGE_SIZE, pageMgr*PAGE_SIZE);
+  if (!rows.length) { tbody.innerHTML=emptyState('No Records Match Filter'); renderPagination('pg-mgr',1,0,'goPageMgr'); return; }
+  var totalRowsMgr=rows.length, pageMgr=S.pages.mgr||1;
+  rows=rows.slice((pageMgr-1)*PAGE_SIZE, pageMgr*PAGE_SIZE);
   renderPagination('pg-mgr', pageMgr, totalRowsMgr, 'goPageMgr');
 
   tbody.innerHTML=rows.map(function(r){
@@ -1429,178 +1754,221 @@ function renderMGRTable() {
     var lbl=(MONTHS[Number(r[1])]||r[1])+' '+r[2];
     var rid=String(r[0]||'').replace(/'/g,"\\'");
     var lble=lbl.replace(/'/g,"\\'");
-
-    var actionBtns = '<div class="actions-cell">';
-    if (st !== 'Distributed' && st !== 'Rejected') {
-      actionBtns += '<button class="btn-icon btn-edit" title="Edit Record" onclick="openEditMGR(\''+rid+'\')"><i class="fas fa-pencil-alt"></i></button>';
-      actionBtns += '<button class="btn-icon btn-view" title="Mark Distributed" onclick="openMarkDist(\''+rid+'\',\''+lble+'\')"><i class="fas fa-check"></i></button>';
-      actionBtns += '<button class="btn-icon btn-reject" title="Reject" onclick="openRejectMGR(\''+rid+'\',\''+lble+'\')"><i class="fas fa-times"></i></button>';
-    } else if (st === 'Distributed') {
-      actionBtns += '<span style="color:var(--primary);font-size:16px;padding:0 4px;" title="Distributed">✓ Done</span>';
+    var actionBtns='<div class="actions-cell">';
+    if (st!=='Distributed'&&st!=='Rejected') {
+      actionBtns+='<button class="btn-icon btn-edit" title="Edit" onclick="openEditMGR(\''+rid+'\')"><i class="fas fa-pencil-alt"></i></button>';
+      actionBtns+='<button class="btn-icon btn-view" title="Mark Distributed" onclick="openMarkDist(\''+rid+'\',\''+lble+'\')"><i class="fas fa-check"></i></button>';
+      actionBtns+='<button class="btn-icon btn-reject" title="Reject" onclick="openRejectMGR(\''+rid+'\',\''+lble+'\')"><i class="fas fa-times"></i></button>';
+    } else if (st==='Distributed') {
+      actionBtns+='<span style="color:var(--primary);font-size:16px;padding:0 4px;">✓ Done</span>';
     } else {
-      actionBtns += '<span style="color:#be185d;font-size:11px;padding:0 4px;font-weight:700;">Rejected</span>';
+      actionBtns+='<span style="color:#be185d;font-size:11px;padding:0 4px;font-weight:700;">Rejected</span>';
     }
-    actionBtns += '</div>';
-
-    var timestamp   = r[13] ? new Date(r[13]).toLocaleString() : (r[0] ? '<span style="font-size:10px;color:#9ca3af;">'+r[0]+'</span>' : '—');
-    var lastUpdated = r[14] ? new Date(r[14]).toLocaleString() : '—';
-    var updatedBy   = r[15] || '—';
-
+    actionBtns+='</div>';
+    var timestamp=r[13]?new Date(r[13]).toLocaleString():(r[0]?'<span style="font-size:10px;color:#9ca3af;">'+r[0]+'</span>':'—');
+    var lastUpdated=r[14]?new Date(r[14]).toLocaleString():'—';
+    var updatedBy=r[15]||'—';
     var b2cell=r[3]===r[5]?'<span style="font-size:11px;background:#fef3c7;color:#92400e;padding:3px 7px;border-radius:6px;font-weight:700;">Single</span>':'<strong>'+(r[6]||'—')+'</strong><br><span style="font-size:10.5px;color:var(--text-muted);">'+(r[5]||'')+'</span>';
     return '<tr><td><strong>'+lbl+'</strong></td><td><strong>'+(r[4]||'—')+'</strong><br><span style="font-size:10.5px;color:var(--text-muted);">'+(r[3]||'')+'</span></td><td>'+b2cell+'</td><td><strong>KES '+Number(r[7]||0).toLocaleString()+'</strong></td><td><strong style="color:var(--primary);">KES '+Number(r[8]||0).toLocaleString()+'</strong></td><td><span class="badge '+bc+'">'+st+'</span></td><td>'+dd+'</td><td style="max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11.5px;color:var(--text-muted);">'+(r[12]||'—')+'</td><td style="font-size:11px;color:var(--text-muted);white-space:nowrap;">'+timestamp+'</td><td style="font-size:11px;color:var(--text-muted);white-space:nowrap;">'+lastUpdated+'</td><td style="font-size:11px;color:var(--text-muted);">'+updatedBy+'</td><td>'+actionBtns+'</td></tr>';
   }).join('');
 }
 
-function openMarkDist(id,label) {
+function openMarkDist(id,label){
   document.getElementById('mgrmark-id').value=id;
   document.getElementById('mgrmark-label').innerText=label;
   document.getElementById('mgrmark-date').value=new Date().toISOString().split('T')[0];
   document.getElementById('mgrmark-notes').value='';
   openModal('m-mgrmark');
 }
-function confirmMarkDistributed() {
+function confirmMarkDistributed(){
   var id=document.getElementById('mgrmark-id').value;
   var dt=document.getElementById('mgrmark-date').value;
   var nt=document.getElementById('mgrmark-notes').value;
   if(!id||!dt){toast('Please select a date','error');return;}
-  var now = new Date().toISOString();
+  var now=new Date().toISOString();
   S.mgr=S.mgr.map(function(row,idx){
     if(idx===0) return row;
     if(String(row[0])===String(id)){var r=row.slice();r[11]='Distributed';r[10]=dt;r[12]=nt||r[12];r[14]=now;r[15]='Admin';return r;}
     return row;
   });
-  renderMGRTable();
-  closeModal('m-mgrmark');
-  toast('Marked as Distributed!');
+  renderMGRTable(); closeModal('m-mgrmark'); toast('Marked as Distributed!');
   api.post('markMGRDistributed',{id:id,distDate:dt,notes:nt}).then(function(){
     api.get('getSheet',{sheet:'MerryGoRound'}).then(function(d){if(d){S.mgr=d;renderMGRTable();}});
   }).catch(function(e){toast('Server error: '+e.message,'error');loadAll(true);});
 }
 
-function openRejectMGR(id, label) {
-  document.getElementById('mgrreject-id').value = id;
-  document.getElementById('mgrreject-label').innerText = label;
+function openRejectMGR(id,label){
+  document.getElementById('mgrreject-id').value=id;
+  document.getElementById('mgrreject-label').innerText=label;
   openModal('m-mgrreject');
 }
-function confirmRejectMGR() {
-  var id = document.getElementById('mgrreject-id').value;
-  if (!id) return;
-  var now = new Date().toISOString();
-  S.mgr = S.mgr.map(function(row, idx) {
-    if (idx === 0) return row;
-    if (String(row[0]) === String(id)) {
-      var r = row.slice();
-      r[11] = 'Rejected';
-      r[14] = now;
-      r[15] = 'Admin';
-      return r;
-    }
+function confirmRejectMGR(){
+  var id=document.getElementById('mgrreject-id').value; if(!id) return;
+  var now=new Date().toISOString();
+  S.mgr=S.mgr.map(function(row,idx){
+    if(idx===0) return row;
+    if(String(row[0])===String(id)){var r=row.slice();r[11]='Rejected';r[14]=now;r[15]='Admin';return r;}
     return row;
   });
-  renderMGRTable();
-  closeModal('m-mgrreject');
-  toast('Schedule rejected.', 'warning');
-  api.post('rejectMGRSchedule', {id: id}).then(function() {
+  renderMGRTable(); closeModal('m-mgrreject'); toast('Schedule rejected.','warning');
+  api.post('rejectMGRSchedule',{id:id}).then(function(){
     api.get('getSheet',{sheet:'MerryGoRound'}).then(function(d){if(d){S.mgr=d;renderMGRTable();}});
-  }).catch(function(e){ toast('Server error: '+e.message,'error'); loadAll(true); });
+  }).catch(function(e){toast('Server error: '+e.message,'error');loadAll(true);});
 }
 
-function openEditMGR(id) {
-  var data = S.mgr;
-  var row = null;
-  for (var i=1; i<data.length; i++) {
-    if (String(data[i][0]) === String(id)) { row = data[i]; break; }
-  }
-  if (!row) { toast('Record not found','error'); return; }
-  document.getElementById('fi-mgredit-id').value = row[0];
-  document.getElementById('fi-mgredit-month').value = row[1];
-  document.getElementById('fi-mgredit-year').value = row[2];
-  document.getElementById('fi-mgredit-b1name').value = row[4] || '';
-  document.getElementById('fi-mgredit-b2name').value = row[6] || row[4] || '';
-  document.getElementById('fi-mgredit-each').value = row[7] || '';
-  document.getElementById('fi-mgredit-total').value = row[8] || '';
-  document.getElementById('fi-mgredit-status').value = row[11] || 'Scheduled';
-  document.getElementById('fi-mgredit-ddate').value = row[10] ? new Date(row[10]).toISOString().split('T')[0] : '';
-  document.getElementById('fi-mgredit-notes').value = row[12] || '';
+function openEditMGR(id){
+  var data=S.mgr; var row=null;
+  for(var i=1;i<data.length;i++){if(String(data[i][0])===String(id)){row=data[i];break;}}
+  if(!row){toast('Record not found','error');return;}
+  document.getElementById('fi-mgredit-id').value=row[0];
+  document.getElementById('fi-mgredit-month').value=row[1];
+  document.getElementById('fi-mgredit-year').value=row[2];
+  document.getElementById('fi-mgredit-b1name').value=row[4]||'';
+  document.getElementById('fi-mgredit-b2name').value=row[6]||row[4]||'';
+  document.getElementById('fi-mgredit-each').value=row[7]||'';
+  document.getElementById('fi-mgredit-total').value=row[8]||'';
+  document.getElementById('fi-mgredit-status').value=row[11]||'Scheduled';
+  document.getElementById('fi-mgredit-ddate').value=row[10]?new Date(row[10]).toISOString().split('T')[0]:'';
+  document.getElementById('fi-mgredit-notes').value=row[12]||'';
   openModal('m-mgreditmodal');
 }
-function submitEditMGR(e) {
+function submitEditMGR(e){
   e.preventDefault();
-  var id = document.getElementById('fi-mgredit-id').value;
-  var btn = document.getElementById('btn-mgr-edit-submit');
-  setBtnLoading(btn, true);
-  var each   = parseFloat(document.getElementById('fi-mgredit-each').value) || 0;
-  var status = document.getElementById('fi-mgredit-status').value;
-  var ddate  = document.getElementById('fi-mgredit-ddate').value;
-  var notes  = document.getElementById('fi-mgredit-notes').value;
-  var month  = document.getElementById('fi-mgredit-month').value;
-  var year   = document.getElementById('fi-mgredit-year').value;
-  var now    = new Date().toISOString();
-  S.mgr = S.mgr.map(function(row, idx) {
-    if (idx === 0) return row;
-    if (String(row[0]) === String(id)) {
-      var r = row.slice();
-      r[1] = Number(month); r[2] = Number(year);
-      r[7] = each; r[8] = each * 2;
-      r[11] = status; r[10] = ddate || r[10];
-      r[12] = notes;
-      r[14] = now; r[15] = 'Admin';
-      return r;
-    }
+  var id=document.getElementById('fi-mgredit-id').value;
+  var btn=document.getElementById('btn-mgr-edit-submit');
+  setBtnLoading(btn,true);
+  var each=parseFloat(document.getElementById('fi-mgredit-each').value)||0;
+  var status=document.getElementById('fi-mgredit-status').value;
+  var ddate=document.getElementById('fi-mgredit-ddate').value;
+  var notes=document.getElementById('fi-mgredit-notes').value;
+  var month=document.getElementById('fi-mgredit-month').value;
+  var year=document.getElementById('fi-mgredit-year').value;
+  var now=new Date().toISOString();
+  S.mgr=S.mgr.map(function(row,idx){
+    if(idx===0) return row;
+    if(String(row[0])===String(id)){var r=row.slice();r[1]=Number(month);r[2]=Number(year);r[7]=each;r[8]=each*2;r[11]=status;r[10]=ddate||r[10];r[12]=notes;r[14]=now;r[15]='Admin';return r;}
     return row;
   });
-  renderMGRTable();
-  closeModal('m-mgreditmodal');
-  toast('MGR record updated!');
-  setBtnLoading(btn, false);
-  api.post('editMGRSchedule', {id:id, month:month, year:year, amountEach:each, totalDistributed:each*2, status:status, distDate:ddate, notes:notes}).then(function() {
+  renderMGRTable(); closeModal('m-mgreditmodal'); toast('MGR record updated!'); setBtnLoading(btn,false);
+  api.post('editMGRSchedule',{id:id,month:month,year:year,amountEach:each,totalDistributed:each*2,status:status,distDate:ddate,notes:notes}).then(function(){
     api.get('getSheet',{sheet:'MerryGoRound'}).then(function(d){if(d){S.mgr=d;renderMGRTable();}});
-  }).catch(function(e){ toast('Server error: '+e.message,'error'); loadAll(true); });
+  }).catch(function(e){toast('Server error: '+e.message,'error');loadAll(true);});
 }
 
-// ─── REPORTS ───
+// ─── REPORTS — Fixed penalty calculation ───
 function renderReports() {
   var tbody=document.getElementById('tb-overdue'); if(tbody) tbody.innerHTML=emptyState('Loading...');
   var s=S.dashboard;
   if (s) {
     function se(id,v){var el=document.getElementById(id);if(el)el.innerText=v;}
-    se('r-penalties','KES '+Number(s.totalPenalties||0).toLocaleString());
-    se('r-borrowers',s.totalLoans||0);
-    se('r-interests','KES '+Number(s.totalInterests||0).toLocaleString());
+
+    // Correct overdue penalty: exact days × 30
+    var loanRows = (S.loans && S.loans.length > 1) ? S.loans.slice(1).filter(function(r){return r[0];}) : [];
+    var today = new Date();
+    var todayFlat = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    var overdueLoans = [];
+    var totalAccruedPenalty = 0;
+
+    loanRows.forEach(function(r){
+      if (String(r[9]||'').toLowerCase() !== 'active') return;
+      if (!r[8]) return;
+      var raw = new Date(r[8]);
+      if (isNaN(raw.getTime())) return;
+      var due = new Date(raw.getFullYear(), raw.getMonth(), raw.getDate());
+      if (todayFlat <= due) return;
+      var daysLate = Math.ceil((todayFlat.getTime() - due.getTime()) / 86400000);
+      var penalty = daysLate * 30;
+      totalAccruedPenalty += penalty;
+      overdueLoans.push({ id: r[0], memberName: r[2], dueDate: r[8], daysLate: daysLate, penaltyAmount: penalty });
+    });
+
+    var penCollected = getTotalPenaltiesCollected();
+
+    se('r-penalties', 'KES '+totalAccruedPenalty.toLocaleString());
+    se('r-borrowers', s.totalLoans||0);
+    se('r-interests', 'KES '+Number(s.totalInterests||0).toLocaleString());
+    se('r-penalties-collected', 'KES '+penCollected.toLocaleString());
+
     if(tbody){
-      if(s.overdueLoans&&s.overdueLoans.length){
-        tbody.innerHTML=s.overdueLoans.map(function(l){
-          var raw = new Date(l.dueDate);
-          var due = new Date(raw.getFullYear(), raw.getMonth(), raw.getDate());
-          var t = new Date();
-          var today = new Date(t.getFullYear(), t.getMonth(), t.getDate());
-          var daysLate = Math.round((today.getTime() - due.getTime()) / 86400000);
-          var penalty = daysLate * 30;
-          return '<tr><td><span class="badge badge-inactive">'+l.id+'</span></td><td><strong>'+l.memberName+'</strong></td><td>'+due.toLocaleDateString()+'</td><td style="color:var(--warning);font-weight:700;">'+daysLate+' day'+(daysLate===1?'':'s')+'</td><td style="color:var(--danger);font-weight:700;">KES '+penalty.toLocaleString()+'</td></tr>';
+      if(overdueLoans.length){
+        tbody.innerHTML=overdueLoans.sort(function(a,b){return b.daysLate-a.daysLate;}).map(function(l){
+          return '<tr><td><span class="badge badge-inactive">'+l.id+'</span></td><td><strong>'+l.memberName+'</strong></td><td>'+new Date(l.dueDate).toLocaleDateString()+'</td><td style="color:var(--warning);font-weight:700;">'+l.daysLate+' day'+(l.daysLate===1?'':'s')+'</td><td style="color:var(--danger);font-weight:700;">KES '+l.penaltyAmount.toLocaleString()+'</td></tr>';
         }).join('');
-      } else { tbody.innerHTML=emptyState('No Overdue Installments', 'All loans are on track.'); }
+      } else { tbody.innerHTML=emptyState('No Overdue Installments','All loans are on track.'); }
     }
   }
   api.get('getDashboardStats').then(function(d){S.dashboard=d;renderReports();}).catch(function(){});
 }
 
+// ─── GUARANTOR TOGGLE ───
+var guarantorMode = 'member';
+function setGuarantorMode(mode) {
+  guarantorMode = mode;
+  var memberBtn = document.getElementById('gtor-use-member-btn');
+  var customBtn = document.getElementById('gtor-custom-btn');
+  var memberInfo = document.getElementById('gtor-member-info');
+  var customFields = document.getElementById('gtor-custom-fields');
+  if (mode === 'member') {
+    memberBtn.classList.add('active'); customBtn.classList.remove('active');
+    memberInfo.style.display = 'block'; customFields.style.display = 'none';
+  } else {
+    customBtn.classList.add('active'); memberBtn.classList.remove('active');
+    memberInfo.style.display = 'none'; customFields.style.display = 'block';
+  }
+}
+
+function updateGuarantorInfo(memberId) {
+  var m = S.members.find(function(x){ return x.ID === memberId; });
+  var nameEl = document.getElementById('gtor-member-name');
+  var detailEl = document.getElementById('gtor-member-details');
+  if (!m) { if(nameEl) nameEl.textContent = 'Select a borrower first'; if(detailEl) detailEl.textContent=''; return; }
+  if (m.Nominee1_Name) {
+    if(nameEl) nameEl.textContent = m.Nominee1_Name + ' (' + (m.Nominee1_Relationship||'') + ')';
+    if(detailEl) detailEl.textContent = '📞 ' + (m.Nominee1_Phone||'—') + (m.Nominee1_ID_Number?' | ID: '+m.Nominee1_ID_Number:'');
+  } else {
+    if(nameEl) { nameEl.textContent = 'No guarantor in member sheet'; nameEl.style.color = '#dc2626'; }
+    if(detailEl) detailEl.textContent = 'You can add a custom guarantor using the option above.';
+  }
+}
+
+// ─── LOAN FILE UPLOAD ───
+function handleLoanFileChange(input) {
+  var file = input.files[0];
+  var area = document.getElementById('loan-file-area');
+  var nameEl = document.getElementById('loan-file-name');
+  if (!file) { area.classList.remove('has-file'); nameEl.style.display='none'; return; }
+  if (file.size > 3 * 1024 * 1024) {
+    toast('File too large! Max 3MB allowed.','error');
+    input.value = '';
+    return;
+  }
+  var allowed = ['application/pdf','image/jpeg','image/jpg'];
+  if (allowed.indexOf(file.type) === -1) {
+    toast('Only PDF, JPG, JPEG files allowed.','error');
+    input.value = '';
+    return;
+  }
+  area.classList.add('has-file');
+  nameEl.style.display = 'block';
+  nameEl.textContent = '✓ ' + file.name + ' (' + (file.size/1024).toFixed(1) + ' KB)';
+}
+
 // ─── AUTOCOMPLETE ───
-function setupAC(inputId,listId,hiddenId,hiddenNameId,hiddenEmailId,acType) {
+function setupAC(inputId,listId,hiddenId,hiddenNameId,hiddenEmailId,acType){
   var inp=document.getElementById(inputId); if(!inp) return;
   var lst=document.getElementById(listId); if(!lst) return;
   var ni=inp.cloneNode(true); inp.parentNode.replaceChild(ni,inp); inp=ni;
-  function getItems() {
-    if (acType==='member') return S.members;
-    if (acType==='loan') {
+  function getItems(){
+    if(acType==='member') return S.members;
+    if(acType==='loan'){
       var rows=(S.loans&&S.loans.length>1)?S.loans.slice(1):[];
       return rows.filter(function(r){return r[9]==='Active';});
     }
     return [];
   }
-  function render(val) {
+  function render(val){
     lst.innerHTML=''; if(!val||val.length<2) return;
-    var items=getItems();
-    var hits;
+    var items=getItems(); var hits;
     if(acType==='member'){
       hits=items.filter(function(m){return(String(m.Name||'')+String(m.ID||'')+String(m.Phone||'')).toLowerCase().indexOf(val.toLowerCase())!==-1;}).slice(0,8);
       if(!hits.length){lst.innerHTML='<div style="color:var(--text-muted);padding:9px 13px;">No results</div>';return;}
@@ -1611,8 +1979,11 @@ function setupAC(inputId,listId,hiddenId,hiddenNameId,hiddenEmailId,acType) {
           inp.value=m.Name;
           if(hiddenId) document.getElementById(hiddenId).value=m.ID;
           if(hiddenNameId) document.getElementById(hiddenNameId).value=m.Name;
-          if(hiddenEmailId) { var eEl=document.getElementById(hiddenEmailId); if(eEl) eEl.value=m.Email||''; }
-          if(inputId==='fi-lmember'){var bt=document.getElementById('fi-lbtype');if(bt)bt.value=m.Type||'Member';}
+          if(hiddenEmailId){var eEl=document.getElementById(hiddenEmailId);if(eEl)eEl.value=m.Email||'';}
+          if(inputId==='fi-lmember'){
+            var bt=document.getElementById('fi-lbtype');if(bt)bt.value=m.Type||'Member';
+            updateGuarantorInfo(m.ID);
+          }
           lst.innerHTML='';
         };
         lst.appendChild(d);
@@ -1629,6 +2000,18 @@ function setupAC(inputId,listId,hiddenId,hiddenNameId,hiddenEmailId,acType) {
           var rmid=document.getElementById('fi-rmid'),rmname=document.getElementById('fi-rmname'),rbtype=document.getElementById('fi-rbtype'),rmemail=document.getElementById('fi-rmemail');
           if(rmid)rmid.value=l[1];if(rmname)rmname.value=l[2];if(rbtype)rbtype.value=l[3]||'Member';
           if(rmemail){var mem=S.members.find(function(m){return m.ID===l[1];});if(mem)rmemail.value=mem.Email||'';}
+          // Show remaining balance info
+          var remaining = getLoanRemainingBalance(l[0], l[4]);
+          var repays = (S.repayments && S.repayments.length > 1) ? S.repayments.slice(1) : [];
+          var totalPaid = 0;
+          repays.forEach(function(r){ if(String(r[1])===String(l[0])) totalPaid+=Number(r[5]||0); });
+          var lrInfo = document.getElementById('loan-remaining-info');
+          if(lrInfo){
+            lrInfo.style.display='block';
+            document.getElementById('lr-original').textContent = 'KES '+Number(l[4]||0).toLocaleString();
+            document.getElementById('lr-paid').textContent = 'KES '+totalPaid.toLocaleString();
+            document.getElementById('lr-remaining').textContent = 'KES '+remaining.toLocaleString();
+          }
           toast('Loan: '+l[2]+' loaded');
           lst.innerHTML='';
         };
@@ -1650,36 +2033,79 @@ function fillProfile(m) {
   function se(id,v){var el=document.getElementById(id);if(el)el.innerText=v||'—';}
   var initials=(m.Name||'?').split(' ').map(function(w){return w[0];}).join('').substring(0,2).toUpperCase();
   var pi=document.getElementById('pa-initials');if(pi)pi.innerText=initials;
-  se('pa-name',m.Name);se('pa-id',m.ID);se('pa-phone',m.Phone);se('pa-email',m.Email);
-  se('pa-idno',m.ID_Number);se('pa-status',m.Status);se('pa-type',m.Type);se('pa-address',m.Address);
-  var upd = m.LastUpdated ? new Date(m.LastUpdated).toLocaleDateString() : '—';
-  se('pa-updated', upd + (m.UpdatedBy ? ' by '+m.UpdatedBy : ''));
+  se('pa-name',m.Name);se('pa-id',m.ID);se('pa-phone',m.Phone);se('pa-email',m.Email||'N/A');
+  se('pa-idno',m.ID_Number);se('pa-type',m.Type);se('pa-address',m.Address||'N/A');
   var ps=document.getElementById('pa-savings'),pl=document.getElementById('pa-loan');
   if(ps)ps.innerText='KES '+Number(m.TotalSavings||0).toLocaleString();
   if(pl)pl.innerText='KES '+Number(m.CurrentLoanBalance||0).toLocaleString();
+
+  var statusBadge=document.getElementById('pa-status-badge');
+  if(statusBadge){
+    var st=String(m.Status||'').toLowerCase();
+    var bc=st==='active'?'badge-active':st==='inactive'?'badge-inactive':'badge-closed';
+    statusBadge.innerHTML='<span class="badge '+bc+'">'+m.Status+'</span>';
+  }
+
+  var upd = m.LastUpdated ? new Date(m.LastUpdated).toLocaleDateString() : '—';
+  se('pa-updated', upd + (m.UpdatedBy ? ' by '+m.UpdatedBy : ''));
+
+  // Guarantor
   var n1el=document.getElementById('pa-n1');
   if(n1el) n1el.innerHTML = m.Nominee1_Name
-    ? m.Nominee1_Name+' ('+m.Nominee1_Relationship+') — '+m.Nominee1_Phone
-      +(m.Nominee1_ID_Number ? ' — ID: '+m.Nominee1_ID_Number : '')
-      +(m.Nominee1_Address?' — '+m.Nominee1_Address:'')
+    ? '<strong>'+m.Nominee1_Name+'</strong> ('+m.Nominee1_Relationship+')<br>📞 '+m.Nominee1_Phone+(m.Nominee1_ID_Number?' | ID: '+m.Nominee1_ID_Number:'')+(m.Nominee1_Address?'<br>📍 '+m.Nominee1_Address:'')
     : '<span style="color:var(--text-muted);">Not set</span>';
-  var n2box=document.getElementById('pa-n2-box');
-  var n2el=document.getElementById('pa-n2');
-  if(n2box && n2el){
-    if(m.Nominee2_Name){
-      n2box.style.display='block';
-      n2el.innerHTML = m.Nominee2_Name+' ('+m.Nominee2_Relationship+') — '+m.Nominee2_Phone
-        +(m.Nominee2_ID_Number ? ' — ID: '+m.Nominee2_ID_Number : '')
-        +(m.Nominee2_Address?' — '+m.Nominee2_Address:'');
-    } else { n2box.style.display='none'; }
+
+  // Nominee
+  var n2box=document.getElementById('pa-n2-box'); var n2el=document.getElementById('pa-n2');
+  if(n2box&&n2el){
+    if(m.Nominee2_Name){n2box.style.display='block';n2el.innerHTML='<strong>'+m.Nominee2_Name+'</strong> ('+m.Nominee2_Relationship+')<br>📞 '+m.Nominee2_Phone+(m.Nominee2_ID_Number?' | ID: '+m.Nominee2_ID_Number:'');}
+    else { n2box.style.display='none'; }
+  }
+
+  // Contribution history for this member
+  var contribs = (S.contributions && S.contributions.length > 1)
+    ? S.contributions.slice(1).filter(function(r){ return String(r[1]) === String(m.ID); })
+    : [];
+  var contribCountEl = document.getElementById('pa-contrib-count');
+  if(contribCountEl) contribCountEl.innerText = contribs.length;
+  var contribList = document.getElementById('pa-contrib-list');
+  if (contribList) {
+    if (contribs.length) {
+      contribList.innerHTML = contribs.slice().reverse().slice(0,10).map(function(r){
+        return '<div class="activity-mini-item"><span>'+(r[3]?new Date(r[3]).toLocaleDateString():'—')+' · '+r[5]+'</span><strong>+KES '+Number(r[4]||0).toLocaleString()+'</strong></div>';
+      }).join('');
+    } else {
+      contribList.innerHTML = '<p style="font-size:12px;color:var(--text-muted);padding:8px;">No contributions found</p>';
+    }
+  }
+
+  // Loan history for this member
+  var memberLoans = (S.loans && S.loans.length > 1)
+    ? S.loans.slice(1).filter(function(r){ return String(r[1]) === String(m.ID); })
+    : [];
+  var loanCountEl = document.getElementById('pa-loan-count');
+  if(loanCountEl) loanCountEl.innerText = memberLoans.filter(function(l){return String(l[9]).toLowerCase()==='active';}).length;
+  var loanList = document.getElementById('pa-loan-list');
+  if (loanList) {
+    if (memberLoans.length) {
+      loanList.innerHTML = memberLoans.slice().reverse().map(function(r){
+        var st=String(r[9]||'').toLowerCase();
+        var remaining=getLoanRemainingBalance(r[0],r[4]);
+        var stIcon=st==='closed'?'✅':'🔴';
+        return '<div class="activity-mini-item"><span>'+stIcon+' '+r[0]+' | KES '+Number(r[4]||0).toLocaleString()+' | Due: '+(r[8]?new Date(r[8]).toLocaleDateString():'—')+'</span><strong style="color:'+(st==='closed'?'#16a34a':'#dc2626')+';">Rem: KES '+remaining.toLocaleString()+'</strong></div>';
+      }).join('');
+    } else {
+      loanList.innerHTML = '<p style="font-size:12px;color:var(--text-muted);padding:8px;">No loans found</p>';
+    }
   }
 }
-function editMember(id) {
+
+function editMember(id){
   var m=S.members.find(function(x){return x.ID===id;});
   if(!m){api.get('getMemberById',{id:id}).then(function(d){if(d){fillEditForm(d);openModal('m-edit');}}).catch(function(){toast('Not found','error');});return;}
   fillEditForm(m);openModal('m-edit');
 }
-function fillEditForm(m) {
+function fillEditForm(m){
   function sv(id,v){var el=document.getElementById(id);if(el)el.value=v||'';}
   sv('fi-eid',m.ID);sv('fi-ename',m.Name);sv('fi-ephone',m.Phone);sv('fi-eemail',m.Email);
   sv('fi-eidno',m.ID_Number);sv('fi-eaddress',m.Address);
@@ -1692,7 +2118,7 @@ function fillEditForm(m) {
 }
 
 // ─── FORM SUBMISSIONS ───
-function submitMember(e) {
+function submitMember(e){
   e.preventDefault();
   var phone=(document.getElementById('fi-mphone')||{}).value.trim();
   if(phone.length<8||isNaN(phone.replace(/[+\-\s]/g,''))){toast('Enter valid phone number','error');return;}
@@ -1736,7 +2162,7 @@ function submitMember(e) {
   }).catch(function(err){toast('Server error: '+err.message,'error');S.members=S.members.filter(function(m){return m.ID!==tempId;});renderMembersTable();});
 }
 
-function submitContribution(e) {
+function submitContribution(e){
   e.preventDefault();
   var mid=(document.getElementById('fi-cmid')||{}).value;
   if(!mid){toast('Select a member from list','error');return;}
@@ -1772,7 +2198,7 @@ function submitContribution(e) {
   }).catch(function(err){toast('Server error: '+err.message,'error');loadAll(true);});
 }
 
-function submitLoan(e) {
+function submitLoan(e){
   e.preventDefault();
   var mid=(document.getElementById('fi-lmid')||{}).value;
   if(!mid){toast('Select a member from list','error');return;}
@@ -1783,29 +2209,63 @@ function submitLoan(e) {
   var btype=(document.getElementById('fi-lbtype')||{}).value||'Member';
   var mname=(document.getElementById('fi-lmname')||{}).value;
   var memail=(document.getElementById('fi-lmemail')||{}).value||'';
-  var payload={memberId:mid,memberName:mname,memberEmail:memail,amount:amt,borrowerType:btype,term:term};
+
+  // Guarantor name
+  var gtorName = '';
+  if (guarantorMode === 'custom') {
+    gtorName = (document.getElementById('fi-gtor-name')||{}).value||'';
+  } else {
+    var m = S.members.find(function(x){return x.ID===mid;});
+    gtorName = m && m.Nominee1_Name ? m.Nominee1_Name : '';
+  }
+
+  var payload={memberId:mid,memberName:mname,memberEmail:memail,amount:amt,borrowerType:btype,term:term,guarantorName:gtorName};
   var ir=btype.toLowerCase()==='member'?0.10:0.20;
   var sd=new Date();var dd=new Date();dd.setMonth(dd.getMonth()+parseInt(term));
   var tempId='L'+Math.random().toString(36).substr(2,6).toUpperCase();
-  var newRow=[tempId,mid,mname,btype,amt,term,ir,sd.toISOString(),dd.toISOString(),'Active'];
-  if(!S.loans||!S.loans.length) S.loans=[['ID','MemberID','MemberName','BorrowerType','Amount','TermMonths','InterestRate','StartDate','DueDate','Status']];
+  var newRow=[tempId,mid,mname,btype,amt,term,ir,sd.toISOString(),dd.toISOString(),'Active',gtorName];
+
+  // Handle file attachment
+  var fileInput = document.getElementById('fi-lfile');
+  var file = fileInput && fileInput.files[0];
+  if (file) {
+    var reader = new FileReader();
+    reader.onload = function(ev) {
+      S.loanFiles[tempId] = { dataUrl: ev.target.result, type: file.type, name: file.name };
+    };
+    reader.readAsDataURL(file);
+  }
+
+  if(!S.loans||!S.loans.length) S.loans=[['ID','MemberID','MemberName','BorrowerType','Amount','TermMonths','InterestRate','StartDate','DueDate','Status','GuarantorName']];
   S.loans.push(newRow);
   var mi=S.members.findIndex(function(m){return m.ID===mid;});
   if(mi>=0) S.members[mi].CurrentLoanBalance=(Number(S.members[mi].CurrentLoanBalance)||0)+amt;
   if(S.dashboard){S.dashboard.totalLoans=(Number(S.dashboard.totalLoans)||0)+1;S.dashboard.outstandingBalance=(Number(S.dashboard.outstandingBalance)||0)+amt;if(S.currentView==='dashboard')updateDashStats(S.dashboard);}
-  if(S.currentView==='loans') renderSheet('loans','tb-loans','loan');
+  if(S.currentView==='loans') renderLoansTable();
   toast('Loan disbursed!');
   closeModal('m-loan');
   document.getElementById('f-loan').reset();
   document.getElementById('fi-lmid').value='';document.getElementById('fi-lmname').value='';document.getElementById('fi-lmemail').value='';
+  if(fileInput) fileInput.value='';
+  var area=document.getElementById('loan-file-area'); if(area) area.classList.remove('has-file');
+  var fnEl=document.getElementById('loan-file-name'); if(fnEl){fnEl.style.display='none';fnEl.textContent='';}
+  // Reset guarantor
+  setGuarantorMode('member');
+  var gnEl=document.getElementById('gtor-member-name'); if(gnEl) gnEl.textContent='Select a borrower first';
+  var gdEl=document.getElementById('gtor-member-details'); if(gdEl) gdEl.textContent='';
   setBtnLoading(btn,false);
-  api.post('disburseLoan',payload).then(function(){
-    api.get('getSheet',{sheet:'Loans'}).then(function(d){if(d)S.loans=d;if(S.currentView==='loans')renderSheet('loans','tb-loans','loan');});
+  api.post('disburseLoan',payload).then(function(res){
+    // Update loan ID in local files store if we have a temp
+    if (file && res && res.id) {
+      S.loanFiles[res.id] = S.loanFiles[tempId];
+      delete S.loanFiles[tempId];
+    }
+    api.get('getSheet',{sheet:'Loans'}).then(function(d){if(d)S.loans=d;if(S.currentView==='loans')renderLoansTable();});
     api.get('getDashboardStats').then(function(d){S.dashboard=d;if(S.currentView==='dashboard')updateDashStats(d);});
   }).catch(function(err){toast('Server error: '+err.message,'error');loadAll(true);});
 }
 
-function submitRepayment(e) {
+function submitRepayment(e){
   e.preventDefault();
   var lid=(document.getElementById('fi-rlid')||{}).value;
   var mbid=(document.getElementById('fi-rmid')||{}).value;
@@ -1830,6 +2290,9 @@ function submitRepayment(e) {
   if(miVal==='') toast('Auto Interest: KES '+interest.toLocaleString());
   if(S.currentView==='repayments') renderSheet('repayments','tb-repayments','repay');
   if(S.currentView==='members') renderMembersTable();
+  if(S.currentView==='loans') renderLoansTable();
+  // Hide remaining info
+  var lrInfo=document.getElementById('loan-remaining-info');if(lrInfo)lrInfo.style.display='none';
   toast('Repayment recorded!');
   closeModal('m-repayment');
   document.getElementById('f-repayment').reset();
@@ -1843,7 +2306,7 @@ function submitRepayment(e) {
   }).catch(function(err){toast('Server error: '+err.message,'error');loadAll(true);});
 }
 
-function submitExpense(e) {
+function submitExpense(e){
   e.preventDefault();
   var btn=document.getElementById('btn-expense-submit');
   setBtnLoading(btn,true);
@@ -1879,7 +2342,7 @@ function submitExpense(e) {
   }).catch(function(err){toast('Server error: '+err.message,'error');loadAll(true);});
 }
 
-function submitEditMember(e) {
+function submitEditMember(e){
   e.preventDefault();
   var id=(document.getElementById('fi-eid')||{}).value;
   var btn=document.getElementById('btn-edit-submit');
@@ -1919,7 +2382,7 @@ function submitEditMember(e) {
   }).catch(function(err){toast('Server error: '+err.message,'error');loadAll(true);});
 }
 
-function submitMGR(e) {
+function submitMGR(e){
   e.preventDefault();
   var b1=(document.getElementById('fi-mgrb1id')||{}).value;
   var b2=(document.getElementById('fi-mgrb2id')||{}).value;
@@ -1964,7 +2427,7 @@ function exportCSV(type) {
   var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8;'}));a.download='SACCO_'+type+'_'+new Date().toISOString().split('T')[0]+'.csv';a.style.display='none';document.body.appendChild(a);a.click();document.body.removeChild(a);
   toast(type+' exported!');
 }
-function downloadFullWorkbook() {
+function downloadFullWorkbook(){
   toast('Generating workbook...');
   api.get('getExportUrl').then(function(url){var a=document.createElement('a');a.href=url;a.target='_blank';document.body.appendChild(a);a.click();document.body.removeChild(a);toast('Download started!');}).catch(function(){toast('Download failed','error');});
 }
@@ -1972,36 +2435,8 @@ function downloadFullWorkbook() {
 // ─── UTILITIES ───
 function setBtnLoading(btn,loading){if(!btn)return;if(loading){btn.disabled=true;btn._orig=btn.innerHTML;btn.innerHTML='<i class="fas fa-spinner spinning"></i> Saving...';}else{btn.disabled=false;if(btn._orig)btn.innerHTML=btn._orig;}}
 
-// ─── SETUP ───
-function saveSetupUrl() {
-  var inp=document.getElementById('setup-url');
-  var err=document.getElementById('setup-error');
-  var btn=document.getElementById('setup-btn');
-  var url=(inp.value||'').trim();
-  if(!url||url.indexOf('script.google.com')===-1){err.style.display='block';err.textContent='❌ Please enter a valid Apps Script URL.';return;}
-  err.style.display='none';
-  btn.innerHTML='<i class="fas fa-spinner spinning"></i> Connecting...'; btn.disabled=true;
-  fetch(url+'?action=ping')
-    .then(function(r){return r.json();})
-    .then(function(r){
-      if(r&&(r.success!==false)){
-        localStorage.setItem('sacco_api_url',url);
-        S.apiUrl=url;
-        document.getElementById('setup-overlay').style.display='none';
-        initApp();
-      } else { throw new Error('API test failed'); }
-    })
-    .catch(function(){
-      btn.innerHTML='<i class="fas fa-plug"></i> Connect & Launch'; btn.disabled=false;
-      err.textContent='❌ Could not connect. Check the URL and try again.'; err.style.display='block';
-    });
-}
-
-function initApp() {
-    // Force hide setup overlay
-  var ov = document.getElementById('setup-overlay');
-  if (ov) ov.style.display = 'none';
-  
+// ─── INIT ───
+function initApp(){
   var de=document.getElementById('current-date');
   if(de) de.innerText=new Date().toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'});
   showView('dashboard');
@@ -2009,19 +2444,12 @@ function initApp() {
 }
 
 window.addEventListener('DOMContentLoaded',function(){
-  var urlInp=document.getElementById('setup-url');
-  if(urlInp) urlInp.addEventListener('keydown',function(e){if(e.key==='Enter')saveSetupUrl();});
-  // Show MGR scroll hint on resize for mobile
-  window.addEventListener('resize', function() {
-    var mgrHint = document.getElementById('mgr-scroll-hint');
-    if (mgrHint && S.currentView === 'mgr') {
-      mgrHint.style.display = window.innerWidth < 1200 ? 'flex' : 'none';
-    }
+  window.addEventListener('resize', function(){
+    var mgrHint=document.getElementById('mgr-scroll-hint');
+    if(mgrHint&&S.currentView==='mgr') mgrHint.style.display=window.innerWidth<1200?'flex':'none';
   });
 });
-window.onload=function(){
-  initApp();
-};
+window.onload=function(){ initApp(); };
 </script>
 </body>
 </html>
