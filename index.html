@@ -1101,6 +1101,16 @@ var api = {
       .then(function(r){ return r.json(); })
       .then(function(r){ if (r.success === false) throw new Error(r.error||'API Error'); return r.data; });
   },
+  postJSON: function(action, body) {
+    return fetch(S.apiUrl + '?action=' + action, {
+      method: 'POST',
+      redirect: 'follow',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify(body)
+    })
+      .then(function(r){ return r.json(); })
+      .then(function(r){ if (r.success === false) throw new Error(r.error||'API Error'); return r.data; });
+  },
   post: function(action, body, params) {
     var u = new URL(S.apiUrl);
     u.searchParams.set('action', action);
@@ -2342,7 +2352,7 @@ function submitLoan(e){
       var fr = new FileReader();
       fr.onload = function(ev) {
         var base64 = ev.target.result.split(',')[1]; // strip data:...;base64,
-       api.post('uploadLoanFile', {
+       api.postJSON('uploadLoanFile', {
           loanId:      realLoanId,
           memberName:  mname,
           fileName:    pendingFile.name,
