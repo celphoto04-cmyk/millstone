@@ -1190,7 +1190,18 @@ function loadAll(force) {
   p.push(api.get('getDashboardStats').then(function(d){ S.dashboard=d; }).catch(function(e){ console.warn('Dashboard:',e.message); }));
   p.push(api.get('getMembers',{limit:2000,offset:0}).then(function(d){ if(d&&d.length) S.members=d; }).catch(function(e){ console.warn('Members:',e.message); }));
   p.push(api.get('getSheet',{sheet:'Contributions'}).then(function(d){ if(d) S.contributions=d; }).catch(function(){}));
-  p.push(api.get('getSheet',{sheet:'Loans'}).then(function(d){ if(d) S.loans=d; }).catch(function(){}));
+  p.push(api.get('getSheet',{sheet:'Loans'}).then(function(d){
+    if(d) {
+      S.loans=d;
+      // Check which loans have Drive files (from DriveFileId column index 11)
+      d.slice(1).forEach(function(row) {
+        if (row[0] && row[11]) {
+          if (!S.loanFiles[row[0]]) S.loanFiles[row[0]] = {};
+          S.loanFiles[row[0]].driveFileId = row[11];
+        }
+      });
+    }
+  }).catch(function(){}));
   p.push(api.get('getSheet',{sheet:'Repayments'}).then(function(d){ if(d) S.repayments=d; }).catch(function(){}));
   p.push(api.get('getSheet',{sheet:'MerryGoRound'}).then(function(d){ if(d) S.mgr=d; }).catch(function(){}));
   p.push(api.get('getSheet',{sheet:'Expenses'}).then(function(d){ if(d) S.expenses=d; }).catch(function(){}));
@@ -1539,14 +1550,32 @@ function viewLoanDetail(loanId) {
 // ─── VIEW PDF ───
 function viewLoanPdf(loanId) {
   var fileData = S.loanFiles[loanId];
-  if (!fileData) { toast('No document attached','warning'); return; }
-  // Open in new tab
-  var win = window.open();
-  if (fileData.type === 'application/pdf') {
-    win.document.write('<iframe src="'+fileData.dataUrl+'" style="width:100%;height:100%;border:0;"></iframe>');
-  } else {
-    win.document.write('<img src="'+fileData.dataUrl+'" style="max-width:100%;display:block;margin:auto;">');
+  // If we have Drive file ID (from upload), open Drive link directly
+  if (fileData && fileData.driveFileId) {
+    window.open('https://drive.google.com/file/d/' + fileData.driveFileId + '/view', '_blank');
+    return;
   }
+  // Fallback: check server for Drive file
+  api.get('getLoanFile', {loanId: loanId}).then(function(res) {
+    if (res && res.exists && res.viewUrl) {
+      // Cache it
+      if (!S.loanFiles[loanId]) S.loanFiles[loanId] = {};
+      S.loanFiles[loanId].driveFileId = res.fileId;
+      window.open(res.viewUrl, '_blank');
+    } else if (fileData && fileData.dataUrl) {
+      // Last resort: local memory (works only before refresh)
+      var win = window.open();
+      if (fileData.type === 'application/pdf') {
+        win.document.write('<iframe src="'+fileData.dataUrl+'" style="width:100%;height:100%;border:0;"></iframe>');
+      } else {
+        win.document.write('<img src="'+fileData.dataUrl+'" style="max-width:100%;display:block;margin:auto;">');
+      }
+    } else {
+      toast('No document found for this loan','warning');
+    }
+  }).catch(function() {
+    toast('Could not retrieve document','error');
+  });
 }
 
 // ─── EDIT LOAN ───
@@ -1569,21 +1598,43 @@ function submitEditLoan(e) {
   var id = document.getElementById('fi-ledit-id').value;
   var btn = document.getElementById('btn-ledit-submit');
   setBtnLoading(btn, true);
-  // Optimistic update
-  for (var i=1;i<S.loans.length;i++) {
-    if (String(S.loans[i][0])===String(id)) {
-      S.loans[i][4] = parseFloat(document.getElementById('fi-ledit-amount').value)||S.loans[i][4];
-      S.loans[i][5] = document.getElementById('fi-ledit-term').value||S.loans[i][5];
-      S.loans[i][8] = document.getElementById('fi-ledit-duedate').value||S.loans[i][8];
-      S.loans[i][9] = document.getElementById('fi-ledit-status').value||S.loans[i][9];
-      S.loans[i][10] = document.getElementById('fi-ledit-gtor').value||'';
+  var amount   = parseFloat(document.getElementById('fi-ledit-amount').value) || 0;
+  var term     = document.getElementById('fi-ledit-term').value;
+  var dueDate  = document.getElementById('fi-ledit-duedate').value;
+  var status   = document.getElementById('fi-ledit-status').value;
+  var gtorName = document.getElementById('fi-ledit-gtor').value || '';
+  // Optimistic local update
+  for (var i=1; i<S.loans.length; i++) {
+    if (String(S.loans[i][0]) === String(id)) {
+      S.loans[i][4]  = amount   || S.loans[i][4];
+      S.loans[i][5]  = term     || S.loans[i][5];
+      S.loans[i][8]  = dueDate  || S.loans[i][8];
+      S.loans[i][9]  = status   || S.loans[i][9];
+      S.loans[i][10] = gtorName;
       break;
     }
   }
   renderLoansTable();
   closeModal('m-loan-edit');
-  toast('Loan updated!');
-  setBtnLoading(btn, false);
+  toast('Saving loan changes...');
+  // ── ACTUAL SERVER SAVE ──
+  api.post('updateLoan', {
+    id:            id,
+    amount:        amount,
+    term:          term,
+    dueDate:       dueDate,
+    status:        status,
+    guarantorName: gtorName
+  }).then(function() {
+    toast('Loan updated & saved!');
+    setBtnLoading(btn, false);
+    // Refresh from server to confirm
+    api.get('getSheet', {sheet:'Loans'}).then(function(d){ if(d) S.loans=d; renderLoansTable(); });
+  }).catch(function(err) {
+    toast('Save failed: ' + err.message, 'error');
+    setBtnLoading(btn, false);
+    loadAll(true);
+  });
 }
 
 // ─── GENERIC SHEET TABLE ───
@@ -1631,19 +1682,42 @@ function editRepayment(rowIdx) {
 }
 function submitEditRepayment(e) {
   e.preventDefault();
-  var idx = parseInt(document.getElementById('fi-redit-rowindex').value);
-  var btn = document.getElementById('btn-redit-submit');
+  var idx     = parseInt(document.getElementById('fi-redit-rowindex').value);
+  var btn     = document.getElementById('btn-redit-submit');
   setBtnLoading(btn, true);
+  var amount    = parseFloat(document.getElementById('fi-redit-amount').value)    || 0;
+  var principal = parseFloat(document.getElementById('fi-redit-principal').value) || 0;
+  var interest  = parseFloat(document.getElementById('fi-redit-interest').value)  || 0;
+  var penalty   = parseFloat(document.getElementById('fi-redit-penalty').value)   || 0;
+  // Get repayment ID for server call
+  var repayId = (S.repayments && S.repayments[idx]) ? S.repayments[idx][0] : null;
+  if (!repayId) { toast('Repayment ID not found','error'); setBtnLoading(btn,false); return; }
+  // Optimistic local update
   if (S.repayments && S.repayments[idx]) {
-    S.repayments[idx][4] = parseFloat(document.getElementById('fi-redit-amount').value)||0;
-    S.repayments[idx][5] = parseFloat(document.getElementById('fi-redit-principal').value)||0;
-    S.repayments[idx][6] = parseFloat(document.getElementById('fi-redit-interest').value)||0;
-    S.repayments[idx][7] = parseFloat(document.getElementById('fi-redit-penalty').value)||0;
+    S.repayments[idx][4] = amount;
+    S.repayments[idx][5] = principal;
+    S.repayments[idx][6] = interest;
+    S.repayments[idx][7] = penalty;
   }
   renderSheet('repayments','tb-repayments','repay');
   closeModal('m-repayment-edit');
-  toast('Repayment updated locally. Sync to save.');
-  setBtnLoading(btn, false);
+  toast('Saving repayment changes...');
+  // ── ACTUAL SERVER SAVE ──
+  api.post('updateRepayment', {
+    id:        repayId,
+    amount:    amount,
+    principal: principal,
+    interest:  interest,
+    penalty:   penalty
+  }).then(function() {
+    toast('Repayment saved to sheet!');
+    setBtnLoading(btn, false);
+    api.get('getSheet',{sheet:'Repayments'}).then(function(d){ if(d) S.repayments=d; renderSheet('repayments','tb-repayments','repay'); });
+  }).catch(function(err) {
+    toast('Save failed: ' + err.message, 'error');
+    setBtnLoading(btn, false);
+    loadAll(true);
+  });
 }
 
 // ─── EXPENSES ───
@@ -2225,12 +2299,14 @@ function submitLoan(e){
   var tempId='L'+Math.random().toString(36).substr(2,6).toUpperCase();
   var newRow=[tempId,mid,mname,btype,amt,term,ir,sd.toISOString(),dd.toISOString(),'Active',gtorName];
 
-  // Handle file attachment
+// Handle file attachment — upload to Google Drive after loan is created
   var fileInput = document.getElementById('fi-lfile');
   var file = fileInput && fileInput.files[0];
+  var pendingFile = file ? file : null; // Save reference for after API call
   if (file) {
     var reader = new FileReader();
     reader.onload = function(ev) {
+      // Store locally for immediate viewing before server confirms
       S.loanFiles[tempId] = { dataUrl: ev.target.result, type: file.type, name: file.name };
     };
     reader.readAsDataURL(file);
@@ -2254,15 +2330,38 @@ function submitLoan(e){
   var gnEl=document.getElementById('gtor-member-name'); if(gnEl) gnEl.textContent='Select a borrower first';
   var gdEl=document.getElementById('gtor-member-details'); if(gdEl) gdEl.textContent='';
   setBtnLoading(btn,false);
-  api.post('disburseLoan',payload).then(function(res){
-    // Update loan ID in local files store if we have a temp
-    if (file && res && res.id) {
-      S.loanFiles[res.id] = S.loanFiles[tempId];
+  api.post('disburseLoan', payload).then(function(res) {
+    var realLoanId = (res && res.id) ? res.id : tempId;
+    // Move local file cache to real loan ID
+    if (pendingFile && S.loanFiles[tempId]) {
+      S.loanFiles[realLoanId] = S.loanFiles[tempId];
       delete S.loanFiles[tempId];
+    }
+    // ── UPLOAD FILE TO GOOGLE DRIVE ──
+    if (pendingFile) {
+      var fr = new FileReader();
+      fr.onload = function(ev) {
+        var base64 = ev.target.result.split(',')[1]; // strip data:...;base64,
+        api.post('uploadLoanFile', {
+          loanId:   realLoanId,
+          fileName: pendingFile.name,
+          mimeType: pendingFile.type,
+          base64Data: base64
+        }).then(function(uploadRes) {
+          if (uploadRes && uploadRes.fileId) {
+            toast('Document uploaded to Drive!');
+            // Update local cache viewUrl too
+            if (S.loanFiles[realLoanId]) S.loanFiles[realLoanId].driveFileId = uploadRes.fileId;
+          }
+        }).catch(function(uploadErr) {
+          toast('File upload failed: ' + uploadErr.message, 'warning');
+        });
+      };
+      fr.readAsDataURL(pendingFile);
     }
     api.get('getSheet',{sheet:'Loans'}).then(function(d){if(d)S.loans=d;if(S.currentView==='loans')renderLoansTable();});
     api.get('getDashboardStats').then(function(d){S.dashboard=d;if(S.currentView==='dashboard')updateDashStats(d);});
-  }).catch(function(err){toast('Server error: '+err.message,'error');loadAll(true);});
+  }).catch(function(err){ toast('Server error: ' + err.message, 'error'); loadAll(true); });
 }
 
 function submitRepayment(e){
