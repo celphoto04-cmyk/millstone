@@ -1192,8 +1192,8 @@ function loadAll(force) {
   p.push(api.get('getSheet',{sheet:'Contributions'}).then(function(d){ if(d) S.contributions=d; }).catch(function(){}));
   p.push(api.get('getSheet',{sheet:'Loans'}).then(function(d){
     if(d) {
-      S.loans=d;
-      // Check which loans have Drive files (from DriveFileId column index 11)
+      S.loans = d;
+      // Har loan ke liye DriveFileId (col index 11) se PDF icon load karo
       d.slice(1).forEach(function(row) {
         if (row[0] && row[11]) {
           if (!S.loanFiles[row[0]]) S.loanFiles[row[0]] = {};
@@ -2342,11 +2342,12 @@ function submitLoan(e){
       var fr = new FileReader();
       fr.onload = function(ev) {
         var base64 = ev.target.result.split(',')[1]; // strip data:...;base64,
-        api.post('uploadLoanFile', {
-          loanId:   realLoanId,
-          fileName: pendingFile.name,
-          mimeType: pendingFile.type,
-          base64Data: base64
+       api.post('uploadLoanFile', {
+          loanId:      realLoanId,
+          memberName:  mname,
+          fileName:    pendingFile.name,
+          mimeType:    pendingFile.type,
+          base64Data:  base64
         }).then(function(uploadRes) {
           if (uploadRes && uploadRes.fileId) {
             toast('Document uploaded to Drive!');
