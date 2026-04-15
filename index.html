@@ -429,7 +429,6 @@ tbody tr.clickable-row{cursor:pointer;}
         </div>
         <div class="balance-row income"><span class="label">Members Savings</span><span class="amount" id="bs-savings">KES —</span></div>
         <div class="balance-row income"><span class="label">Welfare Funds</span><span class="amount" id="bs-welfare">KES —</span></div>
-        <div class="balance-row income"><span class="label">Merry Go Round Contributions</span><span class="amount" id="bs-mgr">KES —</span></div>
         <div class="balance-row income"><span class="label">Interest Collected</span><span class="amount" id="bs-interest">KES —</span></div>
         <div class="balance-row income"><span class="label">Penalties Collected</span><span class="amount" id="bs-penalties" style="color:#d97706;">KES —</span></div>
         <div class="balance-divider"></div>
@@ -1362,7 +1361,6 @@ function updateDashStats(s) {
 
   se('bs-savings', 'KES '+Number(s.totalMembersSavings||0).toLocaleString());
   se('bs-welfare', 'KES '+Number(s.totalWelfareFunds||0).toLocaleString());
-  se('bs-mgr',     'KES '+Number(s.totalMerryGoRound||0).toLocaleString());
   se('bs-interest','KES '+Number(s.totalInterests||0).toLocaleString());
   se('bs-loans',  '- KES '+Number(s.outstandingBalance||0).toLocaleString());
   se('bs-expenses','- KES '+Number(s.totalExpenses||0).toLocaleString());
