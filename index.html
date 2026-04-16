@@ -417,7 +417,9 @@ tbody tr.clickable-row{cursor:pointer;}
         <div class="stat-card"><div class="stat-icon si-orange"><i class="fas fa-clock"></i></div><div class="stat-info"><p>Loans Disbursed</p><h2 id="s-outstandingBalance">KES —</h2></div></div>
         <div class="stat-card"><div class="stat-icon si-teal"><i class="fas fa-wallet"></i></div><div class="stat-info"><p>Members Savings</p><h2 id="s-totalMembersSavings">KES —</h2></div></div>
         <div class="stat-card"><div class="stat-icon si-pink"><i class="fas fa-hand-holding-medical"></i></div><div class="stat-info"><p>Welfare Funds</p><h2 id="s-totalWelfareFunds">KES —</h2></div></div>
+        <div class="stat-card highlight-green"><div class="stat-icon si-teal"><i class="fas fa-layer-group"></i></div><div class="stat-info"><p>Savings + Welfare</p><h2 id="s-savingsWelfareTotal">KES —</h2></div></div>
         <!-- NEW: Total Penalties Collected -->
+        <div class="stat-card"><div class="stat-icon si-cyan"><i class="fas fa-percentage"></i></div><div class="stat-info"><p>Interest Collected</p><h2 id="s-interestCollected">KES —</h2></div></div>
         <div class="stat-card highlight-amber"><div class="stat-icon si-amber"><i class="fas fa-gavel"></i></div><div class="stat-info"><p>Penalties Collected</p><h2 id="s-totalPenaltiesCollected" style="color:#d97706;">KES —</h2></div></div>
         <div class="stat-card highlight-red"><div class="stat-icon si-red"><i class="fas fa-receipt"></i></div><div class="stat-info"><p>Total Expenses</p><h2 id="s-totalExpenses" class="negative">KES —</h2></div></div>
         <div class="stat-card highlight-green"><div class="stat-icon si-green"><i class="fas fa-balance-scale"></i></div><div class="stat-info"><p>Net Balance</p><h2 id="s-netBalance">KES —</h2></div></div>
@@ -427,8 +429,7 @@ tbody tr.clickable-row{cursor:pointer;}
           <h3><i class="fas fa-balance-scale" style="color:var(--primary);margin-right:8px;"></i>Balance Sheet Summary</h3>
           <span style="font-size:11px;color:var(--text-muted);font-weight:600;">Auto-calculated</span>
         </div>
-        <div class="balance-row income"><span class="label">Members Savings</span><span class="amount" id="bs-savings">KES —</span></div>
-        <div class="balance-row income"><span class="label">Welfare Funds</span><span class="amount" id="bs-welfare">KES —</span></div>
+        <div class="balance-row income"><span class="label">Savings + Welfare (Total)</span><span class="amount" id="bs-savings">KES —</span></div>
         <div class="balance-row income"><span class="label">Interest Collected</span><span class="amount" id="bs-interest">KES —</span></div>
         <div class="balance-row income"><span class="label">Penalties Collected</span><span class="amount" id="bs-penalties" style="color:#d97706;">KES —</span></div>
         <div class="balance-divider"></div>
@@ -1350,23 +1351,41 @@ function updateDashStats(s) {
   se('s-totalMerryGoRound', 'KES '+Number(s.totalMerryGoRound||0).toLocaleString());
   se('s-totalExpenses', 'KES '+Number(s.totalExpenses||0).toLocaleString());
 
-  // Penalties collected (from actual repayments)
-  var penCollected = getTotalPenaltiesCollected();
+  // --- Calculated values ---
+  var penCollected       = getTotalPenaltiesCollected();
+  var savingsWelfare     = Number(s.totalMembersSavings||0) + Number(s.totalWelfareFunds||0);
+  var interestCollected  = Number(s.totalInterests||0);
+  var loansOut           = Number(s.outstandingBalance||0);
+  var totalExp           = Number(s.totalExpenses||0);
+
+  // Savings + Welfare combined card
+  se('s-savingsWelfareTotal', 'KES '+savingsWelfare.toLocaleString());
+
+  // Interest Collected card
+  se('s-interestCollected', 'KES '+interestCollected.toLocaleString());
+
+  // Penalties Collected card
   se('s-totalPenaltiesCollected', 'KES '+penCollected.toLocaleString());
-  se('bs-penalties', 'KES '+penCollected.toLocaleString());
 
-  var net = Number(s.netBalance||0);
+  // Correct Net Balance = (Savings+Welfare) + Interest + Penalties - Loans - Expenses
+  var correctNet = savingsWelfare + interestCollected + penCollected - loansOut - totalExp;
+
+  // Net Balance dashboard card
   var netEl = document.getElementById('s-netBalance');
-  if (netEl) { netEl.innerText = 'KES '+net.toLocaleString(); netEl.className = net >= 0 ? 'positive' : 'negative'; }
+  if (netEl) { netEl.innerText = 'KES '+correctNet.toLocaleString(); netEl.className = correctNet >= 0 ? 'positive' : 'negative'; }
 
-  se('bs-savings', 'KES '+Number(s.totalMembersSavings||0).toLocaleString());
-  se('bs-welfare', 'KES '+Number(s.totalWelfareFunds||0).toLocaleString());
-  se('bs-interest','KES '+Number(s.totalInterests||0).toLocaleString());
-  se('bs-loans',  '- KES '+Number(s.outstandingBalance||0).toLocaleString());
-  se('bs-expenses','- KES '+Number(s.totalExpenses||0).toLocaleString());
+  // Balance Sheet rows
+  se('bs-savings',  'KES '+savingsWelfare.toLocaleString());   // Savings+Welfare combined
+  se('bs-interest', 'KES '+interestCollected.toLocaleString());
+  se('bs-penalties','KES '+penCollected.toLocaleString());
+  se('bs-loans',    '- KES '+loansOut.toLocaleString());
+  se('bs-expenses', '- KES '+totalExp.toLocaleString());
+
+  // Balance Sheet net
   var bsNet = document.getElementById('bs-net');
-  if (bsNet) { bsNet.innerText = 'KES '+net.toLocaleString(); bsNet.style.color = net >= 0 ? '#16a34a' : '#dc2626'; }
+  if (bsNet) { bsNet.innerText = 'KES '+correctNet.toLocaleString(); bsNet.style.color = correctNet >= 0 ? '#16a34a' : '#dc2626'; }
 
+  // Recent Contributions
   var list=document.getElementById('recent-list'); if(!list) return;
   if (s.recentContributions&&s.recentContributions.length) {
     list.innerHTML=s.recentContributions.map(function(c){
@@ -1375,6 +1394,7 @@ function updateDashStats(s) {
     }).join('');
   } else { list.innerHTML='<p class="empty-msg">No recent activity</p>'; }
 
+  // Recent Expenses
   var expList=document.getElementById('recent-expenses'); if(!expList) return;
   if (s.recentExpenses&&s.recentExpenses.length) {
     expList.innerHTML=s.recentExpenses.map(function(e){
@@ -1383,7 +1403,6 @@ function updateDashStats(s) {
     }).join('');
   } else { expList.innerHTML='<p class="empty-msg">No expenses yet</p>'; }
 }
-
 // ─── MEMBERS TABLE ───
 function renderMembersTable() {
   var search = getSearchVal();
