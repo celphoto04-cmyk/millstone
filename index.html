@@ -417,7 +417,6 @@ tbody tr.clickable-row{cursor:pointer;}
         <div class="stat-card"><div class="stat-icon si-orange"><i class="fas fa-clock"></i></div><div class="stat-info"><p>Loans Disbursed</p><h2 id="s-outstandingBalance">KES —</h2></div></div>
         <div class="stat-card"><div class="stat-icon si-teal"><i class="fas fa-wallet"></i></div><div class="stat-info"><p>Members Savings</p><h2 id="s-totalMembersSavings">KES —</h2></div></div>
         <div class="stat-card"><div class="stat-icon si-pink"><i class="fas fa-hand-holding-medical"></i></div><div class="stat-info"><p>Welfare Funds</p><h2 id="s-totalWelfareFunds">KES —</h2></div></div>
-        <div class="stat-card"><div class="stat-icon si-teal"><i class="fas fa-layer-group"></i></div><div class="stat-info"><p>Savings + Welfare</p><h2 id="s-savingsWelfareTotal">KES —</h2></div></div>
         <!-- NEW: Total Penalties Collected -->
         <div class="stat-card highlight-green"><div class="stat-icon si-cyan"><i class="fas fa-percentage"></i></div><div class="stat-info"><p>Interest Collected</p><h2 id="s-interestCollected">KES —</h2></div></div>
         <div class="stat-card highlight-amber"><div class="stat-icon si-amber"><i class="fas fa-gavel"></i></div><div class="stat-info"><p>Penalties Collected</p><h2 id="s-totalPenaltiesCollected" style="color:#d97706;">KES —</h2></div></div>
@@ -429,7 +428,7 @@ tbody tr.clickable-row{cursor:pointer;}
           <h3><i class="fas fa-balance-scale" style="color:var(--primary);margin-right:8px;"></i>Balance Sheet Summary</h3>
           <span style="font-size:11px;color:var(--text-muted);font-weight:600;">Auto-calculated</span>
         </div>
-        <div class="balance-row income"><span class="label">Savings + Welfare (Total)</span><span class="amount" id="bs-savings">KES —</span></div>
+        <div class="balance-row income"><span class="label">Member Savings </span><span class="amount" id="bs-savings">KES —</span></div>
         <div class="balance-row income"><span class="label">Interest Collected</span><span class="amount" id="bs-interest">KES —</span></div>
         <div class="balance-row income"><span class="label">Penalties Collected</span><span class="amount" id="bs-penalties" style="color:#d97706;">KES —</span></div>
         <div class="balance-divider"></div>
@@ -1353,13 +1352,11 @@ function updateDashStats(s) {
 
   // --- Calculated values ---
   var penCollected       = getTotalPenaltiesCollected();
-  var savingsWelfare     = Number(s.totalMembersSavings||0) + Number(s.totalWelfareFunds||0);
+  var savings            = Number(s.totalMembersSavings||0);
   var interestCollected  = Number(s.totalInterests||0);
   var loansOut           = Number(s.outstandingBalance||0);
   var totalExp           = Number(s.totalExpenses||0);
 
-  // Savings + Welfare combined card
-  se('s-savingsWelfareTotal', 'KES '+savingsWelfare.toLocaleString());
 
   // Interest Collected card
   se('s-interestCollected', 'KES '+interestCollected.toLocaleString());
@@ -1368,14 +1365,14 @@ function updateDashStats(s) {
   se('s-totalPenaltiesCollected', 'KES '+penCollected.toLocaleString());
 
   // Correct Net Balance = (Savings+Welfare) + Interest + Penalties - Loans - Expenses
-  var correctNet = savingsWelfare + interestCollected + penCollected - loansOut - totalExp;
+  var correctNet = savings + interestCollected + penCollected - loansOut - totalExp;
 
   // Net Balance dashboard card
   var netEl = document.getElementById('s-netBalance');
   if (netEl) { netEl.innerText = 'KES '+correctNet.toLocaleString(); netEl.className = correctNet >= 0 ? 'positive' : 'negative'; }
 
   // Balance Sheet rows
-  se('bs-savings',  'KES '+savingsWelfare.toLocaleString());   // Savings+Welfare combined
+  se('bs-savings',  'KES '+savings.toLocaleString());   // Savings
   se('bs-interest', 'KES '+interestCollected.toLocaleString());
   se('bs-penalties','KES '+penCollected.toLocaleString());
   se('bs-loans',    '- KES '+loansOut.toLocaleString());
