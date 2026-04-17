@@ -2276,7 +2276,7 @@ function submitContribution(e){
   if(!S.contributions||!S.contributions.length) S.contributions=[['ID','MemberID','MemberName','Date','Amount','Type','Reference']];
   S.contributions.push(newRow);
   var mi=S.members.findIndex(function(m){return m.ID===mid;});
-  if(mi>=0) S.members[mi].TotalSavings=(Number(S.members[mi].TotalSavings)||0)+amt;
+  if(mi>=0 && ctype !== 'Merry Go Round') S.members[mi].TotalSavings=(Number(S.members[mi].TotalSavings)||0)+amt;
   if(S.dashboard){
     if(ctype==='Members Savings') S.dashboard.totalMembersSavings=(Number(S.dashboard.totalMembersSavings)||0)+amt;
     if(ctype==='Welfare Funds') S.dashboard.totalWelfareFunds=(Number(S.dashboard.totalWelfareFunds)||0)+amt;
