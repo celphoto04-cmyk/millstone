@@ -954,6 +954,8 @@ tbody tr.clickable-row{cursor:pointer;}
       <div class="profile-stat"><p>Loan Balance</p><h4 id="pa-loan" style="color:#dc2626;">KES 0</h4></div>
       <div class="profile-stat"><p>Total Contributions</p><h4 id="pa-contrib-count" style="color:#2563eb;">0</h4></div>
       <div class="profile-stat"><p>Active Loans</p><h4 id="pa-loan-count" style="color:#ea580c;">0</h4></div>
+      <div class="profile-stat"><p>MGR</p><h4 id="pa-mgr" style="color:#0d9488;">KES 0</h4></div>
+      <div class="profile-stat"><p>Welfare</p><h4 id="pa-welfare" style="color:#9333ea;">KES 0</h4></div>
     </div>
     <div class="profile-details">
       <div><span>Phone: </span><span id="pa-phone">—</span></div>
@@ -1400,6 +1402,21 @@ function updateDashStats(s) {
     }).join('');
   } else { expList.innerHTML='<p class="empty-msg">No expenses yet</p>'; }
 }
+  
+function getMemberSavings(memberId) {
+  var contribs = (S.contributions && S.contributions.length > 1) 
+    ? S.contributions.slice(1) : [];
+  var total = 0;
+  contribs.forEach(function(r) {
+    if (String(r[1]) === String(memberId)) {
+      var type = String(r[5] || '');
+      if (type === 'Members Savings' || type === 'Welfare Funds') {
+        total += Number(r[4] || 0);
+      }
+    }
+  });
+  return total;
+}
 // ─── MEMBERS TABLE ───
 function renderMembersTable() {
   var search = getSearchVal();
@@ -1420,7 +1437,7 @@ function renderMembersTable() {
     var st=String(m.Status||'').toLowerCase();
     var bc=st==='active'?'badge-active':st==='inactive'?'badge-inactive':'badge-closed';
     var n1 = m.Nominee1_Name ? '<span style="font-size:11.5px;">'+m.Nominee1_Name+'</span>' : '<span style="color:var(--text-muted);font-size:11px;">None</span>';
-    return '<tr><td><span style="font-size:11px;color:var(--text-muted);">'+m.ID+'</span></td><td><strong style="cursor:pointer;color:var(--primary);" onclick="viewMember(\''+m.ID+'\')">'+m.Name+'</strong></td><td>'+m.Phone+'</td><td>KES '+Number(m.TotalSavings||0).toLocaleString()+'</td><td>KES '+Number(m.CurrentLoanBalance||0).toLocaleString()+'</td><td>'+n1+'</td><td><span class="badge '+bc+'">'+m.Status+'</span></td><td><div class="actions-cell"><button class="btn-icon btn-view" onclick="viewMember(\''+m.ID+'\')" title="View Profile"><i class="fas fa-eye"></i></button><button class="btn-icon btn-edit" onclick="editMember(\''+m.ID+'\')" title="Edit"><i class="fas fa-pencil-alt"></i></button></div></td></tr>';
+    return '<tr><td><span style="font-size:11px;color:var(--text-muted);">'+m.ID+'</span></td><td><strong style="cursor:pointer;color:var(--primary);" onclick="viewMember(\''+m.ID+'\')">'+m.Name+'</strong></td><td>'+m.Phone+'</td><td>KES '+getMemberSavings(m.ID).toLocaleString()+'</td><td>KES '+Number(m.CurrentLoanBalance||0).toLocaleString()+'</td><td>'+n1+'</td><td><span class="badge '+bc+'">'+m.Status+'</span></td><td><div class="actions-cell"><button class="btn-icon btn-view" onclick="viewMember(\''+m.ID+'\')" title="View Profile"><i class="fas fa-eye"></i></button><button class="btn-icon btn-edit" onclick="editMember(\''+m.ID+'\')" title="Edit"><i class="fas fa-pencil-alt"></i></button></div></td></tr>';
   }).join('');
 }
 
@@ -2135,6 +2152,17 @@ function fillProfile(m) {
   var ps=document.getElementById('pa-savings'),pl=document.getElementById('pa-loan');
   if(ps)ps.innerText='KES '+Number(m.TotalSavings||0).toLocaleString();
   if(pl)pl.innerText='KES '+Number(m.CurrentLoanBalance||0).toLocaleString();
+
+  // Member ki contributions se MGR aur Welfare calculate karo
+    var mgrTotal = 0, welfareTotal = 0;
+    contribs.forEach(function(r){
+      if(String(r[5]) === 'Merry Go Round') mgrTotal += Number(r[4]||0);
+      if(String(r[5]) === 'Welfare Funds')  welfareTotal += Number(r[4]||0);
+    });
+    var paMgr = document.getElementById('pa-mgr');
+    var paWelfare = document.getElementById('pa-welfare');
+    if(paMgr) paMgr.innerText = 'KES ' + mgrTotal.toLocaleString();
+    if(paWelfare) paWelfare.innerText = 'KES ' + welfareTotal.toLocaleString();
 
   var statusBadge=document.getElementById('pa-status-badge');
   if(statusBadge){
