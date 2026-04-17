@@ -522,7 +522,7 @@ tbody tr.clickable-row{cursor:pointer;}
         <div class="stat-card"><div class="stat-icon si-teal"><i class="fas fa-check-double"></i></div><div class="stat-info"><p>Distributed</p><h2 id="mgr-s-done">—</h2></div></div>
         <div class="stat-card"><div class="stat-icon si-orange"><i class="fas fa-hourglass-half"></i></div><div class="stat-info"><p>Pending</p><h2 id="mgr-s-pending">—</h2></div></div>
         <div class="stat-card"><div class="stat-icon si-pink"><i class="fas fa-times-circle"></i></div><div class="stat-info"><p>Rejected</p><h2 id="mgr-s-rejected">—</h2></div></div>
-        <div class="stat-card"><div class="stat-icon si-purple"><i class="fas fa-coins"></i></div><div class="stat-info"><p>Total Distributed</p><h2 id="mgr-s-distamt">KES —</h2></div></div>
+        <!-- <div class="stat-card"><div class="stat-icon si-purple"><i class="fas fa-coins"></i></div><div class="stat-info"><p>Total Distributed</p><h2 id="mgr-s-distamt">KES —</h2></div></div> -->
         <div class="stat-card"><div class="stat-icon si-blue"><i class="fas fa-hand-holding-usd"></i></div><div class="stat-info"><p>Latest Amount Each</p><h2 id="mgr-s-latest">KES —</h2></div></div>
         <div class="stat-card" style="border:2px solid #bbf7d0;"><div class="stat-icon si-green"><i class="fas fa-piggy-bank"></i></div><div class="stat-info"><p>Total MGR Contributions</p><h2 id="mgr-s-contrib">KES —</h2></div></div>
       </div>
@@ -1830,7 +1830,7 @@ function renderMGRTable() {
   var latest=allRows.filter(function(r){return String(r[11]||'').trim()==='Distributed';}).sort(function(a,b){return Number(b[2])-Number(a[2])||Number(b[1])-Number(a[1]);})[0];
   function se(id,v){var el=document.getElementById(id);if(el)el.innerText=v;}
   se('mgr-s-total',tot);se('mgr-s-done',done);se('mgr-s-pending',tot-done-rejected);se('mgr-s-rejected',rejected);
-  se('mgr-s-distamt','KES '+totalDist.toLocaleString());
+  // se('mgr-s-distamt','KES '+totalDist.toLocaleString());
   se('mgr-s-latest','KES '+(latest?Number(latest[7]||0).toLocaleString():'0'));
   se('mgr-s-contrib','KES '+(S.dashboard?Number(S.dashboard.totalMerryGoRound||0).toLocaleString():'0'));
   var tbody=document.getElementById('tb-mgr'); if(!tbody) return;
