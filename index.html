@@ -954,6 +954,8 @@ tbody tr.clickable-row{cursor:pointer;}
       <div class="profile-stat"><p>Loan Balance</p><h4 id="pa-loan" style="color:#dc2626;">KES 0</h4></div>
       <div class="profile-stat"><p>Total Contributions</p><h4 id="pa-contrib-count" style="color:#2563eb;">0</h4></div>
       <div class="profile-stat"><p>Active Loans</p><h4 id="pa-loan-count" style="color:#ea580c;">0</h4></div>
+      <div class="profile-stat"><p>MGR</p><h4 id="pa-mgr" style="color:#0d9488;">KES 0</h4></div>
+      <div class="profile-stat"><p>Welfare</p><h4 id="pa-welfare" style="color:#9333ea;">KES 0</h4></div>
     </div>
     <div class="profile-details">
       <div><span>Phone: </span><span id="pa-phone">—</span></div>
@@ -2182,6 +2184,16 @@ function fillProfile(m) {
     : [];
   var loanCountEl = document.getElementById('pa-loan-count');
   if(loanCountEl) loanCountEl.innerText = memberLoans.filter(function(l){return String(l[9]).toLowerCase()==='active';}).length;
+  // Member ki contributions se MGR aur Welfare calculate karo
+  var mgrTotal = 0, welfareTotal = 0;
+  contribs.forEach(function(r){
+    if(String(r[5]) === 'Merry Go Round') mgrTotal += Number(r[4]||0);
+    if(String(r[5]) === 'Welfare Funds')  welfareTotal += Number(r[4]||0);
+  });
+  var paMgr = document.getElementById('pa-mgr');
+  var paWelfare = document.getElementById('pa-welfare');
+  if(paMgr) paMgr.innerText = 'KES ' + mgrTotal.toLocaleString();
+  if(paWelfare) paWelfare.innerText = 'KES ' + welfareTotal.toLocaleString();
   var loanList = document.getElementById('pa-loan-list');
   if (loanList) {
     if (memberLoans.length) {
