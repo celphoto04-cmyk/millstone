@@ -1345,20 +1345,33 @@ function updateDashStats(s) {
   se('s-totalMembers', s.totalMembers||0);
   se('s-activeMembers', s.activeMembers||0);
   se('s-inactiveMembers', s.inactiveMembers||0);
-  se('s-totalLoans', s.totalLoans||0);
-  se('s-outstandingBalance', 'KES '+Number(s.outstandingBalance||0).toLocaleString());
+
+  // ✅ FIX 1: Client-side se correct loan values calculate karo
+  var totalDisbursed = 0;
+  var clientOutstanding = 0;
+  if (S.loans && S.loans.length > 1) {
+    S.loans.slice(1).forEach(function(r) {
+      if (!r[0]) return;
+      totalDisbursed += Number(r[4]||0);
+      if (String(r[9]||'').toLowerCase() === 'active') {
+        clientOutstanding += getLoanRemainingBalance(r[0], r[4]);
+      }
+    });
+  }
+
+  se('s-totalLoans', 'KES ' + totalDisbursed.toLocaleString()); // ✅ FIX 2: count ki jagah total disbursed amount
+  se('s-outstandingBalance', 'KES '+clientOutstanding.toLocaleString()); // ✅ FIX 3: server ki jagah client-calculated
   se('s-totalMembersSavings', 'KES '+Number(s.totalMembersSavings||0).toLocaleString());
   se('s-totalWelfareFunds', 'KES '+Number(s.totalWelfareFunds||0).toLocaleString());
   se('s-totalMerryGoRound', 'KES '+Number(s.totalMerryGoRound||0).toLocaleString());
   se('s-totalExpenses', 'KES '+Number(s.totalExpenses||0).toLocaleString());
 
   // --- Calculated values ---
-  var penCollected       = getTotalPenaltiesCollected();
-  var savings            = Number(s.totalMembersSavings||0);
-  var interestCollected  = Number(s.totalInterests||0);
-  var loansOut           = Number(s.outstandingBalance||0);
-  var totalExp           = Number(s.totalExpenses||0);
-
+  var penCollected      = getTotalPenaltiesCollected();
+  var savings           = Number(s.totalMembersSavings||0);
+  var interestCollected = Number(s.totalInterests||0);
+  var loansOut          = clientOutstanding; // ✅ FIX 4: server value ki jagah client value use karo
+  var totalExp          = Number(s.totalExpenses||0);
 
   // Interest Collected card
   se('s-interestCollected', 'KES '+interestCollected.toLocaleString());
@@ -1374,7 +1387,7 @@ function updateDashStats(s) {
   if (netEl) { netEl.innerText = 'KES '+correctNet.toLocaleString(); netEl.className = correctNet >= 0 ? 'positive' : 'negative'; }
 
   // Balance Sheet rows
-  se('bs-savings',  'KES '+savings.toLocaleString());   // Savings
+  se('bs-savings',  'KES '+savings.toLocaleString());
   se('bs-interest', 'KES '+interestCollected.toLocaleString());
   se('bs-penalties','KES '+penCollected.toLocaleString());
   se('bs-loans',    '- KES '+loansOut.toLocaleString());
