@@ -489,6 +489,7 @@ tbody tr.clickable-row{cursor:pointer;}
             <option value="active">Yet to be Paid</option>
             <option value="defaulted">Defaulted</option>
             <option value="closed">Fully Paid</option>
+            <option value="partially_paid">Partially Paid</option>
           </select>
         </div>
         <button class="btn-primary" onclick="openModal('m-loan')"><i class="fas fa-plus"></i> Issue Loan</button>
@@ -1059,7 +1060,7 @@ tbody tr.clickable-row{cursor:pointer;}
       </div>
       <div class="form-row">
         <div class="form-group"><label>Due Date</label><input type="date" id="fi-ledit-duedate"></div>
-        <div class="form-group"><label>Status</label><select id="fi-ledit-status"><option value="Active">Active</option><option value="Closed">Closed</option></select></div>
+        <div class="form-group"><label>Status</label><select id="fi-ledit-status"><option value="Active">Active</option><option value="Partially_Paid">Partially Paid</option><option value="Closed">Closed</option></select></div>
       </div>
       <div class="form-group"><label>Guarantor Name</label><input type="text" id="fi-ledit-gtor"></div>
       <button type="submit" class="btn-submit" id="btn-ledit-submit">Save Changes</button>
@@ -1289,7 +1290,7 @@ function emptyState(msg, sub) {
 
 // ─── DUE DAYS BADGE ───
 function dueDaysBadge(dueDateStr, status) {
-  if (!dueDateStr || status === 'Closed') return '<span style="color:#94a3b8;font-size:11.5px;">—</span>';
+  if (!dueDateStr || status === 'Closed' || status === 'Partially_Paid') return '<span style="color:#94a3b8;font-size:11.5px;">—</span>';
   var raw = new Date(dueDateStr); if (isNaN(raw.getTime())) return '—';
   var due = new Date(raw.getFullYear(), raw.getMonth(), raw.getDate());
   var t = new Date(), today = new Date(t.getFullYear(), t.getMonth(), t.getDate());
@@ -1356,7 +1357,8 @@ function updateDashStats(s) {
     S.loans.slice(1).forEach(function(r) {
       if (!r[0]) return;
       totalDisbursed += Number(r[4]||0);
-      if (String(r[9]||'').toLowerCase() === 'active') {
+     var rst = String(r[9]||'').toLowerCase();
+      if (rst === 'active' || rst === 'partially_paid') {
         clientOutstanding += getLoanRemainingBalance(r[0], r[4]);
       }
     });
@@ -1469,6 +1471,8 @@ function renderLoansTable() {
     });
   } else if (statusFilter === 'closed') {
     rows = rows.filter(function(r){ return String(r[9]||'').toLowerCase() === 'closed'; });
+  } else if (statusFilter === 'partially_paid') {
+    rows = rows.filter(function(r){ return String(r[9]||'').toLowerCase() === 'partially_paid'; });
   }
 
   if (!rows.length) { tbody.innerHTML=emptyState('No Matching Loans'); renderPagination('pg-loans',1,0,'goPageLoans'); return; }
@@ -1478,14 +1482,16 @@ function renderLoansTable() {
 
   tbody.innerHTML=rows.map(function(r){
     var st=String(r[9]||'Active').toLowerCase();
-    var lbc=st==='active'?'badge-active':st==='closed'?'badge-closed':'badge-inactive';
+    var lbc=st==='active'?'badge-active':st==='closed'?'badge-closed':st==='partially_paid'?'badge-yettopay':'badge-inactive';
     var dueDays = dueDaysBadge(r[8], r[9]);
 
     // Check if defaulted
     var isDefaulted = st === 'active' && r[8] && new Date(r[8]) < new Date();
-    var statusDisplay = isDefaulted
-      ? '<span class="badge badge-defaulted">Defaulted</span>'
-      : '<span class="badge '+lbc+'">'+r[9]+'</span>';
+    var statusDisplay = st === 'partially_paid'
+      ? '<span class="badge badge-yettopay">Partially Paid</span>'
+      : isDefaulted
+        ? '<span class="badge badge-defaulted">Defaulted</span>'
+        : '<span class="badge '+lbc+'">'+r[9]+'</span>';
 
     // Remaining balance
     var remaining = getLoanRemainingBalance(r[0], r[4]);
@@ -1985,6 +1991,7 @@ function renderReports() {
     var totalAccruedPenalty = 0;
 
     loanRows.forEach(function(r){
+      // Partially_Paid pe penalty nahi
       if (String(r[9]||'').toLowerCase() !== 'active') return;
       if (!r[8]) return;
       var raw = new Date(r[8]);
