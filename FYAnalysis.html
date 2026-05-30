@@ -140,11 +140,48 @@ html,body{font-family:var(--font);background:var(--bg);color:var(--text);min-hei
 .balance-row{display:grid;grid-template-columns:90px 1fr 110px 110px 120px;gap:8px;padding:9px 14px;background:var(--bg);border-radius:var(--radius-xs);font-size:12px;border:1.5px solid transparent;transition:all .12s;}
 .balance-row:hover{background:white;border-color:var(--border2);box-shadow:var(--shadow);}
 
-/* EVENT TYPE FILTER CHIPS */
-.event-filter-bar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;padding:12px 14px;background:var(--bg);border-radius:var(--radius-xs);}
-.evt-chip{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;border:1.5px solid transparent;transition:all .15s;user-select:none;}
-.evt-chip.active{opacity:1;}
-.evt-chip.inactive{opacity:0.38;filter:grayscale(0.5);}
+/* ══════════════════════════════════════════════════
+   FIX 1: EVENT TYPE FILTER CHIPS — proper horizontal wrap
+   ══════════════════════════════════════════════════ */
+.event-filter-bar{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px 10px;
+  margin-bottom:14px;
+  padding:12px 16px;
+  background:white;
+  border:1.5px solid var(--border2);
+  border-radius:var(--radius-xs);
+  align-items:center;
+}
+.event-filter-bar-label{
+  font-size:10px;
+  font-weight:800;
+  color:var(--text3);
+  text-transform:uppercase;
+  letter-spacing:.7px;
+  margin-right:4px;
+  white-space:nowrap;
+  flex-shrink:0;
+}
+.evt-chip{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:6px 14px;
+  border-radius:20px;
+  font-size:12px;
+  font-weight:700;
+  cursor:pointer;
+  border:1.5px solid transparent;
+  transition:all .15s;
+  user-select:none;
+  white-space:nowrap;
+  flex-shrink:0;
+  line-height:1;
+}
+.evt-chip.active{opacity:1;box-shadow:0 2px 8px rgba(0,0,0,0.08);}
+.evt-chip.inactive{opacity:0.35;filter:grayscale(0.6);box-shadow:none;}
 .evt-chip-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
 .evt-chip-contribution{background:#dcfce7;color:#15803d;border-color:#bbf7d0;}
 .evt-chip-contribution.active{border-color:#16a34a;}
@@ -339,7 +376,7 @@ tr:last-child td{border-bottom:none;}
       </div>
     </div>
 
-    <!-- CHARTS ROW 2: Loans + Expenses by Month -->
+    <!-- CHARTS ROW 2: Loans + Expenses by Category (horizontal) -->
     <div class="charts-grid">
       <div class="chart-card">
         <div class="chart-head">
@@ -350,19 +387,20 @@ tr:last-child td{border-bottom:none;}
           <div style="position:relative;height:240px;"><canvas id="chart-loans"></canvas></div>
         </div>
       </div>
-      <!-- REQ 2: Expenses X=months, Y=amount, grouped by category -->
+
+      <!-- FIX 2: Expenses — Y=categories, X=amounts (horizontal bar) -->
       <div class="chart-card">
         <div class="chart-head">
-          <div class="chart-title"><i class="fas fa-receipt"></i> Expenses by Month</div>
-          <div class="chart-legend" id="expense-legend" style="margin-bottom:0;"></div>
+          <div class="chart-title"><i class="fas fa-receipt"></i> Expenses by Category</div>
+          <div style="font-size:11px;color:var(--text3);font-weight:500;">Y = Category · X = Amount (KES)</div>
         </div>
         <div class="chart-body">
-          <div style="position:relative;height:265px;"><canvas id="chart-expenses"></canvas></div>
+          <div style="position:relative;height:280px;"><canvas id="chart-expenses"></canvas></div>
         </div>
       </div>
     </div>
 
-    <!-- REQ 3: Running Balance + Monthly Savings side by side -->
+    <!-- Running Balance + Monthly Savings side by side -->
     <div class="two-col-section">
 
       <!-- Running Balance -->
@@ -374,9 +412,9 @@ tr:last-child td{border-bottom:none;}
         <div class="section-card-body">
           <div style="position:relative;height:180px;margin-bottom:14px;"><canvas id="chart-balance"></canvas></div>
 
-          <!-- REQ 4: Event type filter chips -->
+          <!-- FIX 1: Event filter chips — proper horizontal layout -->
           <div class="event-filter-bar" id="event-filter-bar">
-            <span style="font-size:10px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:.6px;align-self:center;">Show:</span>
+            <span class="event-filter-bar-label">Show:</span>
             <span class="evt-chip evt-chip-contribution active" data-type="Contribution" onclick="toggleEventType(this)">
               <span class="evt-chip-dot" style="background:#16a34a;"></span>Contribution
             </span>
@@ -397,7 +435,7 @@ tr:last-child td{border-bottom:none;}
             </span>
           </div>
 
-          <!-- REQ 4: Totals bar -->
+          <!-- Totals bar -->
           <div class="balance-totals" id="balance-totals"></div>
 
           <div class="balance-header">
@@ -414,7 +452,6 @@ tr:last-child td{border-bottom:none;}
           <span class="section-card-meta">Newest first</span>
         </div>
         <div class="section-card-body">
-          <!-- Monthly trend chart -->
           <div style="position:relative;height:200px;margin-bottom:16px;"><canvas id="chart-monthly-savings"></canvas></div>
           <div class="timeline" id="monthly-timeline"></div>
         </div>
@@ -454,7 +491,7 @@ var S={members:[],contributions:[],loans:[],repayments:[],expenses:[],
   filteredContribs:[],filteredLoans:[],filteredRepayments:[],filteredExpenses:[]};
 var CHARTS={};
 
-/* Active event types for balance filter — REQ 4 */
+/* Active event types for balance filter */
 var activeEventTypes={Contribution:true,WelfareFund:true,MGR:true,Loan:true,Repayment:true,Expense:true};
 
 /* ── VALUE FORMATTER: K / Lac ── */
@@ -518,7 +555,7 @@ function loadAllData(force){
   }).finally(function(){if(icon)icon.classList.remove('spinning');});
 }
 
-/* ── EVENT TYPE FILTER (REQ 4) ── */
+/* ── EVENT TYPE FILTER ── */
 function toggleEventType(el){
   var type=el.dataset.type;
   activeEventTypes[type]=!activeEventTypes[type];
@@ -665,7 +702,7 @@ function getAllMonths(maps){var s={};maps.forEach(function(m){Object.keys(m).for
 function monthLabel(k){var p=k.split('-');return new Date(p[0],p[1]-1,1).toLocaleDateString('en-US',{month:'short',year:'2-digit'});}
 function destroyChart(id){if(CHARTS[id]){CHARTS[id].destroy();delete CHARTS[id];}}
 
-/* Chart.js data label plugin — K/Lac format */
+/* Chart.js data label plugin */
 var datalabelPlugin={
   id:'topLabels',
   afterDatasetsDraw:function(chart){
@@ -682,8 +719,15 @@ var datalabelPlugin={
         ctx.fillStyle=ds.borderColor||'#374151';
         ctx.textAlign='center';
         ctx.textBaseline='bottom';
-        var x=bar.x,y=bar.y-3;
-        ctx.fillText(label,x,y);
+        /* For horizontal bars, adjust label position */
+        var isHorizontal=(chart.config.options&&chart.config.options.indexAxis==='y');
+        if(isHorizontal){
+          ctx.textAlign='left';
+          ctx.textBaseline='middle';
+          ctx.fillText(label,bar.x+4,bar.y);
+        } else {
+          ctx.fillText(label,bar.x,bar.y-3);
+        }
         ctx.restore();
       });
     });
@@ -692,7 +736,7 @@ var datalabelPlugin={
 
 var TT={backgroundColor:'rgba(5,46,22,0.92)',borderColor:'rgba(22,163,74,0.3)',borderWidth:1,titleColor:'#e8fdf2',bodyColor:'#a7f3c4',padding:10,cornerRadius:8,displayColors:true};
 
-/* ── REQ 1: CONTRIB TREND with data labels ── */
+/* ── CONTRIB TREND ── */
 function renderContribTrend(){
   var savings=groupByMonth(S.filteredContribs.filter(function(r){return r[5]==='Members Savings';}),3,4);
   var welfare=groupByMonth(S.filteredContribs.filter(function(r){return r[5]==='Welfare Funds';}),3,4);
@@ -733,14 +777,13 @@ function renderContribPie(){
     options:{responsive:true,maintainAspectRatio:false,cutout:'68%',
       plugins:{legend:{display:false},
         tooltip:Object.assign({},TT,{callbacks:{label:function(ctx){return' '+ctx.label+': '+fmtFull(ctx.raw)+' ('+pct(ctx.raw)+'%)';}}}),
-        /* REQ 1: datalabels on pie */
         datalabels:{display:false}
       }
     }
   });
 }
 
-/* ── REQ 1: LOANS chart with data labels ── */
+/* ── LOANS chart ── */
 function renderLoansChart(){
   var loansM=groupByMonth(S.filteredLoans,7,4);
   var repaysM=groupByMonth(S.filteredRepayments,3,4);
@@ -765,75 +808,84 @@ function renderLoansChart(){
   });
 }
 
-/* ── REQ 2: EXPENSES — X=months, Y=amount, grouped by category ── */
+/* ══════════════════════════════════════════════════
+   FIX 2: EXPENSES — Horizontal Bar Chart
+   Y-axis = Category names
+   X-axis = Amount (KES)
+   ══════════════════════════════════════════════════ */
 function renderExpensesChart(){
-  /* Build: categories × months matrix */
-  var catSet={},monthSet={};
+  /* Sum expenses per category */
+  var catTotals={};
   S.filteredExpenses.forEach(function(r){
     var c=r[2]||'Other';
-    var d=new Date(r[1]);if(isNaN(d.getTime()))return;
-    var m=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');
-    catSet[c]=1;monthSet[m]=1;
+    catTotals[c]=(catTotals[c]||0)+Number(r[4]||0);
   });
-  var cats=Object.keys(catSet);
-  var months=Object.keys(monthSet).sort();
 
-  /* Per category, sum by month */
-  var catData={};
-  cats.forEach(function(c){catData[c]={};months.forEach(function(m){catData[c][m]=0;});});
-  S.filteredExpenses.forEach(function(r){
-    var c=r[2]||'Other';var d=new Date(r[1]);if(isNaN(d.getTime()))return;
-    var m=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');
-    if(catData[c])catData[c][m]=(catData[c][m]||0)+Number(r[4]||0);
-  });
+  /* Sort categories by total descending */
+  var cats=Object.keys(catTotals).sort(function(a,b){return catTotals[b]-catTotals[a];});
+  var values=cats.map(function(c){return catTotals[c];});
 
   var colors=['#ef4444','#f97316','#f59e0b','#8b5cf6','#3b82f6','#14b8a6','#ec4899','#6366f1','#84cc16'];
 
-  /* Legend */
-  document.getElementById('expense-legend').innerHTML=cats.map(function(c,i){
-    return li(colors[i%colors.length],c);
-  }).join('');
-
   destroyChart('chart-expenses');
-  if(!months.length||!cats.length)return;
+  if(!cats.length)return;
+
+  /* Dynamic height: min 200px, 36px per category */
+  var chartHeight=Math.max(200,cats.length*42);
+  var container=document.getElementById('chart-expenses').parentNode;
+  container.style.height=chartHeight+'px';
 
   CHARTS['chart-expenses']=new Chart(document.getElementById('chart-expenses'),{
     type:'bar',
-    plugins:[datalabelPlugin],
     data:{
-      labels:months.map(monthLabel),
-      datasets:cats.map(function(c,i){
-        return{
-          label:c,
-          data:months.map(function(m){return catData[c][m]||0;}),
-          backgroundColor:colors[i%colors.length]+'bb',
-          borderColor:colors[i%colors.length],
-          borderRadius:4,
-          borderWidth:1,
-          barPercentage:0.7,
-          stack:'expense'
-        };
-      })
+      labels:cats,
+      datasets:[{
+        label:'Amount (KES)',
+        data:values,
+        backgroundColor:cats.map(function(_,i){return colors[i%colors.length]+'cc';}),
+        borderColor:cats.map(function(_,i){return colors[i%colors.length];}),
+        borderRadius:6,
+        borderWidth:1.5,
+        barPercentage:0.65
+      }]
     },
-    options:{responsive:true,maintainAspectRatio:false,
+    options:{
+      indexAxis:'y',  /* <-- THIS makes it horizontal: Y=categories, X=amounts */
+      responsive:true,
+      maintainAspectRatio:false,
       plugins:{
         legend:{display:false},
-        tooltip:Object.assign({},TT,{mode:'index',intersect:false,callbacks:{
-          label:function(ctx){return ctx.raw>0?' '+ctx.dataset.label+': '+fmtFull(ctx.raw):'';},
-          footer:function(items){var t=items.reduce(function(s,i){return s+i.raw;},0);return t>0?'Total: '+fmtFull(t):'';}
-        }})
+        tooltip:Object.assign({},TT,{
+          callbacks:{
+            label:function(ctx){return'  '+fmtFull(ctx.raw);}
+          }
+        })
       },
       scales:{
-        x:{grid:{display:false},ticks:{color:'#9ca3af',font:{size:10},maxRotation:40,autoSkip:true,maxTicksLimit:14}},
-        y:{stacked:true,grid:{color:'rgba(22,163,74,0.06)'},ticks:{color:'#9ca3af',font:{size:10},callback:function(v){return fmtK(v);}},border:{dash:[4,4]}}
+        y:{
+          grid:{display:false},
+          ticks:{
+            color:'#374151',
+            font:{size:11,weight:'600'},
+            crossAlign:'far'
+          }
+        },
+        x:{
+          grid:{color:'rgba(22,163,74,0.06)'},
+          ticks:{
+            color:'#9ca3af',
+            font:{size:10},
+            callback:function(v){return fmtK(v);}
+          },
+          border:{dash:[4,4]}
+        }
       }
     }
   });
 }
 
-/* ── RUNNING BALANCE (REQ 4: event filter + totals) ── */
+/* ── RUNNING BALANCE ── */
 function renderRunningBalance(){
-  /* Build all events with sub-types */
   var allEvents=[];
   S.filteredContribs.forEach(function(r){
     var subtype=r[5]||'Contribution';
@@ -852,11 +904,9 @@ function renderRunningBalance(){
   });
   allEvents.sort(function(a,b){return new Date(a.date)-new Date(b.date);});
 
-  /* Running balance on ALL events (unfiltered) */
   var running=0;
   var allRows=allEvents.map(function(ev){running+=ev.inAmt-ev.outAmt;return Object.assign({},ev,{balance:running});});
 
-  /* Balance chart uses all events */
   var mBal={};
   allRows.forEach(function(ev){
     var d=new Date(ev.date);if(isNaN(d.getTime()))return;
@@ -885,10 +935,7 @@ function renderRunningBalance(){
     });
   }
 
-  /* Filter rows by active event types for table */
   var visibleRows=allRows.filter(function(ev){return activeEventTypes[ev.type];});
-
-  /* REQ 4: Compute totals for visible rows */
   var totalIn=0,totalOut=0;
   visibleRows.forEach(function(ev){totalIn+=ev.inAmt;totalOut+=ev.outAmt;});
   var netVis=totalIn-totalOut;
@@ -929,14 +976,13 @@ function renderRunningBalance(){
   }).join('');
 }
 
-/* ── REQ 3: MONTHLY TIMELINE with mini chart ── */
+/* ── MONTHLY TIMELINE ── */
 function renderMonthlyTimeline(){
   var monthly=groupByMonth(S.filteredContribs,3,4);
   var months=sortedKeys(monthly).reverse();
   var max=Math.max.apply(null,Object.values(monthly).concat([1]));
   var el=document.getElementById('monthly-timeline');
 
-  /* Mini bar chart for monthly savings */
   var allMonths=sortedKeys(monthly);
   destroyChart('chart-monthly-savings');
   if(allMonths.length){
