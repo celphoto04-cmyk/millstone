@@ -2084,7 +2084,10 @@ function setupAC(inputId,listId,hiddenId,hiddenNameId,hiddenEmailId,acType){
     if(acType==='member') return S.members;
     if(acType==='loan'){
       var rows=(S.loans&&S.loans.length>1)?S.loans.slice(1):[];
-      return rows.filter(function(r){return r[9]==='Active';});
+      return rows.filter(function(r){
+        var st = String(r[9]||'').trim();
+        return st==='Active' || st==='Partially_Paid';
+      });
     }
     return [];
   }
