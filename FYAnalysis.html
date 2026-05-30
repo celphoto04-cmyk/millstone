@@ -4,207 +4,424 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SACCOSync — Financial Analysis</title>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+<!-- Favicon matching SACCOSync -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%2316a34a'/><text y='46' x='32' text-anchor='middle' font-size='40' font-family='sans-serif' font-weight='900' fill='white'>S</text></svg>">
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+
 <style>
+/* ══════════════════════════════════════════
+   SACCOSYNC FINANCIAL ANALYSIS — Premium Light
+   Palette: white cards · #f0fdf4 bg · #16a34a green
+   Matching the SACCOSync dashboard exactly
+══════════════════════════════════════════ */
 :root {
-  --primary: #16a34a;
-  --primary-dark: #15803d;
-  --primary-light: #dcfce7;
-  --primary-xlight: #f0fdf4;
-  --accent: #22c55e;
-  --warning: #f59e0b;
-  --danger: #ef4444;
-  --blue: #3b82f6;
-  --purple: #8b5cf6;
-  --orange: #f97316;
-  --teal: #14b8a6;
-  --background: #f0fdf4;
-  --surface: #ffffff;
-  --text: #052e16;
-  --text-muted: #6b7280;
-  --border: #d1fae5;
-  --glass: rgba(255,255,255,0.88);
-  --shadow: 0 2px 12px rgba(22,163,74,0.08);
-  --shadow-lg: 0 8px 32px rgba(22,163,74,0.14);
-  --radius: 14px;
+  --bg:          #f0fdf4;
+  --bg2:         #e8faf0;
+  --surface:     #ffffff;
+  --surface2:    #f8fffe;
+  --green:       #16a34a;
+  --green-b:     #15803d;
+  --green-lt:    #dcfce7;
+  --green-xlt:   #f0fdf4;
+  --green-glow:  rgba(22,163,74,0.12);
+  --accent:      #22c55e;
+  --border:      #e2f5ea;
+  --border2:     #d1fae5;
+  --text:        #052e16;
+  --text2:       #374151;
+  --text3:       #6b7280;
+  --text4:       #9ca3af;
+
+  /* card accent colours — matches dashboard icons */
+  --purple:      #8b5cf6;
+  --purple-lt:   #f3e8ff;
+  --blue:        #3b82f6;
+  --blue-lt:     #dbeafe;
+  --red:         #ef4444;
+  --red-lt:      #fee2e2;
+  --orange:      #f97316;
+  --orange-lt:   #ffedd5;
+  --teal:        #14b8a6;
+  --teal-lt:     #ccfbf1;
+  --amber:       #f59e0b;
+  --amber-lt:    #fef3c7;
+  --pink:        #ec4899;
+  --pink-lt:     #fce7f3;
+
+  --radius:      18px;
+  --radius-sm:   12px;
+  --radius-xs:   8px;
+  --shadow:      0 1px 8px rgba(22,163,74,0.08), 0 4px 24px rgba(0,0,0,0.04);
+  --shadow-md:   0 4px 20px rgba(22,163,74,0.1), 0 8px 40px rgba(0,0,0,0.06);
+  --shadow-lg:   0 8px 40px rgba(22,163,74,0.14), 0 16px 64px rgba(0,0,0,0.08);
+  --font:        'Plus Jakarta Sans', sans-serif;
 }
+
 *{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased;}
-body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--background);color:var(--text);min-height:100vh;}
+html,body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;}
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:8px;}
 
-/* TOP BAR */
-.topbar{background:var(--surface);border-bottom:1.5px solid var(--border);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:var(--shadow);}
-.topbar-left{display:flex;align-items:center;gap:14px;}
-.back-btn{display:flex;align-items:center;gap:7px;padding:8px 14px;background:var(--primary-xlight);border:1.5px solid var(--border);border-radius:10px;color:var(--primary);font-weight:700;font-size:12.5px;cursor:pointer;text-decoration:none;transition:all .15s;}
-.back-btn:hover{background:var(--primary-light);}
-.page-title{font-size:18px;font-weight:900;color:var(--text);}
-.page-title span{color:var(--primary);}
+/* ─── TOPBAR ─── */
+.topbar{
+  background:rgba(255,255,255,0.92);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border-bottom:1.5px solid var(--border2);
+  padding:0 28px;height:64px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:200;
+  box-shadow:0 2px 16px rgba(22,163,74,0.07);
+}
+.topbar-left{display:flex;align-items:center;gap:16px;}
+.logo-wrap{display:flex;align-items:center;gap:10px;}
+.logo-icon{
+  width:38px;height:38px;
+  background:linear-gradient(135deg,#16a34a,#22c55e);
+  border-radius:11px;
+  display:flex;align-items:center;justify-content:center;
+  font-weight:900;font-size:20px;color:white;letter-spacing:-1px;
+  box-shadow:0 4px 14px rgba(22,163,74,0.35);
+  flex-shrink:0;
+}
+.logo-text{font-size:16px;font-weight:900;color:var(--text);}
+.logo-text span{color:var(--green);}
+.logo-version{font-size:10px;color:var(--text3);font-weight:500;margin-top:1px;}
+.divider-v{width:1px;height:28px;background:var(--border2);}
+.back-btn{
+  display:flex;align-items:center;gap:7px;
+  padding:8px 14px;
+  background:var(--green-xlt);border:1.5px solid var(--border2);
+  border-radius:var(--radius-xs);color:var(--green);
+  font-weight:700;font-size:12px;cursor:pointer;text-decoration:none;
+  transition:all .18s;
+}
+.back-btn:hover{background:var(--green-lt);border-color:var(--green);box-shadow:0 0 0 3px var(--green-glow);}
+.page-meta{display:flex;flex-direction:column;gap:2px;}
+.page-title{font-size:17px;font-weight:900;color:var(--text);}
+.page-title span{color:var(--green);}
+.page-sub{font-size:11px;color:var(--text3);font-weight:500;}
 .topbar-right{display:flex;align-items:center;gap:10px;}
-.sync-btn{display:flex;align-items:center;gap:6px;padding:8px 16px;background:var(--primary);color:white;border:none;border-radius:10px;font-weight:700;font-size:12.5px;cursor:pointer;transition:all .15s;font-family:inherit;}
-.sync-btn:hover{background:var(--primary-dark);}
-
-/* FILTERS */
-.filter-bar{background:var(--glass);backdrop-filter:blur(12px);border-bottom:1.5px solid var(--border);padding:16px 28px;display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;}
-.filter-group{display:flex;flex-direction:column;gap:5px;}
-.filter-group label{font-size:10.5px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;}
-.filter-group input,.filter-group select{padding:9px 13px;background:white;border:1.5px solid #e5e7eb;border-radius:10px;font-size:12.5px;color:var(--text);outline:none;font-family:inherit;font-weight:600;transition:border .15s;min-width:130px;}
-.filter-group input:focus,.filter-group select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(22,163,74,0.1);}
-.filter-actions{display:flex;gap:8px;align-items:flex-end;margin-left:auto;}
-.btn-apply{padding:9px 18px;background:var(--primary);color:white;border:none;border-radius:10px;font-weight:700;font-size:12.5px;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:6px;transition:all .15s;}
-.btn-apply:hover{background:var(--primary-dark);}
-.btn-reset{padding:9px 14px;background:white;color:var(--text-muted);border:1.5px solid #e5e7eb;border-radius:10px;font-weight:600;font-size:12.5px;cursor:pointer;font-family:inherit;transition:all .15s;}
-.btn-reset:hover{background:var(--primary-xlight);border-color:var(--primary);color:var(--primary);}
-
-/* MEMBER MULTI-SELECT */
-.member-select-wrap{position:relative;}
-.member-select-display{padding:9px 13px;background:white;border:1.5px solid #e5e7eb;border-radius:10px;font-size:12.5px;color:var(--text);cursor:pointer;font-family:inherit;font-weight:600;min-width:200px;display:flex;align-items:center;justify-content:space-between;gap:8px;user-select:none;transition:border .15s;}
-.member-select-display:hover,.member-select-display.open{border-color:var(--primary);box-shadow:0 0 0 3px rgba(22,163,74,0.1);}
-.member-dropdown{position:absolute;top:calc(100% + 4px);left:0;right:0;background:white;border:1.5px solid var(--border);border-radius:12px;box-shadow:var(--shadow-lg);z-index:9999;max-height:260px;overflow-y:auto;display:none;min-width:260px;}
-.member-dropdown.open{display:block;}
-.member-search-box{padding:10px 12px;border-bottom:1px solid #f0fdf4;position:sticky;top:0;background:white;}
-.member-search-box input{width:100%;padding:7px 10px;background:#f9fafb;border:1.5px solid #e5e7eb;border-radius:8px;font-size:12.5px;outline:none;font-family:inherit;}
-.member-option{padding:9px 14px;font-size:12.5px;cursor:pointer;display:flex;align-items:center;gap:9px;border-bottom:1px solid #f9fafb;transition:background .1s;}
-.member-option:hover{background:var(--primary-xlight);}
-.member-option:last-child{border-bottom:none;}
-.member-option input[type=checkbox]{accent-color:var(--primary);width:14px;height:14px;flex-shrink:0;cursor:pointer;}
-.member-option label{cursor:pointer;font-weight:500;color:var(--text);}
-.select-all-row{padding:8px 14px;font-size:11.5px;font-weight:700;color:var(--primary);cursor:pointer;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;background:#f9fdfb;}
-.chip{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;background:var(--primary-light);color:var(--primary);border-radius:6px;font-size:11px;font-weight:700;max-width:120px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
-
-/* CONTENT */
-.content{padding:24px 28px;max-width:1400px;margin:0 auto;}
-.loading-overlay{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 20px;gap:16px;}
-.spinner{width:40px;height:40px;border:3px solid var(--primary-light);border-top-color:var(--primary);border-radius:50%;animation:spin 1s linear infinite;}
+.btn-ghost{
+  display:flex;align-items:center;gap:6px;padding:8px 14px;
+  background:white;border:1.5px solid var(--border2);border-radius:var(--radius-xs);
+  color:var(--text2);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--font);
+  transition:all .18s;
+}
+.btn-ghost:hover{background:var(--green-xlt);color:var(--green);border-color:var(--green);}
+.btn-primary{
+  display:flex;align-items:center;gap:6px;padding:8px 18px;
+  background:var(--green);color:white;border:none;border-radius:var(--radius-xs);
+  font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font);
+  transition:all .18s;box-shadow:0 4px 14px rgba(22,163,74,0.3);
+}
+.btn-primary:hover{background:var(--green-b);box-shadow:0 6px 20px rgba(22,163,74,0.4);}
 @keyframes spin{to{transform:rotate(360deg);}}
-.loading-text{font-size:13.5px;font-weight:600;color:var(--text-muted);}
+.spinning{animation:spin 1s linear infinite;}
 
-/* STATS GRID */
+/* ─── FILTER BAR ─── */
+.filter-bar{
+  background:rgba(255,255,255,0.85);
+  backdrop-filter:blur(14px);
+  border-bottom:1.5px solid var(--border);
+  padding:14px 28px;
+  display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;
+}
+.filter-group{display:flex;flex-direction:column;gap:5px;}
+.filter-label{font-size:10px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:.7px;}
+.filter-input{
+  padding:9px 13px;background:white;border:1.5px solid #e5e7eb;
+  border-radius:var(--radius-xs);font-size:12.5px;color:var(--text);
+  outline:none;font-family:var(--font);font-weight:600;
+  transition:border .15s,box-shadow .15s;min-width:130px;
+}
+.filter-input:focus{border-color:var(--green);box-shadow:0 0 0 3px var(--green-glow);}
+.filter-input option{background:white;}
+.filter-actions{display:flex;gap:8px;align-items:flex-end;margin-left:auto;}
+.btn-apply{
+  padding:9px 18px;background:var(--green);color:white;
+  border:none;border-radius:var(--radius-xs);font-weight:700;font-size:12px;
+  cursor:pointer;font-family:var(--font);display:flex;align-items:center;gap:6px;
+  transition:all .18s;box-shadow:0 4px 12px rgba(22,163,74,0.25);
+}
+.btn-apply:hover{background:var(--green-b);box-shadow:0 6px 18px rgba(22,163,74,0.35);}
+.btn-reset{
+  padding:9px 14px;background:white;color:var(--text3);
+  border:1.5px solid #e5e7eb;border-radius:var(--radius-xs);
+  font-weight:600;font-size:12px;cursor:pointer;font-family:var(--font);transition:all .18s;
+}
+.btn-reset:hover{background:var(--green-xlt);color:var(--green);border-color:var(--green);}
+
+/* ─── MEMBER MULTI-SELECT ─── */
+.member-select-wrap{position:relative;}
+.member-select-display{
+  padding:9px 13px;background:white;border:1.5px solid #e5e7eb;
+  border-radius:var(--radius-xs);font-size:12.5px;color:var(--text);
+  cursor:pointer;font-family:var(--font);font-weight:600;
+  min-width:210px;display:flex;align-items:center;justify-content:space-between;gap:8px;
+  user-select:none;transition:border .15s,box-shadow .15s;
+}
+.member-select-display:hover,.member-select-display.open{border-color:var(--green);box-shadow:0 0 0 3px var(--green-glow);}
+.chips-area{display:flex;flex-wrap:nowrap;gap:4px;flex:1;min-width:0;overflow:hidden;align-items:center;}
+.chip{
+  display:inline-flex;align-items:center;gap:3px;
+  padding:3px 8px;background:var(--green-lt);color:var(--green);
+  border-radius:6px;font-size:10.5px;font-weight:700;
+  white-space:nowrap;max-width:110px;overflow:hidden;text-overflow:ellipsis;flex-shrink:0;
+}
+.member-dropdown{
+  position:absolute;top:calc(100% + 6px);left:0;
+  background:white;border:1.5px solid var(--border2);
+  border-radius:var(--radius-sm);box-shadow:var(--shadow-lg);
+  z-index:9999;max-height:300px;overflow-y:auto;display:none;min-width:270px;
+}
+.member-dropdown.open{display:block;}
+.member-search-box{
+  padding:10px 12px;border-bottom:1px solid var(--border);
+  position:sticky;top:0;background:white;z-index:1;
+}
+.member-search-box input{
+  width:100%;padding:8px 11px;background:var(--bg);border:1.5px solid var(--border2);
+  border-radius:8px;font-size:12px;color:var(--text);outline:none;font-family:var(--font);
+}
+.member-search-box input:focus{border-color:var(--green);}
+.member-option{
+  padding:9px 14px;font-size:12.5px;cursor:pointer;
+  display:flex;align-items:center;gap:10px;
+  border-bottom:1px solid var(--border);transition:background .1s;
+  color:var(--text2);
+}
+.member-option:hover{background:var(--green-xlt);}
+.member-option:last-child{border-bottom:none;}
+.member-option input[type=checkbox]{accent-color:var(--green);width:14px;height:14px;flex-shrink:0;cursor:pointer;}
+.member-option label{cursor:pointer;font-weight:500;}
+.select-all-row{
+  padding:9px 14px;font-size:11px;font-weight:800;color:var(--green);
+  cursor:pointer;border-bottom:1.5px solid var(--border2);
+  display:flex;align-items:center;gap:8px;
+  background:var(--green-xlt);position:sticky;top:52px;z-index:1;
+}
+
+/* ─── CONTENT ─── */
+.content{padding:24px 28px;max-width:1540px;margin:0 auto;}
+
+/* ─── LOADING ─── */
+.loading-overlay{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:120px 20px;gap:20px;}
+.spinner{width:44px;height:44px;border:3px solid var(--green-lt);border-top-color:var(--green);border-radius:50%;animation:spin 1s linear infinite;}
+.loading-text{font-size:13px;font-weight:600;color:var(--text3);}
+
+/* ─── STATS GRID ─── */
 .stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;margin-bottom:24px;}
-.stat-card{padding:18px;background:var(--glass);backdrop-filter:blur(12px);border:1.5px solid rgba(255,255,255,.8);border-radius:var(--radius);box-shadow:var(--shadow);transition:transform .15s,box-shadow .15s;}
-.stat-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg);}
-.stat-icon{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:12px;}
-.stat-info p{font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
-.stat-info h2{font-size:19px;font-weight:800;color:var(--text);}
-.stat-info h2.green{color:#16a34a;}
-.stat-info h2.red{color:#dc2626;}
-.stat-info h2.blue{color:#2563eb;}
-.stat-info h2.amber{color:#d97706;}
-.si-green{background:#dcfce7;color:#16a34a;}
-.si-blue{background:#dbeafe;color:#2563eb;}
-.si-orange{background:#ffedd5;color:#ea580c;}
-.si-purple{background:#f3e8ff;color:#9333ea;}
-.si-teal{background:#ccfbf1;color:#0d9488;}
-.si-red{background:#fee2e2;color:#dc2626;}
-.si-amber{background:#fef3c7;color:#d97706;}
 
-/* SECTION */
-.section{background:var(--glass);backdrop-filter:blur(12px);border:1.5px solid rgba(255,255,255,.8);border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:20px;overflow:hidden;}
-.section-header{background:#f0fdf4;padding:14px 20px;border-bottom:1.5px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
-.section-header h3{font-size:14px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:8px;}
-.section-header h3 i{color:var(--primary);}
-.section-body{padding:20px;}
+.stat-card{
+  background:white;border-radius:var(--radius);
+  padding:20px;border:1.5px solid var(--border);
+  box-shadow:var(--shadow);
+  transition:transform .2s,box-shadow .2s;cursor:default;
+  position:relative;overflow:hidden;
+}
+.stat-card::after{
+  content:'';position:absolute;
+  top:-20px;right:-20px;width:70px;height:70px;
+  border-radius:50%;opacity:0.5;
+  background:var(--card-glow,rgba(22,163,74,0.07));
+  pointer-events:none;
+}
+.stat-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md);}
 
-/* CHARTS GRID */
-.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:20px;}
-@media(max-width:900px){.charts-grid{grid-template-columns:1fr;}}
-.chart-card{background:var(--glass);border:1.5px solid rgba(255,255,255,.8);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;}
-.chart-header{background:#f0fdf4;padding:12px 18px;border-bottom:1.5px solid var(--border);}
-.chart-header h4{font-size:13px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:7px;}
-.chart-header h4 i{color:var(--primary);}
+.stat-icon{
+  width:42px;height:42px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:17px;margin-bottom:14px;flex-shrink:0;
+}
+.stat-label{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--text3);margin-bottom:5px;}
+.stat-value{font-size:21px;font-weight:900;color:var(--text);line-height:1.1;}
+.stat-value.green{color:var(--green);}
+.stat-value.red{color:var(--red);}
+.stat-value.blue{color:var(--blue);}
+.stat-value.amber{color:var(--amber);}
+.stat-value.purple{color:var(--purple);}
+.stat-value.teal{color:var(--teal);}
+.stat-value.orange{color:var(--orange);}
+.stat-value.pink{color:var(--pink);}
+
+/* icon colour sets */
+.ic-green {background:var(--green-lt);color:var(--green);}
+.ic-purple{background:var(--purple-lt);color:var(--purple);}
+.ic-blue  {background:var(--blue-lt);color:var(--blue);}
+.ic-red   {background:var(--red-lt);color:var(--red);}
+.ic-orange{background:var(--orange-lt);color:var(--orange);}
+.ic-teal  {background:var(--teal-lt);color:var(--teal);}
+.ic-amber {background:var(--amber-lt);color:var(--amber);}
+.ic-pink  {background:var(--pink-lt);color:var(--pink);}
+
+/* ─── SECTION CARD ─── */
+.section-card{background:white;border:1.5px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:18px;overflow:hidden;}
+.section-card-head{
+  background:var(--green-xlt);border-bottom:1.5px solid var(--border2);
+  padding:14px 20px;display:flex;align-items:center;justify-content:space-between;
+}
+.section-card-title{font-size:13px;font-weight:800;color:var(--text);display:flex;align-items:center;gap:8px;}
+.section-card-title i{color:var(--green);font-size:13px;}
+.section-card-meta{font-size:11px;color:var(--text3);font-weight:500;}
+.section-card-body{padding:20px;}
+
+/* ─── CHARTS GRID ─── */
+.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+@media(max-width:960px){.charts-grid{grid-template-columns:1fr;}}
+
+.chart-card{background:white;border:1.5px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;}
+.chart-head{background:var(--green-xlt);border-bottom:1.5px solid var(--border2);padding:13px 18px;display:flex;align-items:center;justify-content:space-between;}
+.chart-title{font-size:12.5px;font-weight:800;color:var(--text);display:flex;align-items:center;gap:7px;}
+.chart-title i{color:var(--green);}
 .chart-body{padding:16px;}
+.chart-legend{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:12px;}
+.leg{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text3);font-weight:600;}
+.leg-dot{width:9px;height:9px;border-radius:2px;flex-shrink:0;}
 
-/* MEMBER TABLE */
+/* ─── RUNNING BALANCE TABLE ─── */
+.balance-header{
+  display:grid;grid-template-columns:105px 1fr 120px 120px 130px;
+  gap:8px;padding:9px 14px;
+  background:var(--green-xlt);border-radius:var(--radius-xs);
+  font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--text3);
+  margin-bottom:6px;
+}
+.balance-list{display:flex;flex-direction:column;gap:3px;max-height:380px;overflow-y:auto;}
+.balance-row{
+  display:grid;grid-template-columns:105px 1fr 120px 120px 130px;
+  gap:8px;padding:9px 14px;
+  background:var(--bg);border-radius:var(--radius-xs);
+  font-size:12px;border:1.5px solid transparent;transition:all .12s;
+}
+.balance-row:hover{background:white;border-color:var(--border2);box-shadow:var(--shadow);}
+
+/* ─── MONTHLY TIMELINE ─── */
+.timeline{display:flex;flex-direction:column;gap:6px;}
+.tl-row{
+  display:flex;align-items:center;gap:14px;padding:10px 14px;
+  border-radius:var(--radius-xs);background:var(--bg);
+  border:1.5px solid transparent;transition:all .12s;
+}
+.tl-row:hover{background:white;border-color:var(--border2);box-shadow:var(--shadow);}
+.tl-month{font-size:11.5px;font-weight:800;color:var(--text2);min-width:60px;}
+.tl-bar-wrap{flex:1;background:var(--green-lt);border-radius:6px;height:9px;overflow:hidden;}
+.tl-bar{height:100%;background:linear-gradient(90deg,var(--green),var(--accent));border-radius:6px;transition:width .6s cubic-bezier(.4,0,.2,1);}
+.tl-amount{font-size:12px;font-weight:800;color:var(--green);min-width:110px;text-align:right;}
+.tl-count{font-size:11px;color:var(--text4);min-width:54px;text-align:right;}
+
+/* ─── MEMBER TABLE ─── */
 .table-wrap{overflow-x:auto;}
-table{width:100%;border-spacing:0;}
-th{background:#f0fdf4;padding:10px 14px;text-align:left;font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;border-bottom:1.5px solid var(--border);white-space:nowrap;}
-td{padding:11px 14px;border-bottom:1px solid #f0fdf4;font-size:12.5px;font-weight:500;color:var(--text);}
+table{width:100%;border-collapse:collapse;}
+th{
+  padding:11px 14px;text-align:left;
+  font-size:9.5px;font-weight:800;color:var(--text3);
+  text-transform:uppercase;letter-spacing:.6px;
+  border-bottom:1.5px solid var(--border2);white-space:nowrap;
+  background:var(--green-xlt);
+}
+td{padding:11px 14px;border-bottom:1px solid var(--border);font-size:12.5px;font-weight:500;color:var(--text2);white-space:nowrap;}
+tbody tr:hover td{background:var(--green-xlt);}
 tr:last-child td{border-bottom:none;}
-tbody tr:hover td{background:rgba(22,163,74,0.03);}
-.positive{color:#16a34a;font-weight:700;}
-.negative{color:#dc2626;font-weight:700;}
-.badge{padding:3px 9px;border-radius:7px;font-size:11px;font-weight:700;text-transform:uppercase;}
-.badge-active{background:#dcfce7;color:#16a34a;}
-.badge-inactive{background:#fee2e2;color:#dc2626;}
+.positive{color:var(--green)!important;font-weight:700;}
+.negative{color:var(--red)!important;font-weight:700;}
+.badge{padding:3px 9px;border-radius:6px;font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.3px;}
+.badge-active{background:var(--green-lt);color:var(--green);}
+.badge-inactive{background:var(--red-lt);color:var(--red);}
 
-/* MONTH TIMELINE */
-.timeline{display:flex;flex-direction:column;gap:8px;}
-.timeline-row{display:flex;align-items:center;gap:12px;padding:10px 14px;background:rgba(240,253,244,0.5);border-radius:10px;border:1px solid transparent;transition:all .1s;}
-.timeline-row:hover{background:rgba(255,255,255,.9);border-color:var(--border);}
-.timeline-month{font-size:12px;font-weight:700;color:var(--text-muted);min-width:80px;}
-.timeline-bar-wrap{flex:1;background:#f0fdf4;border-radius:6px;height:10px;overflow:hidden;}
-.timeline-bar{height:100%;background:linear-gradient(90deg,#16a34a,#22c55e);border-radius:6px;transition:width .4s ease;}
-.timeline-amount{font-size:12.5px;font-weight:700;color:var(--primary);min-width:100px;text-align:right;}
-.timeline-count{font-size:11px;color:var(--text-muted);min-width:60px;text-align:right;}
+.table-search{
+  padding:7px 12px;background:white;border:1.5px solid var(--border2);
+  border-radius:8px;font-size:12px;color:var(--text);outline:none;
+  font-family:var(--font);font-weight:600;width:220px;
+  transition:border .15s,box-shadow .15s;
+}
+.table-search:focus{border-color:var(--green);box-shadow:0 0 0 3px var(--green-glow);}
 
-/* RUNNING BALANCE */
-.balance-timeline{display:flex;flex-direction:column;gap:6px;max-height:400px;overflow-y:auto;}
-.balance-row{display:grid;grid-template-columns:100px 1fr 130px 130px 130px;gap:10px;align-items:center;padding:9px 14px;background:rgba(240,253,244,0.4);border-radius:9px;font-size:12px;border:1px solid transparent;transition:border .1s;}
-.balance-row:hover{border-color:var(--border);background:rgba(255,255,255,.9);}
-.balance-row.header{background:#f0fdf4;font-size:10px;font-weight:700;text-transform:uppercase;color:var(--text-muted);letter-spacing:.4px;border-radius:9px;position:sticky;top:0;}
-
-/* TOAST */
+/* ─── TOAST ─── */
 .toast-cont{position:fixed;bottom:22px;right:22px;z-index:99999;display:flex;flex-direction:column;gap:8px;}
-.toast{background:white;padding:11px 18px;border-radius:11px;box-shadow:var(--shadow-lg);display:flex;align-items:center;gap:9px;font-size:13px;font-weight:600;border:1.5px solid var(--border);animation:ts .3s ease;}
-.toast.t-success i{color:var(--primary);}
-.toast.t-error i{color:var(--danger);}
-.toast.t-warning i{color:var(--warning);}
+.toast{
+  background:white;padding:11px 16px;border-radius:12px;
+  box-shadow:var(--shadow-lg);display:flex;align-items:center;gap:9px;
+  font-size:12.5px;font-weight:600;border:1.5px solid var(--border2);
+  animation:ts .3s cubic-bezier(.4,0,.2,1);
+}
+.toast.t-success i{color:var(--green);}
+.toast.t-error   i{color:var(--red);}
+.toast.t-warning i{color:var(--amber);}
 .toast.fade-out{animation:tf .35s ease forwards;}
 @keyframes ts{from{transform:translateX(110%);opacity:0;}to{transform:translateX(0);opacity:1;}}
 @keyframes tf{to{opacity:0;transform:translateX(110%);}}
 
-.empty-state{text-align:center;padding:48px 20px;color:var(--text-muted);}
-.empty-state-icon{font-size:40px;opacity:.2;margin-bottom:14px;display:block;}
-.section-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--text-muted);margin-bottom:12px;}
-.print-btn{padding:7px 14px;background:white;border:1.5px solid var(--border);border-radius:9px;font-size:12px;font-weight:700;color:var(--text-muted);cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:6px;transition:all .15s;}
-.print-btn:hover{background:var(--primary-xlight);color:var(--primary);border-color:var(--primary);}
-.legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:10px;}
-.legend-item{display:flex;align-items:center;gap:5px;font-size:11.5px;color:var(--text-muted);font-weight:600;}
-.legend-dot{width:10px;height:10px;border-radius:2px;}
+/* ─── EMPTY ─── */
+.empty-state{text-align:center;padding:44px 20px;color:var(--text3);}
+.empty-icon{font-size:34px;opacity:.25;margin-bottom:12px;display:block;}
+
+/* ─── MOBILE ─── */
 @media(max-width:600px){
+  .topbar{padding:0 14px;}
   .filter-bar{padding:12px 14px;}
   .content{padding:14px;}
-  .topbar{padding:12px 14px;}
-  .balance-row{grid-template-columns:80px 1fr 100px;}
+  .stats-grid{grid-template-columns:repeat(2,1fr);}
+  .balance-header,.balance-row{grid-template-columns:80px 1fr 100px;}
+  .balance-row span:nth-child(4),.balance-header span:nth-child(4){display:none;}
+  .logo-version,.divider-v{display:none;}
 }
 @media print{
-  .topbar,.filter-bar,.print-btn,.sync-btn,.back-btn{display:none!important;}
-  .section,.chart-card{box-shadow:none;border:1px solid #e5e7eb;}
+  .topbar,.filter-bar{display:none!important;}
+  body{background:white!important;}
+  .section-card,.chart-card{box-shadow:none!important;border:1px solid #e5e7eb!important;}
 }
 </style>
 </head>
 <body>
 
-<!-- TOP BAR -->
+<!-- ══ TOPBAR ══ -->
 <div class="topbar">
   <div class="topbar-left">
-    <a href="javascript:history.back()" class="back-btn">
-      <i class="fas fa-arrow-left"></i> Back to SACCOSync
+    <div class="logo-wrap">
+      <div class="logo-icon">S</div>
+      <div>
+        <div class="logo-text">SACCO<span>Sync</span></div>
+        <div class="logo-version">v5.9.1</div>
+      </div>
+    </div>
+    <div class="divider-v"></div>
+    <a href="index.html" class="back-btn">
+      <i class="fas fa-arrow-left"></i> Back to Dashboard
     </a>
-    <div>
+    <div class="page-meta">
       <div class="page-title">Financial <span>Analysis</span></div>
-      <div style="font-size:11px;color:var(--text-muted);font-weight:500;margin-top:1px;">All-time transactions • Running balance • Member breakdown</div>
+      <div class="page-sub">All-time transactions · Running balance · Member breakdown</div>
     </div>
   </div>
   <div class="topbar-right">
-    <button class="print-btn" onclick="window.print()"><i class="fas fa-print"></i> Print / PDF</button>
-    <button class="sync-btn" onclick="loadAllData(true)"><i class="fas fa-sync" id="sync-icon"></i> Refresh Data</button>
+    <button class="btn-ghost" onclick="window.print()">
+      <i class="fas fa-print"></i> Print / PDF
+    </button>
+    <button class="btn-primary" onclick="loadAllData(true)">
+      <i class="fas fa-sync-alt" id="sync-icon"></i> Refresh Data
+    </button>
   </div>
 </div>
 
-<!-- FILTERS -->
+<!-- ══ FILTER BAR ══ -->
 <div class="filter-bar">
   <div class="filter-group">
-    <label>From Date</label>
-    <input type="date" id="f-from" onchange="applyFilters()">
+    <span class="filter-label">From Date</span>
+    <input type="date" id="f-from" class="filter-input" onchange="applyFilters()">
   </div>
   <div class="filter-group">
-    <label>To Date</label>
-    <input type="date" id="f-to" onchange="applyFilters()">
+    <span class="filter-label">To Date</span>
+    <input type="date" id="f-to" class="filter-input" onchange="applyFilters()">
   </div>
   <div class="filter-group">
-    <label>Quick Range</label>
-    <select id="f-range" onchange="setQuickRange(this.value)">
+    <span class="filter-label">Quick Range</span>
+    <select id="f-range" class="filter-input" onchange="setQuickRange(this.value)">
       <option value="">Custom</option>
       <option value="ytd">Year to Date</option>
       <option value="last30">Last 30 Days</option>
@@ -214,68 +431,79 @@ tbody tr:hover td{background:rgba(22,163,74,0.03);}
       <option value="all" selected>All Time</option>
     </select>
   </div>
+
   <div class="filter-group">
-    <label>Member(s)</label>
+    <span class="filter-label">Member(s)</span>
     <div class="member-select-wrap" id="member-select-wrap">
       <div class="member-select-display" id="member-select-display" onclick="toggleMemberDropdown()">
-        <span id="member-select-label">All Members</span>
-        <i class="fas fa-chevron-down" style="font-size:10px;opacity:.6;"></i>
+        <div class="chips-area" id="member-chips">
+          <span style="color:var(--text3);font-size:12.5px;font-weight:600;">All Members</span>
+        </div>
+        <i class="fas fa-chevron-down" style="font-size:10px;opacity:.5;flex-shrink:0;"></i>
       </div>
       <div class="member-dropdown" id="member-dropdown">
         <div class="member-search-box">
-          <input type="text" id="member-search" placeholder="Search member..." oninput="filterMemberOptions(this.value)">
+          <input type="text" id="member-search" placeholder="Search member…" oninput="filterMemberOptions(this.value)">
         </div>
         <div class="select-all-row" onclick="toggleSelectAll()">
-          <input type="checkbox" id="chk-all" checked> <label for="chk-all">Select All</label>
+          <input type="checkbox" id="chk-all" checked>
+          <label for="chk-all" style="cursor:pointer;font-size:11.5px;">Select All</label>
         </div>
         <div id="member-options-list"></div>
       </div>
     </div>
   </div>
+
   <div class="filter-group">
-    <label>Contribution Type</label>
-    <select id="f-ctype" onchange="applyFilters()">
+    <span class="filter-label">Contribution Type</span>
+    <select id="f-ctype" class="filter-input" onchange="applyFilters()">
       <option value="">All Types</option>
       <option value="Members Savings">Members Savings</option>
       <option value="Welfare Funds">Welfare Funds</option>
       <option value="Merry Go Round">Merry Go Round</option>
     </select>
   </div>
+
   <div class="filter-actions">
     <button class="btn-apply" onclick="applyFilters()"><i class="fas fa-filter"></i> Apply</button>
     <button class="btn-reset" onclick="resetFilters()"><i class="fas fa-times"></i> Reset</button>
   </div>
 </div>
 
-<!-- CONTENT -->
-<div class="content" id="main-content">
+<!-- ══ CONTENT ══ -->
+<div class="content">
   <div class="loading-overlay" id="loading-state">
     <div class="spinner"></div>
-    <div class="loading-text">Loading financial data...</div>
+    <div class="loading-text">Loading financial data…</div>
   </div>
+
   <div id="analysis-content" style="display:none;">
 
-    <!-- SUMMARY STATS -->
+    <!-- STATS -->
     <div class="stats-grid" id="stats-grid"></div>
 
     <!-- CHARTS ROW 1 -->
     <div class="charts-grid">
       <div class="chart-card">
-        <div class="chart-header"><h4><i class="fas fa-chart-line"></i> Monthly Contributions Trend</h4></div>
+        <div class="chart-head">
+          <div class="chart-title"><i class="fas fa-chart-line"></i> Monthly Contributions Trend</div>
+        </div>
         <div class="chart-body">
-          <div class="legend" id="contrib-legend"></div>
-          <div style="position:relative;height:250px;">
-            <canvas id="chart-contrib-trend" role="img" aria-label="Monthly contribution trend chart"></canvas>
+          <div class="chart-legend" id="contrib-legend"></div>
+          <div style="position:relative;height:240px;">
+            <canvas id="chart-contrib-trend"></canvas>
           </div>
         </div>
       </div>
       <div class="chart-card">
-        <div class="chart-header"><h4><i class="fas fa-chart-pie"></i> Contribution Breakdown</h4></div>
-        <div class="chart-body">
-          <div style="position:relative;height:250px;">
-            <canvas id="chart-contrib-pie" role="img" aria-label="Contribution type pie chart"></canvas>
+        <div class="chart-head">
+          <div class="chart-title"><i class="fas fa-chart-pie"></i> Contribution Breakdown</div>
+        </div>
+        <div class="chart-body" style="display:flex;flex-direction:column;align-items:center;">
+          <div style="position:relative;height:220px;width:220px;">
+            <canvas id="chart-contrib-pie"></canvas>
           </div>
-          <div class="legend" id="pie-legend" style="margin-top:12px;justify-content:center;"></div>
+          <div class="chart-legend" id="pie-legend" style="margin-top:14px;justify-content:center;"></div>
         </div>
       </div>
     </div>
@@ -283,75 +511,71 @@ tbody tr:hover td{background:rgba(22,163,74,0.03);}
     <!-- CHARTS ROW 2 -->
     <div class="charts-grid">
       <div class="chart-card">
-        <div class="chart-header"><h4><i class="fas fa-hand-holding-usd"></i> Loans vs Repayments (Monthly)</h4></div>
+        <div class="chart-head">
+          <div class="chart-title"><i class="fas fa-hand-holding-dollar"></i> Loans vs Repayments</div>
+        </div>
         <div class="chart-body">
-          <div class="legend" id="loan-legend"></div>
-          <div style="position:relative;height:250px;">
-            <canvas id="chart-loans" role="img" aria-label="Loans vs repayments monthly chart"></canvas>
+          <div class="chart-legend" id="loan-legend"></div>
+          <div style="position:relative;height:240px;">
+            <canvas id="chart-loans"></canvas>
           </div>
         </div>
       </div>
       <div class="chart-card">
-        <div class="chart-header"><h4><i class="fas fa-receipt"></i> Expenses by Category</h4></div>
+        <div class="chart-head">
+          <div class="chart-title"><i class="fas fa-receipt"></i> Expenses by Category</div>
+        </div>
         <div class="chart-body">
-          <div style="position:relative;height:250px;">
-            <canvas id="chart-expenses" role="img" aria-label="Expenses by category bar chart"></canvas>
+          <div style="position:relative;height:265px;">
+            <canvas id="chart-expenses"></canvas>
           </div>
         </div>
       </div>
     </div>
 
     <!-- RUNNING BALANCE -->
-    <div class="section" style="margin-bottom:20px;">
-      <div class="section-header">
-        <h3><i class="fas fa-balance-scale"></i> Running Balance Timeline</h3>
-        <span style="font-size:11px;color:var(--text-muted);font-weight:600;">Cumulative — all transactions</span>
+    <div class="section-card">
+      <div class="section-card-head">
+        <div class="section-card-title"><i class="fas fa-scale-balanced"></i> Running Balance Timeline</div>
+        <span class="section-card-meta">Cumulative · all transactions</span>
       </div>
-      <div class="section-body">
-        <div style="position:relative;height:220px;margin-bottom:16px;">
-          <canvas id="chart-balance" role="img" aria-label="Running balance over time"></canvas>
+      <div class="section-card-body">
+        <div style="position:relative;height:200px;margin-bottom:18px;">
+          <canvas id="chart-balance"></canvas>
         </div>
-        <div class="balance-row header">
-          <span>Month</span><span>Event</span><span>+In</span><span>-Out</span><span>Balance</span>
+        <div class="balance-header">
+          <span>Date</span><span>Event</span><span>+ In</span><span>− Out</span><span>Balance</span>
         </div>
-        <div class="balance-timeline" id="balance-timeline"></div>
+        <div class="balance-list" id="balance-timeline"></div>
       </div>
     </div>
 
-    <!-- MONTHLY SUMMARY TIMELINE -->
-    <div class="section" style="margin-bottom:20px;">
-      <div class="section-header">
-        <h3><i class="fas fa-calendar-alt"></i> Monthly Savings Summary</h3>
+    <!-- MONTHLY SUMMARY -->
+    <div class="section-card">
+      <div class="section-card-head">
+        <div class="section-card-title"><i class="fas fa-calendar-alt"></i> Monthly Savings Summary</div>
+        <span class="section-card-meta">Newest first</span>
       </div>
-      <div class="section-body">
+      <div class="section-card-body">
         <div class="timeline" id="monthly-timeline"></div>
       </div>
     </div>
 
-    <!-- MEMBER BREAKDOWN TABLE -->
-    <div class="section">
-      <div class="section-header">
-        <h3><i class="fas fa-users"></i> Member-wise Breakdown</h3>
-        <div style="display:flex;gap:8px;">
-          <input type="text" id="member-table-search" placeholder="Search member..." style="padding:6px 11px;border-radius:8px;border:1.5px solid var(--border);background:white;font-size:12px;outline:none;font-family:inherit;font-weight:600;" oninput="renderMemberTable(this.value)">
-        </div>
+    <!-- MEMBER TABLE -->
+    <div class="section-card" style="margin-bottom:0;">
+      <div class="section-card-head">
+        <div class="section-card-title"><i class="fas fa-users"></i> Member-wise Breakdown</div>
+        <input type="text" class="table-search" id="member-table-search"
+          placeholder="Search member…" oninput="renderMemberTable(this.value)">
       </div>
       <div class="table-wrap">
         <table>
           <thead>
             <tr>
-              <th>Member</th>
-              <th>Status</th>
-              <th>Total Savings</th>
-              <th>Welfare</th>
-              <th>MGR</th>
-              <th>Total Contrib.</th>
-              <th>Loans Taken</th>
-              <th>Principal Paid</th>
-              <th>Interest Paid</th>
-              <th>Penalty Paid</th>
-              <th>Loan Balance</th>
-              <th>Net Position</th>
+              <th>Member</th><th>Status</th><th>Savings</th><th>Welfare</th>
+              <th>MGR</th><th>Total Contrib.</th><th>Loans Out</th>
+              <th>Principal Paid</th><th>Interest</th><th>Penalty</th>
+              <th>Loan Balance</th><th>Net Position</th>
             </tr>
           </thead>
           <tbody id="tb-member-breakdown"></tbody>
@@ -359,623 +583,461 @@ tbody tr:hover td{background:rgba(22,163,74,0.03);}
       </div>
     </div>
 
-  </div>
-</div>
+  </div><!-- /analysis-content -->
+</div><!-- /content -->
 
 <div id="toast-container" class="toast-cont"></div>
 
 <script>
-var API_URL = 'https://script.google.com/macros/s/AKfycbySMG-KoYkeEeaHXwBBqTag8pjK4GXgdHE7WJ8o-e_yJ8KC6PmNRTG_u_WqYe7MbQmuaw/exec';
+/* ══════════════════════════════════════════
+   SACCOSync Financial Analysis — JS Engine
+══════════════════════════════════════════ */
+var API_URL='https://script.google.com/macros/s/AKfycbySMG-KoYkeEeaHXwBBqTag8pjK4GXgdHE7WJ8o-e_yJ8KC6PmNRTG_u_WqYe7MbQmuaw/exec';
 
-var S = {
-  members: [],
-  contributions: [],
-  loans: [],
-  repayments: [],
-  expenses: [],
-  selectedMembers: [],
-  allMemberIds: [],
-  filteredContribs: [],
-  filteredLoans: [],
-  filteredRepayments: [],
-  filteredExpenses: []
-};
+var S={members:[],contributions:[],loans:[],repayments:[],expenses:[],
+  selectedMembers:[],allMemberIds:[],
+  filteredContribs:[],filteredLoans:[],filteredRepayments:[],filteredExpenses:[]};
+var CHARTS={};
 
-var CHARTS = {};
-
-function api(action, params) {
-  var u = new URL(API_URL);
-  u.searchParams.set('action', action);
-  if (params) Object.keys(params).forEach(function(k){ u.searchParams.set(k, params[k]); });
-  return fetch(u.toString(), {method:'GET', redirect:'follow'})
+function api(action,params){
+  var u=new URL(API_URL);
+  u.searchParams.set('action',action);
+  if(params) Object.keys(params).forEach(function(k){u.searchParams.set(k,params[k]);});
+  return fetch(u.toString(),{method:'GET',redirect:'follow'})
     .then(function(r){return r.json();})
-    .then(function(r){if(r.success===false) throw new Error(r.error||'API Error'); return r.data;});
+    .then(function(r){if(r.success===false)throw new Error(r.error||'API Error');return r.data;});
 }
 
-function toast(msg, type) {
-  type = type || 'success';
-  var c = document.getElementById('toast-container');
-  var t = document.createElement('div');
-  t.className = 'toast t-'+type;
-  var icon = type==='success'?'check-circle':type==='warning'?'exclamation-triangle':'exclamation-circle';
-  t.innerHTML = '<i class="fas fa-'+icon+'"></i><span>'+msg+'</span>';
+function toast(msg,type){
+  type=type||'success';
+  var c=document.getElementById('toast-container');
+  var t=document.createElement('div');
+  t.className='toast t-'+type;
+  var icons={success:'circle-check',warning:'triangle-exclamation',error:'circle-exclamation'};
+  t.innerHTML='<i class="fas fa-'+(icons[type])+'"></i><span>'+msg+'</span>';
   c.appendChild(t);
-  setTimeout(function(){ t.classList.add('fade-out'); setTimeout(function(){if(t.parentNode)t.parentNode.removeChild(t);},380); }, 3000);
+  setTimeout(function(){t.classList.add('fade-out');setTimeout(function(){if(t.parentNode)t.parentNode.removeChild(t);},380);},3200);
 }
 
-function loadAllData(force) {
-  document.getElementById('loading-state').style.display = 'flex';
-  document.getElementById('analysis-content').style.display = 'none';
-  var icon = document.getElementById('sync-icon');
-  if(icon) icon.classList.add('spinning');
-  var p = [];
-  p.push(api('getMembers',{limit:2000,offset:0}).then(function(d){if(d&&d.length) S.members=d;}));
-  p.push(api('getSheet',{sheet:'Contributions'}).then(function(d){if(d) S.contributions=d;}));
-  p.push(api('getSheet',{sheet:'Loans'}).then(function(d){if(d) S.loans=d;}));
-  p.push(api('getSheet',{sheet:'Repayments'}).then(function(d){if(d) S.repayments=d;}));
-  p.push(api('getSheet',{sheet:'Expenses'}).then(function(d){if(d) S.expenses=d;}));
-  Promise.all(p).then(function(){
-    S.allMemberIds = S.members.map(function(m){return m.ID;});
-    S.selectedMembers = S.allMemberIds.slice();
+/* ── LOAD ── */
+function loadAllData(force){
+  document.getElementById('loading-state').style.display='flex';
+  document.getElementById('analysis-content').style.display='none';
+  var icon=document.getElementById('sync-icon');
+  if(icon)icon.classList.add('spinning');
+  Promise.all([
+    api('getMembers',{limit:2000,offset:0}).then(function(d){if(d&&d.length)S.members=d;}),
+    api('getSheet',{sheet:'Contributions'}).then(function(d){if(d)S.contributions=d;}),
+    api('getSheet',{sheet:'Loans'}).then(function(d){if(d)S.loans=d;}),
+    api('getSheet',{sheet:'Repayments'}).then(function(d){if(d)S.repayments=d;}),
+    api('getSheet',{sheet:'Expenses'}).then(function(d){if(d)S.expenses=d;})
+  ]).then(function(){
+    S.allMemberIds=S.members.map(function(m){return m.ID;});
+    S.selectedMembers=S.allMemberIds.slice();
     buildMemberOptions();
     setQuickRange('all');
-    document.getElementById('loading-state').style.display = 'none';
-    document.getElementById('analysis-content').style.display = 'block';
+    document.getElementById('loading-state').style.display='none';
+    document.getElementById('analysis-content').style.display='block';
     applyFilters();
-    toast('Data loaded successfully!');
+    toast('Data loaded — '+S.members.length+' members');
   }).catch(function(e){
-    toast('Error loading data: '+e.message, 'error');
-    document.getElementById('loading-state').innerHTML = '<i class="fas fa-exclamation-circle" style="font-size:36px;color:var(--danger);"></i><div class="loading-text">Failed to load. Check your connection.</div><button class="btn-apply" style="margin-top:12px;" onclick="loadAllData(true)"><i class="fas fa-redo"></i> Retry</button>';
-  }).then(function(){
-    if(icon) icon.classList.remove('spinning');
-  });
+    toast('Failed to load: '+e.message,'error');
+    document.getElementById('loading-state').innerHTML='<i class="fas fa-circle-exclamation" style="font-size:36px;color:var(--red);"></i><div class="loading-text" style="margin-top:10px;">Connection error</div><button class="btn-apply" style="margin-top:14px;" onclick="loadAllData(true)"><i class="fas fa-redo"></i> Retry</button>';
+  }).finally(function(){if(icon)icon.classList.remove('spinning');});
 }
 
-/* ─── DATE HELPERS ─── */
-function setQuickRange(val) {
-  var now = new Date();
-  var from = '', to = '';
-  if (val === 'ytd') {
-    from = new Date(now.getFullYear(),0,1).toISOString().split('T')[0];
-    to   = now.toISOString().split('T')[0];
-  } else if (val === 'last30') {
-    from = new Date(now-30*86400000).toISOString().split('T')[0];
-    to   = now.toISOString().split('T')[0];
-  } else if (val === 'last90') {
-    from = new Date(now-90*86400000).toISOString().split('T')[0];
-    to   = now.toISOString().split('T')[0];
-  } else if (val === 'last6m') {
-    var d6 = new Date(now); d6.setMonth(d6.getMonth()-6);
-    from = d6.toISOString().split('T')[0];
-    to   = now.toISOString().split('T')[0];
-  } else if (val === 'last12m') {
-    var d12 = new Date(now); d12.setMonth(d12.getMonth()-12);
-    from = d12.toISOString().split('T')[0];
-    to   = now.toISOString().split('T')[0];
-  } else if (val === 'all') {
-    from = ''; to = '';
-  }
-  document.getElementById('f-from').value = from;
-  document.getElementById('f-to').value = to;
-  if (S.members.length) applyFilters();
+/* ── QUICK RANGE ── */
+function setQuickRange(val){
+  var now=new Date(),from='',to='';
+  if(val==='ytd'){from=new Date(now.getFullYear(),0,1).toISOString().split('T')[0];to=now.toISOString().split('T')[0];}
+  else if(val==='last30'){from=new Date(now-30*864e5).toISOString().split('T')[0];to=now.toISOString().split('T')[0];}
+  else if(val==='last90'){from=new Date(now-90*864e5).toISOString().split('T')[0];to=now.toISOString().split('T')[0];}
+  else if(val==='last6m'){var d=new Date(now);d.setMonth(d.getMonth()-6);from=d.toISOString().split('T')[0];to=now.toISOString().split('T')[0];}
+  else if(val==='last12m'){var d2=new Date(now);d2.setMonth(d2.getMonth()-12);from=d2.toISOString().split('T')[0];to=now.toISOString().split('T')[0];}
+  document.getElementById('f-from').value=from;
+  document.getElementById('f-to').value=to;
+  if(S.members.length)applyFilters();
 }
 
-function resetFilters() {
-  document.getElementById('f-from').value = '';
-  document.getElementById('f-to').value = '';
-  document.getElementById('f-range').value = 'all';
-  document.getElementById('f-ctype').value = '';
-  S.selectedMembers = S.allMemberIds.slice();
-  updateMemberLabel();
+function resetFilters(){
+  document.getElementById('f-from').value='';
+  document.getElementById('f-to').value='';
+  document.getElementById('f-range').value='all';
+  document.getElementById('f-ctype').value='';
+  S.selectedMembers=S.allMemberIds.slice();
   document.querySelectorAll('.member-option input[type=checkbox]').forEach(function(c){c.checked=true;});
-  document.getElementById('chk-all').checked = true;
+  document.getElementById('chk-all').checked=true;
+  updateMemberChips();
   applyFilters();
 }
 
-/* ─── MEMBER MULTI-SELECT ─── */
-function buildMemberOptions() {
-  var list = document.getElementById('member-options-list');
-  list.innerHTML = S.members.map(function(m){
-    return '<div class="member-option" data-name="'+(m.Name||'').toLowerCase()+'"><input type="checkbox" id="mchk-'+m.ID+'" value="'+m.ID+'" checked onchange="memberCheckChange()"><label for="mchk-'+m.ID+'">'+m.Name+' <span style="font-size:10.5px;color:var(--text-muted);">('+m.ID+')</span></label></div>';
+/* ── MEMBER DROPDOWN ── */
+function buildMemberOptions(){
+  var list=document.getElementById('member-options-list');
+  list.innerHTML=S.members.map(function(m){
+    return '<div class="member-option" data-name="'+(m.Name||'').toLowerCase()+'">'
+      +'<input type="checkbox" id="mchk-'+m.ID+'" value="'+m.ID+'" checked onchange="memberCheckChange()">'
+      +'<label for="mchk-'+m.ID+'">'+m.Name+' <span style="font-size:10px;color:var(--text4);">'+m.ID+'</span></label>'
+      +'</div>';
   }).join('');
 }
-
-function toggleMemberDropdown() {
-  var dd = document.getElementById('member-dropdown');
-  var disp = document.getElementById('member-select-display');
-  dd.classList.toggle('open');
-  disp.classList.toggle('open');
+function toggleMemberDropdown(){
+  var dd=document.getElementById('member-dropdown');
+  var disp=document.getElementById('member-select-display');
+  dd.classList.toggle('open');disp.classList.toggle('open');
 }
-
-document.addEventListener('click', function(e) {
-  var wrap = document.getElementById('member-select-wrap');
-  if (wrap && !wrap.contains(e.target)) {
+document.addEventListener('click',function(e){
+  var wrap=document.getElementById('member-select-wrap');
+  if(wrap&&!wrap.contains(e.target)){
     document.getElementById('member-dropdown').classList.remove('open');
     document.getElementById('member-select-display').classList.remove('open');
   }
 });
-
-function filterMemberOptions(val) {
-  var opts = document.querySelectorAll('.member-option');
-  opts.forEach(function(opt){
-    opt.style.display = (!val || opt.dataset.name.indexOf(val.toLowerCase())!==-1) ? '' : 'none';
+function filterMemberOptions(val){
+  document.querySelectorAll('.member-option').forEach(function(opt){
+    opt.style.display=(!val||opt.dataset.name.indexOf(val.toLowerCase())!==-1)?'':'none';
   });
 }
-
-function memberCheckChange() {
-  S.selectedMembers = [];
-  document.querySelectorAll('.member-option input[type=checkbox]:checked').forEach(function(c){
-    S.selectedMembers.push(c.value);
-  });
-  var all = document.querySelectorAll('.member-option input[type=checkbox]');
-  document.getElementById('chk-all').checked = (S.selectedMembers.length === all.length);
-  updateMemberLabel();
-  applyFilters();
+function memberCheckChange(){
+  S.selectedMembers=[];
+  document.querySelectorAll('.member-option input[type=checkbox]:checked').forEach(function(c){S.selectedMembers.push(c.value);});
+  var all=document.querySelectorAll('.member-option input[type=checkbox]').length;
+  document.getElementById('chk-all').checked=(S.selectedMembers.length===all);
+  updateMemberChips();applyFilters();
 }
-
-function toggleSelectAll() {
-  var chkAll = document.getElementById('chk-all');
-  var checked = !chkAll.checked;
-  chkAll.checked = checked;
+function toggleSelectAll(){
+  var chkAll=document.getElementById('chk-all');
+  var checked=!chkAll.checked;chkAll.checked=checked;
   document.querySelectorAll('.member-option input[type=checkbox]').forEach(function(c){c.checked=checked;});
-  S.selectedMembers = checked ? S.allMemberIds.slice() : [];
-  updateMemberLabel();
-  applyFilters();
+  S.selectedMembers=checked?S.allMemberIds.slice():[];
+  updateMemberChips();applyFilters();
+}
+function updateMemberChips(){
+  var area=document.getElementById('member-chips');
+  var n=S.selectedMembers.length,total=S.allMemberIds.length;
+  if(n===0||n===total){
+    area.innerHTML='<span style="color:var(--text3);font-size:12.5px;font-weight:600;">All Members</span>';return;
+  }
+  if(n===1){
+    var m=S.members.find(function(x){return x.ID===S.selectedMembers[0];});
+    area.innerHTML='<span class="chip">'+(m?m.Name:'1 selected')+'</span>';return;
+  }
+  var html='';
+  S.selectedMembers.slice(0,2).forEach(function(id){
+    var mm=S.members.find(function(x){return x.ID===id;});
+    if(mm)html+='<span class="chip">'+mm.Name+'</span>';
+  });
+  if(n>2)html+='<span class="chip">+' +(n-2)+'</span>';
+  area.innerHTML=html;
 }
 
-function updateMemberLabel() {
-  var lbl = document.getElementById('member-select-label');
-  if (S.selectedMembers.length === S.allMemberIds.length || S.selectedMembers.length === 0) {
-    lbl.textContent = 'All Members';
-  } else if (S.selectedMembers.length === 1) {
-    var m = S.members.find(function(x){return x.ID===S.selectedMembers[0];});
-    lbl.textContent = m ? m.Name : '1 Selected';
-  } else {
-    lbl.textContent = S.selectedMembers.length + ' Selected';
+/* ── FILTERS ── */
+function applyFilters(){
+  var from=document.getElementById('f-from').value;
+  var to=document.getElementById('f-to').value;
+  var ctype=document.getElementById('f-ctype').value;
+  var fromDate=from?new Date(from):null;
+  var toDate=to?new Date(to+'T23:59:59'):null;
+  function inRange(ds){
+    if(!ds)return true;var d=new Date(ds);if(isNaN(d.getTime()))return true;
+    if(fromDate&&d<fromDate)return false;if(toDate&&d>toDate)return false;return true;
   }
-}
-
-/* ─── FILTER & BUILD DATA ─── */
-function applyFilters() {
-  var from = document.getElementById('f-from').value;
-  var to   = document.getElementById('f-to').value;
-  var ctype = document.getElementById('f-ctype').value;
-  var fromDate = from ? new Date(from) : null;
-  var toDate   = to   ? new Date(to + 'T23:59:59') : null;
-
-  function inRange(dateStr) {
-    if (!dateStr) return true;
-    var d = new Date(dateStr);
-    if (isNaN(d.getTime())) return true;
-    if (fromDate && d < fromDate) return false;
-    if (toDate   && d > toDate)   return false;
-    return true;
+  function memberOk(id){
+    if(!S.selectedMembers.length||S.selectedMembers.length===S.allMemberIds.length)return true;
+    return S.selectedMembers.indexOf(String(id))!==-1;
   }
-
-  function memberSelected(id) {
-    if (!S.selectedMembers.length || S.selectedMembers.length === S.allMemberIds.length) return true;
-    return S.selectedMembers.indexOf(String(id)) !== -1;
-  }
-
-  var contribs = (S.contributions && S.contributions.length > 1) ? S.contributions.slice(1).filter(function(r){return r[0];}) : [];
-  S.filteredContribs = contribs.filter(function(r){
-    if (!memberSelected(r[1])) return false;
-    if (!inRange(r[3])) return false;
-    if (ctype && r[5] !== ctype) return false;
-    return true;
-  });
-
-  var loans = (S.loans && S.loans.length > 1) ? S.loans.slice(1).filter(function(r){return r[0];}) : [];
-  S.filteredLoans = loans.filter(function(r){
-    if (!memberSelected(r[1])) return false;
-    if (!inRange(r[7])) return false;
-    return true;
-  });
-
-  var repays = (S.repayments && S.repayments.length > 1) ? S.repayments.slice(1).filter(function(r){return r[0];}) : [];
-  var loanIds = S.filteredLoans.map(function(l){return String(l[0]);});
-  S.filteredRepayments = repays.filter(function(r){
-    if (loanIds.indexOf(String(r[1])) === -1) return false;
-    if (!inRange(r[3])) return false;
-    return true;
-  });
-
-  var exps = (S.expenses && S.expenses.length > 1) ? S.expenses.slice(1).filter(function(r){return r[0];}) : [];
-  S.filteredExpenses = exps.filter(function(r){
-    if (!inRange(r[1])) return false;
-    return true;
-  });
-
+  var cs=(S.contributions&&S.contributions.length>1)?S.contributions.slice(1).filter(function(r){return r[0];}):[];
+  S.filteredContribs=cs.filter(function(r){return memberOk(r[1])&&inRange(r[3])&&(!ctype||r[5]===ctype);});
+  var ls=(S.loans&&S.loans.length>1)?S.loans.slice(1).filter(function(r){return r[0];}):[];
+  S.filteredLoans=ls.filter(function(r){return memberOk(r[1])&&inRange(r[7]);});
+  var rs=(S.repayments&&S.repayments.length>1)?S.repayments.slice(1).filter(function(r){return r[0];}):[];
+  var lids=S.filteredLoans.map(function(l){return String(l[0]);});
+  S.filteredRepayments=rs.filter(function(r){return lids.indexOf(String(r[1]))!==-1&&inRange(r[3]);});
+  var ex=(S.expenses&&S.expenses.length>1)?S.expenses.slice(1).filter(function(r){return r[0];}):[];
+  S.filteredExpenses=ex.filter(function(r){return inRange(r[1]);});
   renderAll();
 }
 
-/* ─── RENDER ALL ─── */
-function renderAll() {
-  renderStats();
-  renderContribTrend();
-  renderContribPie();
-  renderLoansChart();
-  renderExpensesChart();
-  renderRunningBalance();
-  renderMonthlyTimeline();
-  renderMemberTable('');
-}
+/* ── RENDER ALL ── */
+function renderAll(){renderStats();renderContribTrend();renderContribPie();renderLoansChart();renderExpensesChart();renderRunningBalance();renderMonthlyTimeline();renderMemberTable('');}
 
-function fmt(n) { return 'KES '+(Math.round(n)||0).toLocaleString(); }
+function fmt(n){var v=Math.round(n)||0;if(Math.abs(v)>=1e6)return'KES '+(v/1e6).toFixed(1)+'M';if(Math.abs(v)>=1e3)return'KES '+(v/1e3).toFixed(1)+'K';return'KES '+v.toLocaleString();}
+function fmtFull(n){return'KES '+(Math.round(n)||0).toLocaleString();}
 
-/* ─── STATS ─── */
-function renderStats() {
-  var totalSavings=0, totalWelfare=0, totalMgr=0;
-  S.filteredContribs.forEach(function(r){
-    var amt = Number(r[4]||0);
-    if(r[5]==='Members Savings') totalSavings+=amt;
-    else if(r[5]==='Welfare Funds') totalWelfare+=amt;
-    else if(r[5]==='Merry Go Round') totalMgr+=amt;
-  });
-  var totalLoaned=0; S.filteredLoans.forEach(function(r){totalLoaned+=Number(r[4]||0);});
-  var totalPrinPaid=0, totalInterest=0, totalPenalty=0;
-  S.filteredRepayments.forEach(function(r){totalPrinPaid+=Number(r[5]||0);totalInterest+=Number(r[6]||0);totalPenalty+=Number(r[7]||0);});
-  var totalExpenses=0; S.filteredExpenses.forEach(function(r){totalExpenses+=Number(r[4]||0);});
-  var totalContrib = totalSavings+totalWelfare+totalMgr;
-  var netBalance = totalContrib+totalInterest+totalPenalty-totalLoaned-totalExpenses;
-  var activeLoans = S.filteredLoans.filter(function(r){return String(r[9]).toLowerCase()==='active';}).length;
+/* ── STATS ── */
+function renderStats(){
+  var sav=0,wel=0,mgr=0;
+  S.filteredContribs.forEach(function(r){var a=Number(r[4]||0);if(r[5]==='Members Savings')sav+=a;else if(r[5]==='Welfare Funds')wel+=a;else if(r[5]==='Merry Go Round')mgr+=a;});
+  var loaned=0;S.filteredLoans.forEach(function(r){loaned+=Number(r[4]||0);});
+  var prin=0,interest=0,penalty=0;
+  S.filteredRepayments.forEach(function(r){prin+=Number(r[5]||0);interest+=Number(r[6]||0);penalty+=Number(r[7]||0);});
+  var expenses=0;S.filteredExpenses.forEach(function(r){expenses+=Number(r[4]||0);});
+  var totalC=sav+wel+mgr;
+  var net=totalC+interest+penalty-loaned-expenses;
+  var activeLoans=S.filteredLoans.filter(function(r){return String(r[9]||'').toLowerCase()==='active';}).length;
 
-  var html = [
-    stat('si-green','piggy-bank','Total Savings',fmt(totalSavings),'green'),
-    stat('si-purple','hand-holding-heart','Welfare Funds',fmt(totalWelfare),''),
-    stat('si-teal','sync-alt','Merry Go Round',fmt(totalMgr),''),
-    stat('si-blue','coins','Total Contributions',fmt(totalContrib),'blue'),
-    stat('si-orange','file-invoice-dollar','Loans Disbursed',fmt(totalLoaned),''),
-    stat('si-green','percentage','Interest Collected',fmt(totalInterest),'green'),
-    stat('si-amber','gavel','Penalties Collected',fmt(totalPenalty),'amber'),
-    stat('si-red','receipt','Total Expenses',fmt(totalExpenses),'red'),
-    stat('si-green','balance-scale','Net Balance',fmt(netBalance), netBalance>=0?'green':'red'),
-    stat('si-blue','hand-holding-usd','Active Loans',activeLoans,''),
-    stat('si-green','users','Members Filtered',S.selectedMembers.length || S.allMemberIds.length,''),
-    stat('si-teal','chart-bar','Total Transactions',S.filteredContribs.length+S.filteredRepayments.length,'')
+  document.getElementById('stats-grid').innerHTML=[
+    sc('ic-green','piggy-bank','Members Savings',fmtFull(sav),'green'),
+    sc('ic-purple','hand-holding-heart','Welfare Funds',fmtFull(wel),'purple'),
+    sc('ic-teal','rotate','Merry Go Round',fmtFull(mgr),'teal'),
+    sc('ic-blue','coins','Total Contributions',fmtFull(totalC),'blue'),
+    sc('ic-orange','file-invoice-dollar','Loans Disbursed',fmtFull(loaned),'orange'),
+    sc('ic-green','percent','Interest Collected',fmtFull(interest),'green'),
+    sc('ic-amber','gavel','Penalties',fmtFull(penalty),'amber'),
+    sc('ic-red','receipt','Total Expenses',fmtFull(expenses),'red'),
+    sc('ic-green','scale-balanced','Net Balance',fmtFull(net),net>=0?'green':'red'),
+    sc('ic-blue','hand-holding-dollar','Active Loans',activeLoans,'blue'),
+    sc('ic-teal','users','Members Shown',S.selectedMembers.length||S.allMemberIds.length,'teal'),
+    sc('ic-pink','chart-bar','Total Transactions',S.filteredContribs.length+S.filteredRepayments.length,'pink')
   ].join('');
-  document.getElementById('stats-grid').innerHTML = html;
+}
+function sc(ic,icon,label,val,vc){
+  return '<div class="stat-card"><div class="stat-icon '+ic+'"><i class="fas fa-'+icon+'"></i></div>'
+    +'<div class="stat-label">'+label+'</div>'
+    +'<div class="stat-value '+(vc||'')+'">'+val+'</div></div>';
 }
 
-function stat(ic, icon, label, val, valClass) {
-  return '<div class="stat-card"><div class="stat-icon '+ic+'"><i class="fas fa-'+icon+'"></i></div><div class="stat-info"><p>'+label+'</p><h2 class="'+valClass+'">'+val+'</h2></div></div>';
-}
+/* ── MONTH HELPERS ── */
+function groupByMonth(rows,di,ai){var map={};rows.forEach(function(r){var d=new Date(r[di]);if(isNaN(d.getTime()))return;var k=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');map[k]=(map[k]||0)+Number(r[ai]||0);});return map;}
+function sortedKeys(map){return Object.keys(map).sort();}
+function getAllMonths(maps){var s={};maps.forEach(function(m){Object.keys(m).forEach(function(k){s[k]=1;});});return Object.keys(s).sort();}
+function monthLabel(k){var p=k.split('-');return new Date(p[0],p[1]-1,1).toLocaleDateString('en-US',{month:'short',year:'2-digit'});}
+function destroyChart(id){if(CHARTS[id]){CHARTS[id].destroy();delete CHARTS[id];}}
 
-/* ─── MONTHLY GROUP ─── */
-function groupByMonth(rows, dateIdx, amtIdx) {
-  var map = {};
-  rows.forEach(function(r){
-    var d = new Date(r[dateIdx]); if(isNaN(d.getTime())) return;
-    var key = d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');
-    map[key] = (map[key]||0) + Number(r[amtIdx]||0);
-  });
-  return map;
-}
+/* chart tooltip defaults */
+var TT={backgroundColor:'rgba(5,46,22,0.92)',borderColor:'rgba(22,163,74,0.3)',borderWidth:1,titleColor:'#e8fdf2',bodyColor:'#a7f3c4',padding:10,cornerRadius:8,displayColors:true};
 
-function sortedKeys(map) {
-  return Object.keys(map).sort();
-}
+/* ── CONTRIB TREND ── */
+function renderContribTrend(){
+  var savings=groupByMonth(S.filteredContribs.filter(function(r){return r[5]==='Members Savings';}),3,4);
+  var welfare=groupByMonth(S.filteredContribs.filter(function(r){return r[5]==='Welfare Funds';}),3,4);
+  var mgr=groupByMonth(S.filteredContribs.filter(function(r){return r[5]==='Merry Go Round';}),3,4);
+  var months=getAllMonths([savings,welfare,mgr]);
 
-function getAllMonths(maps) {
-  var set = {};
-  maps.forEach(function(m){ Object.keys(m).forEach(function(k){set[k]=1;}); });
-  return Object.keys(set).sort();
-}
-
-function monthLabel(key) {
-  var parts = key.split('-');
-  var d = new Date(parts[0], parts[1]-1, 1);
-  return d.toLocaleDateString('en-US',{month:'short',year:'2-digit'});
-}
-
-/* ─── CONTRIB TREND CHART ─── */
-function renderContribTrend() {
-  var savings = groupByMonth(S.filteredContribs.filter(function(r){return r[5]==='Members Savings';}), 3, 4);
-  var welfare = groupByMonth(S.filteredContribs.filter(function(r){return r[5]==='Welfare Funds';}), 3, 4);
-  var mgr     = groupByMonth(S.filteredContribs.filter(function(r){return r[5]==='Merry Go Round';}), 3, 4);
-  var months  = getAllMonths([savings,welfare,mgr]);
-  var labels  = months.map(monthLabel);
-
-  document.getElementById('contrib-legend').innerHTML = [
-    legendItem('#16a34a','Members Savings'),
-    legendItem('#8b5cf6','Welfare Funds'),
-    legendItem('#0d9488','Merry Go Round')
+  document.getElementById('contrib-legend').innerHTML=[
+    li('#16a34a','Members Savings'),li('#8b5cf6','Welfare Funds'),li('#14b8a6','Merry Go Round')
   ].join('');
 
   destroyChart('chart-contrib-trend');
-  if (!months.length) return;
-  CHARTS['chart-contrib-trend'] = new Chart(document.getElementById('chart-contrib-trend'), {
-    type: 'line',
-    data: {
-      labels: labels,
-      datasets: [
-        {label:'Members Savings', data:months.map(function(m){return savings[m]||0;}), borderColor:'#16a34a', backgroundColor:'rgba(22,163,74,0.08)', pointBackgroundColor:'#16a34a', tension:0.3, fill:true, pointRadius:3, pointHoverRadius:5, borderDash:[]},
-        {label:'Welfare Funds', data:months.map(function(m){return welfare[m]||0;}), borderColor:'#8b5cf6', backgroundColor:'rgba(139,92,246,0.06)', pointBackgroundColor:'#8b5cf6', tension:0.3, fill:true, pointRadius:3, pointHoverRadius:5, borderDash:[5,3]},
-        {label:'Merry Go Round', data:months.map(function(m){return mgr[m]||0;}), borderColor:'#0d9488', backgroundColor:'rgba(13,148,136,0.06)', pointBackgroundColor:'#0d9488', tension:0.3, fill:true, pointRadius:3, pointHoverRadius:5, borderDash:[2,2]}
-      ]
-    },
-    options:{
-      responsive:true, maintainAspectRatio:false,
-      plugins:{legend:{display:false}, tooltip:{mode:'index', intersect:false, callbacks:{label:function(ctx){return ctx.dataset.label+': KES '+Math.round(ctx.raw).toLocaleString();}}}},
+  if(!months.length)return;
+  CHARTS['chart-contrib-trend']=new Chart(document.getElementById('chart-contrib-trend'),{
+    type:'line',
+    data:{labels:months.map(monthLabel),datasets:[
+      {label:'Members Savings',data:months.map(function(m){return savings[m]||0;}),borderColor:'#16a34a',backgroundColor:'rgba(22,163,74,0.08)',pointBackgroundColor:'#16a34a',tension:0.35,fill:true,pointRadius:3,pointHoverRadius:6,borderWidth:2.5},
+      {label:'Welfare Funds',data:months.map(function(m){return welfare[m]||0;}),borderColor:'#8b5cf6',backgroundColor:'rgba(139,92,246,0.06)',pointBackgroundColor:'#8b5cf6',tension:0.35,fill:true,pointRadius:3,pointHoverRadius:6,borderWidth:2,borderDash:[5,3]},
+      {label:'Merry Go Round',data:months.map(function(m){return mgr[m]||0;}),borderColor:'#14b8a6',backgroundColor:'rgba(20,184,166,0.06)',pointBackgroundColor:'#14b8a6',tension:0.35,fill:true,pointRadius:3,pointHoverRadius:6,borderWidth:2,borderDash:[2,3]}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:Object.assign({},TT,{mode:'index',intersect:false,callbacks:{label:function(ctx){return ' '+ctx.dataset.label+': '+fmtFull(ctx.raw);}}})},
       scales:{
-        x:{grid:{display:false}, ticks:{font:{size:10}, color:'#9ca3af', maxRotation:45, autoSkip:true, maxTicksLimit:12}},
-        y:{grid:{color:'rgba(0,0,0,0.05)'}, ticks:{font:{size:10}, color:'#9ca3af', callback:function(v){return 'K'+Math.round(v/1000);}}}
+        x:{grid:{display:false},ticks:{color:'#9ca3af',font:{size:10,family:'Plus Jakarta Sans'},maxRotation:40,autoSkip:true,maxTicksLimit:12}},
+        y:{grid:{color:'rgba(22,163,74,0.06)'},ticks:{color:'#9ca3af',font:{size:10},callback:function(v){return 'K'+(v/1000).toFixed(0);}},border:{dash:[4,4]}}
       }
     }
   });
 }
 
-/* ─── PIE CHART ─── */
-function renderContribPie() {
-  var savings=0, welfare=0, mgr=0;
-  S.filteredContribs.forEach(function(r){
-    var amt=Number(r[4]||0);
-    if(r[5]==='Members Savings') savings+=amt;
-    else if(r[5]==='Welfare Funds') welfare+=amt;
-    else if(r[5]==='Merry Go Round') mgr+=amt;
-  });
-  var total = savings+welfare+mgr;
-  function pct(v){ return total?Math.round(v/total*100):0; }
+/* ── PIE ── */
+function renderContribPie(){
+  var sav=0,wel=0,mgr=0;
+  S.filteredContribs.forEach(function(r){var a=Number(r[4]||0);if(r[5]==='Members Savings')sav+=a;else if(r[5]==='Welfare Funds')wel+=a;else if(r[5]==='Merry Go Round')mgr+=a;});
+  var total=sav+wel+mgr;
+  function pct(v){return total?Math.round(v/total*100):0;}
 
-  document.getElementById('pie-legend').innerHTML = [
-    legendItem('#16a34a','Savings '+pct(savings)+'%'),
-    legendItem('#8b5cf6','Welfare '+pct(welfare)+'%'),
-    legendItem('#0d9488','MGR '+pct(mgr)+'%')
+  document.getElementById('pie-legend').innerHTML=[
+    li('#16a34a','Savings '+pct(sav)+'%'),li('#8b5cf6','Welfare '+pct(wel)+'%'),li('#14b8a6','MGR '+pct(mgr)+'%')
   ].join('');
 
   destroyChart('chart-contrib-pie');
-  CHARTS['chart-contrib-pie'] = new Chart(document.getElementById('chart-contrib-pie'), {
-    type: 'doughnut',
-    data: {
-      labels: ['Members Savings','Welfare Funds','Merry Go Round'],
-      datasets: [{data:[savings,welfare,mgr], backgroundColor:['#16a34a','#8b5cf6','#0d9488'], borderWidth:2, borderColor:'#fff', hoverBorderColor:'#fff'}]
-    },
-    options:{
-      responsive:true, maintainAspectRatio:false, cutout:'65%',
-      plugins:{legend:{display:false}, tooltip:{callbacks:{label:function(ctx){return ctx.label+': KES '+Math.round(ctx.raw).toLocaleString()+' ('+pct(ctx.raw)+'%)';}}}},
+  CHARTS['chart-contrib-pie']=new Chart(document.getElementById('chart-contrib-pie'),{
+    type:'doughnut',
+    data:{labels:['Members Savings','Welfare Funds','Merry Go Round'],
+      datasets:[{data:[sav,wel,mgr],backgroundColor:['#16a34a','#8b5cf6','#14b8a6'],borderWidth:3,borderColor:'#ffffff',hoverBorderColor:'#f0fdf4'}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:'68%',
+      plugins:{legend:{display:false},tooltip:Object.assign({},TT,{callbacks:{label:function(ctx){return ' '+ctx.label+': '+fmtFull(ctx.raw)+' ('+pct(ctx.raw)+'%)';}}})}
     }
   });
 }
 
-/* ─── LOANS CHART ─── */
-function renderLoansChart() {
-  var loansMonth   = groupByMonth(S.filteredLoans, 7, 4);
-  var repaysMonth  = groupByMonth(S.filteredRepayments, 3, 4);
-  var months       = getAllMonths([loansMonth, repaysMonth]);
-  var labels       = months.map(monthLabel);
+/* ── LOANS ── */
+function renderLoansChart(){
+  var loansM=groupByMonth(S.filteredLoans,7,4);
+  var repaysM=groupByMonth(S.filteredRepayments,3,4);
+  var months=getAllMonths([loansM,repaysM]);
 
-  document.getElementById('loan-legend').innerHTML = [
-    legendItem('#ef4444','Loans Disbursed'),
-    legendItem('#3b82f6','Repayments Received')
-  ].join('');
+  document.getElementById('loan-legend').innerHTML=[li('#ef4444','Loans Disbursed'),li('#3b82f6','Repayments')].join('');
 
   destroyChart('chart-loans');
-  if (!months.length) { document.getElementById('chart-loans').getContext('2d').clearRect(0,0,0,0); return; }
-  CHARTS['chart-loans'] = new Chart(document.getElementById('chart-loans'), {
-    type: 'bar',
-    data: {
-      labels: labels,
-      datasets: [
-        {label:'Loans Disbursed', data:months.map(function(m){return loansMonth[m]||0;}), backgroundColor:'rgba(239,68,68,0.75)', borderRadius:4, barPercentage:0.6},
-        {label:'Repayments', data:months.map(function(m){return repaysMonth[m]||0;}), backgroundColor:'rgba(59,130,246,0.75)', borderRadius:4, barPercentage:0.6}
-      ]
-    },
-    options:{
-      responsive:true, maintainAspectRatio:false,
-      plugins:{legend:{display:false}, tooltip:{mode:'index', intersect:false, callbacks:{label:function(ctx){return ctx.dataset.label+': KES '+Math.round(ctx.raw).toLocaleString();}}}},
+  if(!months.length)return;
+  CHARTS['chart-loans']=new Chart(document.getElementById('chart-loans'),{
+    type:'bar',
+    data:{labels:months.map(monthLabel),datasets:[
+      {label:'Loans Disbursed',data:months.map(function(m){return loansM[m]||0;}),backgroundColor:'rgba(239,68,68,0.7)',borderRadius:5,barPercentage:0.55},
+      {label:'Repayments',data:months.map(function(m){return repaysM[m]||0;}),backgroundColor:'rgba(59,130,246,0.7)',borderRadius:5,barPercentage:0.55}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:Object.assign({},TT,{mode:'index',intersect:false,callbacks:{label:function(ctx){return ' '+ctx.dataset.label+': '+fmtFull(ctx.raw);}}})},
       scales:{
-        x:{grid:{display:false}, ticks:{font:{size:10}, color:'#9ca3af', maxRotation:45, autoSkip:true, maxTicksLimit:12}},
-        y:{grid:{color:'rgba(0,0,0,0.05)'}, ticks:{font:{size:10}, color:'#9ca3af', callback:function(v){return 'K'+Math.round(v/1000);}}}
+        x:{grid:{display:false},ticks:{color:'#9ca3af',font:{size:10},maxRotation:40,autoSkip:true,maxTicksLimit:12}},
+        y:{grid:{color:'rgba(22,163,74,0.06)'},ticks:{color:'#9ca3af',font:{size:10},callback:function(v){return 'K'+(v/1000).toFixed(0);}},border:{dash:[4,4]}}
       }
     }
   });
 }
 
-/* ─── EXPENSES CHART ─── */
-function renderExpensesChart() {
-  var cats = {};
-  S.filteredExpenses.forEach(function(r){
-    var c = r[2]||'Other';
-    cats[c] = (cats[c]||0)+Number(r[4]||0);
-  });
-  var labels = Object.keys(cats);
-  var vals   = labels.map(function(l){return cats[l];});
-  var colors = ['#ef4444','#f97316','#f59e0b','#8b5cf6','#3b82f6','#0d9488'];
+/* ── EXPENSES ── */
+function renderExpensesChart(){
+  var cats={};
+  S.filteredExpenses.forEach(function(r){var c=r[2]||'Other';cats[c]=(cats[c]||0)+Number(r[4]||0);});
+  var labels=Object.keys(cats);
+  var vals=labels.map(function(l){return cats[l];});
+  var colors=['#ef4444','#f97316','#f59e0b','#8b5cf6','#3b82f6','#14b8a6','#ec4899'];
 
   destroyChart('chart-expenses');
-  if (!labels.length) return;
-  CHARTS['chart-expenses'] = new Chart(document.getElementById('chart-expenses'), {
-    type: 'bar',
-    data: {
-      labels: labels,
-      datasets: [{
-        label:'Expenses',
-        data: vals,
-        backgroundColor: labels.map(function(_,i){return colors[i%colors.length]+'bb';}),
-        borderRadius: 5,
-        barPercentage: 0.55
-      }]
-    },
-    options:{
-      indexAxis: 'y',
-      responsive:true, maintainAspectRatio:false,
-      plugins:{legend:{display:false}, tooltip:{callbacks:{label:function(ctx){return 'KES '+Math.round(ctx.raw).toLocaleString();}}}},
+  if(!labels.length)return;
+  CHARTS['chart-expenses']=new Chart(document.getElementById('chart-expenses'),{
+    type:'bar',indexAxis:'y',
+    data:{labels:labels,datasets:[{label:'Expenses',data:vals,
+      backgroundColor:labels.map(function(_,i){return colors[i%colors.length]+'cc';}),
+      borderRadius:5,barPercentage:0.55}]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:Object.assign({},TT,{callbacks:{label:function(ctx){return ' '+fmtFull(ctx.raw);}}})},
       scales:{
-        x:{grid:{color:'rgba(0,0,0,0.04)'}, ticks:{font:{size:10}, color:'#9ca3af', callback:function(v){return 'K'+Math.round(v/1000);}}},
-        y:{grid:{display:false}, ticks:{font:{size:11}, color:'#374151'}}
+        x:{grid:{color:'rgba(22,163,74,0.06)'},ticks:{color:'#9ca3af',font:{size:10},callback:function(v){return 'K'+(v/1000).toFixed(0);}},border:{dash:[4,4]}},
+        y:{grid:{display:false},ticks:{color:'#374151',font:{size:11,weight:'600'}}}
       }
     }
   });
 }
 
-/* ─── RUNNING BALANCE ─── */
-function renderRunningBalance() {
-  var events = [];
-
-  S.filteredContribs.forEach(function(r){
-    events.push({date:r[3], type:'Contribution', label:(r[5]||'')+'–'+r[2], in:Number(r[4]||0), out:0});
-  });
-  S.filteredLoans.forEach(function(r){
-    events.push({date:r[7], type:'Loan', label:'Loan to '+r[2], in:0, out:Number(r[4]||0)});
-  });
+/* ── RUNNING BALANCE ── */
+function renderRunningBalance(){
+  var events=[];
+  S.filteredContribs.forEach(function(r){events.push({date:r[3],type:'Contribution',label:(r[5]||'')+'–'+r[2],inAmt:Number(r[4]||0),outAmt:0});});
+  S.filteredLoans.forEach(function(r){events.push({date:r[7],type:'Loan',label:'Loan→'+r[2],inAmt:0,outAmt:Number(r[4]||0)});});
   S.filteredRepayments.forEach(function(r){
-    var total = Number(r[5]||0)+Number(r[6]||0)+Number(r[7]||0);
-    events.push({date:r[3], type:'Repayment', label:'Repay–'+r[2], in:total, out:0});
+    var t=Number(r[5]||0)+Number(r[6]||0)+Number(r[7]||0);
+    events.push({date:r[3],type:'Repayment',label:'Repay–'+r[2],inAmt:t,outAmt:0});
   });
-  S.filteredExpenses.forEach(function(r){
-    events.push({date:r[1], type:'Expense', label:r[3]||r[2], in:0, out:Number(r[4]||0)});
-  });
-
+  S.filteredExpenses.forEach(function(r){events.push({date:r[1],type:'Expense',label:r[3]||r[2],inAmt:0,outAmt:Number(r[4]||0)});});
   events.sort(function(a,b){return new Date(a.date)-new Date(b.date);});
 
-  var running = 0;
-  var timelineRows = events.map(function(ev){
-    running += ev.in - ev.out;
-    return Object.assign({}, ev, {balance: running});
-  });
+  var running=0;
+  var rows=events.map(function(ev){running+=ev.inAmt-ev.outAmt;return Object.assign({},ev,{balance:running});});
 
-  // Group by month for chart
-  var monthBalance = {};
-  var monthLabels  = {};
-  timelineRows.forEach(function(ev){
-    var d = new Date(ev.date); if(isNaN(d.getTime())) return;
-    var key = d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');
-    monthBalance[key] = ev.balance;
-    monthLabels[key]  = monthLabel(key);
+  var mBal={};
+  rows.forEach(function(ev){
+    var d=new Date(ev.date);if(isNaN(d.getTime()))return;
+    var k=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');
+    mBal[k]=ev.balance;
   });
-  var mkeys = sortedKeys(monthBalance);
+  var mkeys=sortedKeys(mBal);
 
   destroyChart('chart-balance');
-  if (mkeys.length) {
-    CHARTS['chart-balance'] = new Chart(document.getElementById('chart-balance'), {
-      type: 'line',
-      data: {
-        labels: mkeys.map(monthLabel),
-        datasets: [{
-          label:'Balance',
-          data: mkeys.map(function(m){return monthBalance[m]||0;}),
-          borderColor:'#16a34a',
-          backgroundColor:'rgba(22,163,74,0.07)',
-          fill:true,
-          tension:0.35,
-          pointRadius:3,
-          pointBackgroundColor:'#16a34a',
-          borderWidth:2
-        }]
-      },
-      options:{
-        responsive:true, maintainAspectRatio:false,
-        plugins:{legend:{display:false}, tooltip:{callbacks:{label:function(ctx){return 'Balance: KES '+Math.round(ctx.raw).toLocaleString();}}}},
+  if(mkeys.length){
+    CHARTS['chart-balance']=new Chart(document.getElementById('chart-balance'),{
+      type:'line',
+      data:{labels:mkeys.map(monthLabel),datasets:[{
+        label:'Balance',data:mkeys.map(function(m){return mBal[m]||0;}),
+        borderColor:'#16a34a',backgroundColor:'rgba(22,163,74,0.07)',
+        fill:true,tension:0.35,pointRadius:3,pointBackgroundColor:'#16a34a',
+        borderWidth:2.5,pointHoverRadius:6
+      }]},
+      options:{responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{display:false},tooltip:Object.assign({},TT,{callbacks:{label:function(ctx){return ' Balance: '+fmtFull(ctx.raw);}}})},
         scales:{
-          x:{grid:{display:false}, ticks:{font:{size:10}, color:'#9ca3af', maxRotation:45, autoSkip:true, maxTicksLimit:14}},
-          y:{grid:{color:'rgba(0,0,0,0.04)'}, ticks:{font:{size:10}, color:'#9ca3af', callback:function(v){return v>=0?'KES '+Math.round(v/1000)+'K':'-KES '+Math.round(Math.abs(v)/1000)+'K';}}}
+          x:{grid:{display:false},ticks:{color:'#9ca3af',font:{size:10},maxRotation:40,autoSkip:true,maxTicksLimit:14}},
+          y:{grid:{color:'rgba(22,163,74,0.06)'},ticks:{color:'#9ca3af',font:{size:10},callback:function(v){return (v<0?'-KES ':'KES ')+Math.abs(Math.round(v/1000))+'K';}},border:{dash:[4,4]}}
         }
       }
     });
   }
 
-  var tlEl = document.getElementById('balance-timeline');
-  if (!timelineRows.length) {
-    tlEl.innerHTML = '<div class="empty-state"><span class="empty-state-icon">📭</span>No transactions in selected range</div>';
-    return;
-  }
-  // Show last 100 events reversed (most recent first)
-  var visible = timelineRows.slice().reverse().slice(0,100);
-  tlEl.innerHTML = visible.map(function(ev){
-    var d = ev.date?new Date(ev.date).toLocaleDateString():'—';
-    var typeColor = ev.type==='Contribution'?'#16a34a':ev.type==='Repayment'?'#3b82f6':ev.type==='Loan'?'#ef4444':'#f97316';
-    return '<div class="balance-row"><span style="font-size:11px;color:var(--text-muted);">'+d+'</span><span><span style="font-size:10px;padding:2px 7px;border-radius:5px;font-weight:700;background:'+typeColor+'18;color:'+typeColor+';">'+ev.type+'</span> <span style="font-size:11.5px;margin-left:5px;">'+ev.label.substring(0,40)+'</span></span><span class="positive">'+( ev.in?fmt(ev.in):'' )+'</span><span class="negative">'+( ev.out?fmt(ev.out):'' )+'</span><span style="font-weight:700;color:'+(ev.balance>=0?'#16a34a':'#dc2626')+';">'+fmt(ev.balance)+'</span></div>';
+  var el=document.getElementById('balance-timeline');
+  if(!rows.length){el.innerHTML='<div class="empty-state"><span class="empty-icon">📭</span>No transactions in selected range</div>';return;}
+
+  var typeStyle={
+    Contribution:{bg:'#dcfce7',color:'#16a34a'},
+    Repayment:{bg:'#dbeafe',color:'#2563eb'},
+    Loan:{bg:'#fee2e2',color:'#dc2626'},
+    Expense:{bg:'#ffedd5',color:'#ea580c'}
+  };
+  el.innerHTML=rows.slice().reverse().slice(0,120).map(function(ev){
+    var d=ev.date?new Date(ev.date).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'2-digit'}):'—';
+    var st=typeStyle[ev.type]||{bg:'#f3f4f6',color:'#6b7280'};
+    return '<div class="balance-row">'
+      +'<span style="font-size:11px;color:var(--text3);">'+d+'</span>'
+      +'<span style="display:flex;align-items:center;gap:7px;min-width:0;">'
+      +'<span style="font-size:10px;padding:2px 8px;border-radius:5px;font-weight:800;background:'+st.bg+';color:'+st.color+';flex-shrink:0;">'+ev.type+'</span>'
+      +'<span style="font-size:11.5px;color:var(--text2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+ev.label.substring(0,44)+'</span>'
+      +'</span>'
+      +'<span style="color:var(--green);font-weight:700;font-size:12px;">'+(ev.inAmt?fmtFull(ev.inAmt):'—')+'</span>'
+      +'<span style="color:var(--red);font-weight:700;font-size:12px;">'+(ev.outAmt?fmtFull(ev.outAmt):'—')+'</span>'
+      +'<span style="font-weight:800;font-size:12px;color:'+(ev.balance>=0?'var(--green)':'var(--red)')+';">'+fmtFull(ev.balance)+'</span>'
+      +'</div>';
   }).join('');
 }
 
-/* ─── MONTHLY TIMELINE ─── */
-function renderMonthlyTimeline() {
-  var monthly = groupByMonth(S.filteredContribs, 3, 4);
-  var months  = sortedKeys(monthly).reverse();
-  var max     = Math.max.apply(null, Object.values(monthly).concat([1]));
-
-  var el = document.getElementById('monthly-timeline');
-  if (!months.length) {
-    el.innerHTML = '<div class="empty-state"><span class="empty-state-icon">📭</span>No contributions in selected range</div>';
-    return;
-  }
-  el.innerHTML = months.map(function(m){
-    var amt = monthly[m]||0;
-    var pct = Math.round(amt/max*100);
-    var contribs = S.filteredContribs.filter(function(r){
-      var d=new Date(r[3]); if(isNaN(d.getTime())) return false;
-      return (d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'))===m;
-    });
-    return '<div class="timeline-row"><div class="timeline-month">'+monthLabel(m)+'</div><div class="timeline-bar-wrap"><div class="timeline-bar" style="width:'+pct+'%"></div></div><div class="timeline-amount">'+fmt(amt)+'</div><div class="timeline-count">'+contribs.length+' records</div></div>';
+/* ── MONTHLY TIMELINE ── */
+function renderMonthlyTimeline(){
+  var monthly=groupByMonth(S.filteredContribs,3,4);
+  var months=sortedKeys(monthly).reverse();
+  var max=Math.max.apply(null,Object.values(monthly).concat([1]));
+  var el=document.getElementById('monthly-timeline');
+  if(!months.length){el.innerHTML='<div class="empty-state"><span class="empty-icon">📭</span>No contributions in selected range</div>';return;}
+  el.innerHTML=months.map(function(m){
+    var amt=monthly[m]||0;
+    var pct=Math.round(amt/max*100);
+    var cnt=S.filteredContribs.filter(function(r){var d=new Date(r[3]);if(isNaN(d.getTime()))return false;return(d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'))===m;}).length;
+    return '<div class="tl-row">'
+      +'<div class="tl-month">'+monthLabel(m)+'</div>'
+      +'<div class="tl-bar-wrap"><div class="tl-bar" style="width:'+pct+'%"></div></div>'
+      +'<div class="tl-amount">'+fmtFull(amt)+'</div>'
+      +'<div class="tl-count">'+cnt+' rec.</div>'
+      +'</div>';
   }).join('');
 }
 
-/* ─── MEMBER TABLE ─── */
-var memberBreakdownCache = [];
-
-function renderMemberTable(search) {
-  var selectedIds = S.selectedMembers.length ? S.selectedMembers : S.allMemberIds;
-  var rows = S.members.filter(function(m){ return selectedIds.indexOf(m.ID) !== -1; });
-  if (search) rows = rows.filter(function(m){ return (m.Name||'').toLowerCase().indexOf(search.toLowerCase()) !== -1; });
-
-  var tbody = document.getElementById('tb-member-breakdown');
-  if (!rows.length) {
-    tbody.innerHTML = '<tr><td colspan="12" style="text-align:center;padding:32px;color:var(--text-muted);">No members match filter</td></tr>';
-    return;
-  }
-
-  var data = rows.map(function(m){
-    var contribs = S.filteredContribs.filter(function(r){return String(r[1])===String(m.ID);});
-    var savings=0, welfare=0, mgr=0;
-    contribs.forEach(function(r){
-      var amt=Number(r[4]||0);
-      if(r[5]==='Members Savings') savings+=amt;
-      else if(r[5]==='Welfare Funds') welfare+=amt;
-      else if(r[5]==='Merry Go Round') mgr+=amt;
-    });
-    var mLoans = S.filteredLoans.filter(function(l){return String(l[1])===String(m.ID);});
-    var totalLoaned=0; mLoans.forEach(function(l){totalLoaned+=Number(l[4]||0);});
-    var loanIds = mLoans.map(function(l){return String(l[0]);});
-    var mRepays = S.filteredRepayments.filter(function(r){return loanIds.indexOf(String(r[1]))!==-1;});
-    var prinPaid=0, intPaid=0, penPaid=0;
-    mRepays.forEach(function(r){prinPaid+=Number(r[5]||0);intPaid+=Number(r[6]||0);penPaid+=Number(r[7]||0);});
-    var loanBal = Math.max(0, totalLoaned - prinPaid);
-    var net = savings+welfare+mgr+intPaid+penPaid-loanBal;
-    return {m:m, savings:savings, welfare:welfare, mgr:mgr, totalContrib:savings+welfare+mgr, totalLoaned:totalLoaned, prinPaid:prinPaid, intPaid:intPaid, penPaid:penPaid, loanBal:loanBal, net:net};
-  });
-
-  memberBreakdownCache = data;
-
-  tbody.innerHTML = data.map(function(d){
-    var st = String(d.m.Status||'').toLowerCase();
-    var bc = st==='active'?'badge-active':'badge-inactive';
-    return '<tr>'+
-      '<td><strong>'+d.m.Name+'</strong><br><span style="font-size:10.5px;color:var(--text-muted);">'+d.m.ID+'</span></td>'+
-      '<td><span class="badge '+bc+'">'+d.m.Status+'</span></td>'+
-      '<td class="positive">'+fmt(d.savings)+'</td>'+
-      '<td style="color:#9333ea;font-weight:600;">'+fmt(d.welfare)+'</td>'+
-      '<td style="color:#0d9488;font-weight:600;">'+fmt(d.mgr)+'</td>'+
-      '<td style="color:#2563eb;font-weight:700;">'+fmt(d.totalContrib)+'</td>'+
-      '<td style="color:#f97316;font-weight:600;">'+fmt(d.totalLoaned)+'</td>'+
-      '<td class="positive">'+fmt(d.prinPaid)+'</td>'+
-      '<td style="color:#16a34a;font-weight:600;">'+fmt(d.intPaid)+'</td>'+
-      '<td style="color:#d97706;font-weight:600;">'+fmt(d.penPaid)+'</td>'+
-      '<td class="'+(d.loanBal>0?'negative':'positive')+'">'+fmt(d.loanBal)+'</td>'+
-      '<td style="font-weight:800;color:'+(d.net>=0?'#16a34a':'#dc2626')+';">'+fmt(d.net)+'</td>'+
-    '</tr>';
+/* ── MEMBER TABLE ── */
+function renderMemberTable(search){
+  var ids=S.selectedMembers.length?S.selectedMembers:S.allMemberIds;
+  var rows=S.members.filter(function(m){return ids.indexOf(m.ID)!==-1;});
+  if(search)rows=rows.filter(function(m){return(m.Name||'').toLowerCase().indexOf(search.toLowerCase())!==-1;});
+  var tbody=document.getElementById('tb-member-breakdown');
+  if(!rows.length){tbody.innerHTML='<tr><td colspan="12" style="text-align:center;padding:32px;color:var(--text3);">No members match</td></tr>';return;}
+  tbody.innerHTML=rows.map(function(m){
+    var cs=S.filteredContribs.filter(function(r){return String(r[1])===String(m.ID);});
+    var sav=0,wel=0,mg=0;
+    cs.forEach(function(r){var a=Number(r[4]||0);if(r[5]==='Members Savings')sav+=a;else if(r[5]==='Welfare Funds')wel+=a;else if(r[5]==='Merry Go Round')mg+=a;});
+    var mLoans=S.filteredLoans.filter(function(l){return String(l[1])===String(m.ID);});
+    var loaned=0;mLoans.forEach(function(l){loaned+=Number(l[4]||0);});
+    var lids=mLoans.map(function(l){return String(l[0]);});
+    var mR=S.filteredRepayments.filter(function(r){return lids.indexOf(String(r[1]))!==-1;});
+    var prin=0,intP=0,pen=0;
+    mR.forEach(function(r){prin+=Number(r[5]||0);intP+=Number(r[6]||0);pen+=Number(r[7]||0);});
+    var lBal=Math.max(0,loaned-prin);
+    var net=sav+wel+mg+intP+pen-lBal;
+    var st=String(m.Status||'').toLowerCase();
+    return '<tr>'
+      +'<td><span style="font-weight:800;color:var(--text);">'+m.Name+'</span><br><span style="font-size:10px;color:var(--text3);">'+m.ID+'</span></td>'
+      +'<td><span class="badge '+(st==='active'?'badge-active':'badge-inactive')+'">'+m.Status+'</span></td>'
+      +'<td class="positive">'+fmtFull(sav)+'</td>'
+      +'<td style="color:var(--purple);font-weight:700;">'+fmtFull(wel)+'</td>'
+      +'<td style="color:var(--teal);font-weight:700;">'+fmtFull(mg)+'</td>'
+      +'<td style="color:var(--blue);font-weight:800;">'+fmtFull(sav+wel+mg)+'</td>'
+      +'<td style="color:var(--orange);font-weight:700;">'+fmtFull(loaned)+'</td>'
+      +'<td class="positive">'+fmtFull(prin)+'</td>'
+      +'<td style="color:var(--green);font-weight:700;">'+fmtFull(intP)+'</td>'
+      +'<td style="color:var(--amber);font-weight:700;">'+fmtFull(pen)+'</td>'
+      +'<td class="'+(lBal>0?'negative':'positive')+'">'+fmtFull(lBal)+'</td>'
+      +'<td style="font-weight:900;color:'+(net>=0?'var(--green)':'var(--red)')+';">'+fmtFull(net)+'</td>'
+      +'</tr>';
   }).join('');
 }
 
-/* ─── HELPERS ─── */
-function legendItem(color, label) {
-  return '<span class="legend-item"><span class="legend-dot" style="background:'+color+';"></span>'+label+'</span>';
-}
+function li(color,label){return'<span class="leg"><span class="leg-dot" style="background:'+color+';"></span>'+label+'</span>';}
 
-function destroyChart(id) {
-  if (CHARTS[id]) { CHARTS[id].destroy(); delete CHARTS[id]; }
-}
-
-window.onload = function(){ loadAllData(false); };
+window.onload=function(){loadAllData(false);};
 </script>
 </body>
 </html>
