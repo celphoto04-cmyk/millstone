@@ -971,6 +971,7 @@ function renderExpensesChart(){
 }
 
 /* ── RUNNING BALANCE ── */
+/* ── RUNNING BALANCE ── */
 function renderRunningBalance(){
   var allEvents=[];
   S.filteredContribs.forEach(function(r){
@@ -990,9 +991,14 @@ function renderRunningBalance(){
   });
   allEvents.sort(function(a,b){return new Date(a.date)-new Date(b.date);});
 
+  // Pehle running balance chart ke liye ALL events ka balance calculate karo
   var running=0;
-  var allRows=allEvents.map(function(ev){running+=ev.inAmt-ev.outAmt;return Object.assign({},ev,{balance:running});});
+  var allRows=allEvents.map(function(ev){
+    running+=ev.inAmt-ev.outAmt;
+    return Object.assign({},ev,{balance:running});
+  });
 
+  // Running balance chart (all events, no chip filter)
   var mBal={};
   allRows.forEach(function(ev){
     var d=new Date(ev.date);if(isNaN(d.getTime()))return;
@@ -1021,19 +1027,18 @@ function renderRunningBalance(){
     });
   }
 
-    var runningVis = 0;
-  var visibleRowsChron = allRows
-    .filter(function(ev){ return activeEventTypes[ev.type]; })
+  // Chip filter ke baad FRESH running balance calculate karo
+  var runningVis=0;
+  var visibleRows=allRows
+    .filter(function(ev){return activeEventTypes[ev.type];})
     .map(function(ev){
-      runningVis += ev.inAmt - ev.outAmt;
-      return Object.assign({}, ev, { balance: runningVis });
+      runningVis+=ev.inAmt-ev.outAmt;
+      return Object.assign({},ev,{balance:runningVis});
     });
 
-  // Display ke liye reverse (newest first) — balance column chronological running balance dikhata hai
-  var visibleRows = visibleRowsChron;
-  var totalIn=0, totalOut=0;
-  visibleRows.forEach(function(ev){ totalIn+=ev.inAmt; totalOut+=ev.outAmt; });
-  var netVis = totalIn - totalOut;
+  var totalIn=0,totalOut=0;
+  visibleRows.forEach(function(ev){totalIn+=ev.inAmt;totalOut+=ev.outAmt;});
+  var netVis=totalIn-totalOut;
 
   var totEl=document.getElementById('balance-totals');
   totEl.innerHTML=[
@@ -1055,7 +1060,8 @@ function renderRunningBalance(){
     Expense:{bg:'#ffedd5',color:'#ea580c'}
   };
 
-   var displayRows = visibleRows.slice().reverse().slice(0, 150);
+  // Newest first display — balance column mein har row ka us waqt tak ka cumulative balance
+  var displayRows=visibleRows.slice().reverse().slice(0,150);
   el.innerHTML=displayRows.map(function(ev){
     var d=ev.date?new Date(ev.date).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'2-digit'}):'—';
     var st=typeStyle[ev.type]||{bg:'#f3f4f6',color:'#6b7280'};
@@ -1070,6 +1076,7 @@ function renderRunningBalance(){
       +'<span style="font-weight:900;font-size:13px;color:'+(ev.balance>=0?'var(--green)':'var(--red)')+';">'+fmtFull(ev.balance)+'</span>'
       +'</div>';
   }).join('');
+}
 
 /* ── MONTHLY TIMELINE ── */
 function renderMonthlyTimeline(){
